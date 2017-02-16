@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-   - 几谷 博客
+  OC(2) 对 C 的扩展 - 几谷 博客
   
   </title>
   
@@ -40,9 +40,11 @@
       <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
         <ul id="main-menu" class="left">
         
-        <li id=""><a target="self" href="index.html">Home</a></li>
+        <li id=""><a target="_self" href="index.html">Home</a></li>
         
         <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        <li id=""><a target="_self" href="about.html">About</a></li>
         
         </ul>
 
@@ -107,7 +109,7 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1></h1>
+          <h1>OC(2) 对 C 的扩展</h1>
      
         <div class="read-more clearfix">
           <span class="date">2016/9/23 19:11 下午</span>
@@ -119,7 +121,11 @@
          
           <span class="comments">
             
+              <a href="http://kayorl.com/14872504902898.html#disqus_thread">comments</a>
+            
 
+            
+              &nbsp;<a  class="ds-thread-count" data-thread-key="14872504902898.html" data-count-type="comments" href="14872504902898.html#ds-thread"></a>
             
           </span>
 
@@ -127,11 +133,9 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <h1 id="toc_0">OC(2) 对 C 的扩展</h1>
+      <span id="more"></span><!-- more -->
 
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_1">解构 Hello, Objective-C</h2>
+<h2 id="toc_0">解构 Hello, Objective-C</h2>
 
 <pre><code class="language-objc">#import  &lt;Foundation/Foundation.h&gt;
 int main(int argc, const char * argv[]) {
@@ -157,11 +161,11 @@ int main(int argc, const char * argv[]) {
 <li>@符号意味着符号内的字符串作为 Cocoa 的 NSString 元素来处理 </li>
 </ul>
 
-<h2 id="toc_2">布尔类型</h2>
+<h2 id="toc_1">布尔类型</h2>
 
 <p>C 语言拥有 bool 数据类型,该类型有 true 和 false 两个值,Objective-C 提供了一个相似的 <code>BOOL</code>, 它具有 <code>YES</code> 和 <code>No</code> 两个值</p>
 
-<h3 id="toc_3">BOOL</h3>
+<h3 id="toc_2">BOOL</h3>
 
 <ol>
 <li>带符号的字符类型 (signed char)</li>
@@ -200,7 +204,7 @@ int main(int argc, const char * argv[]) {
 }
 </code></pre>
 
-<h3 id="toc_4">获取布尔值</h3>
+<h3 id="toc_3">获取布尔值</h3>
 
 <p>下面这种方式获取布尔值需要注意,由于 BOOL 值有8位的存储空间的,因此通过判断 BOOL 值为 YES 的话,会出现其他值</p>
 
@@ -219,7 +223,7 @@ int main(int argc, const char * argv[]) {
 
 </code></pre>
 
-<h2 id="toc_5">NSString</h2>
+<h2 id="toc_4">NSString</h2>
 
 <p>boolString() 的返回值类型是一个指向 NSString 的<code>指针</code>,意味着会返回一个 Cocoa 字符串.(原因摘自<a href="http://blog.sina.com.cn/s/blog_9ffcd5dc01014igv.html">stackoverflow</a>,关于<a href="http://stackoverflow.com/questions/5074369/when-to-and-when-not-to-use-pointers-in-objective-c">指针使用的原因</a>,还有<a href="http://www.cnblogs.com/edisonchou/p/4669098.html">图看堆栈</a>)</p>
 
@@ -257,7 +261,11 @@ int main(int argc, const char * argv[]) {
           
 
           
+            <div id="disqus_thread"></div>
+          
 
+          
+              <div class="ds-thread" data-thread-key="14872504902898.html" data-url="http://kayorl.com/14872504902898.html" data-title="OC(2) 对 C 的扩展"></div>
           
         </div>
       </div>
@@ -271,6 +279,8 @@ int main(int argc, const char * argv[]) {
   <div class="hide-for-small">
     <div id="sidebar" class="sidebar">
           <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="http://olh3adg9x.bkt.clouddn.com/logo.jpeg" /></div>
             
                 <h1>几谷 博客</h1>
                 <div class="site-des">暂时还没想到什么</div>
@@ -405,7 +415,41 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
       </div>
     </div>
 
+
+<script type="text/javascript">
+    var disqus_shortname = 'kayorl'; 
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<script type="text/javascript">
+var disqus_shortname = 'kayorl'; 
+
+(function () {
+var s = document.createElement('script'); s.async = true;
+s.type = 'text/javascript';
+s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
   
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:'kayorl'};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
     
 
     <script src="asset/js/foundation.min.js"></script>

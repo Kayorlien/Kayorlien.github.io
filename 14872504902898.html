@@ -1,0 +1,433 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+   - 几谷 博客
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:kayorl.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; 几谷 博客</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="nodejs.html">nodejs</a></li>
+        
+            <li><a href="database.html">数据库系统</a></li>
+        
+            <li><a href="C&C++.html">C/C++</a></li>
+        
+            <li><a href="O&M.html">运维</a></li>
+        
+            <li><a href="objc.html">ObjC</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1></h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/9/23 19:11 下午</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='objc.html'>ObjC</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <h1 id="toc_0">OC(2) 对 C 的扩展</h1>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_1">解构 Hello, Objective-C</h2>
+
+<pre><code class="language-objc">#import  &lt;Foundation/Foundation.h&gt;
+int main(int argc, const char * argv[]) {
+   NSLog(@&quot;Hello, Objective-C.&quot;)
+   return 0;
+} 
+</code></pre>
+
+<p>#import <Foundation/Foundation.h></p>
+
+<ul>
+<li>查询 Foundation 框架中的 Foundation.h 头文件,使用# import可以避免重复包含</li>
+<li>Foundation.h 涵盖100多个文件.但 Xcode 使用预编译头文件加快读取速度</li>
+<li>Cocoa 的组成部分有 Foundation 和 AppKit ,导入 Foundation, 就可以使用 Cocoa 特性写代码了</li>
+<li>Foundation 框架: 处理 UI 之下的那些层的特性,比如数据结构和通信机制</li>
+</ul>
+
+<p>NSLog() 和@ &quot;字符串&quot;</p>
+
+<ul>
+<li>接受格式说明符 (比如 %d)</li>
+<li>NS前缀: NextSTEP工具包</li>
+<li>@符号意味着符号内的字符串作为 Cocoa 的 NSString 元素来处理 </li>
+</ul>
+
+<h2 id="toc_2">布尔类型</h2>
+
+<p>C 语言拥有 bool 数据类型,该类型有 true 和 false 两个值,Objective-C 提供了一个相似的 <code>BOOL</code>, 它具有 <code>YES</code> 和 <code>No</code> 两个值</p>
+
+<h3 id="toc_3">BOOL</h3>
+
+<ol>
+<li>带符号的字符类型 (signed char)</li>
+<li>使用8位的存储空间</li>
+<li>通过# define 把 <code>YES 定义为 1, NO 定义为 0</code></li>
+<li>不小心把大于1的整型赋值给 BOOL 变量,<code>最低字位</code>会被用作 BOOL 值</li>
+</ol>
+
+<p>通过实例来理解 BOOL 类型</p>
+
+<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
+
+BOOL areIntsDifferent(int a, int b){
+    if (a == b) {
+        return (NO);
+    }else{
+        return (YES);
+    }
+    
+}
+NSString * boolString(BOOL str){
+    if (str == YES) {
+        return (@&quot;YES&quot;);
+    }else{
+    return (@&quot;NO&quot;);
+    }
+    
+}
+int main(int argc, const char * argv[]) {
+    BOOL areInts=areIntsDifferent(5, 5);
+    NSLog(@&quot;are %d and %d different? %@\n&quot;,5,5,boolString(areInts));    // 输出 NO
+    
+    areInts=areIntsDifferent(10, 0);
+    NSLog(@&quot;are %d and %d different? %@\n&quot;,10,0,boolString(areInts));    //输出 YES
+    return 0;
+}
+</code></pre>
+
+<h3 id="toc_4">获取布尔值</h3>
+
+<p>下面这种方式获取布尔值需要注意,由于 BOOL 值有8位的存储空间的,因此通过判断 BOOL 值为 YES 的话,会出现其他值</p>
+
+<p>然而,直接与 NO 比较是<code>安全</code>的, 因为 C 语言中的假值只有一个 0</p>
+
+<pre><code class="language-objc">BOOL areIntsDifferent_faulty(int a, int b){
+    return (a-b);
+}
+int main(int argc, const char * argv[]) {
+    BOOL b_value=areIntsDifferent_faulty(5, 10);
+    NSLog(@&quot;BOOL %d and %d is %d\n&quot;,5,10,b_value);   //BOOL 5 and 10 is -5
+    
+    b_value=areIntsDifferent_faulty(10, 10);
+    NSLog(@&quot;BOOL %d and %d is %d\n&quot;,10,10,b_value);  //BOOL 10 and 10 is 0
+}
+
+</code></pre>
+
+<h2 id="toc_5">NSString</h2>
+
+<p>boolString() 的返回值类型是一个指向 NSString 的<code>指针</code>,意味着会返回一个 Cocoa 字符串.(原因摘自<a href="http://blog.sina.com.cn/s/blog_9ffcd5dc01014igv.html">stackoverflow</a>,关于<a href="http://stackoverflow.com/questions/5074369/when-to-and-when-not-to-use-pointers-in-objective-c">指针使用的原因</a>,还有<a href="http://www.cnblogs.com/edisonchou/p/4669098.html">图看堆栈</a>)</p>
+
+<blockquote>
+<p>You use a pointer always when referring to something on the heap and sometimes, but usually not when referring to something on the stack.</p>
+
+<p>Since Objective-C objects are always allocated on the heap,you always use pointers to Objective-C objects.</p>
+</blockquote>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14872504903507.html" 
+          title="Previous Post: OC(3) 面对对象编程 (OOP)">&laquo; OC(3) 面对对象编程 (OOP)</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14872295002950.html" 
+          title="Next Post: 字符数组 vs 字符串常量">字符数组 vs 字符串常量 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>几谷 博客</h1>
+                <div class="site-des">暂时还没想到什么</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Kayorlien" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:kayorl@163.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="nodejs.html"><strong>nodejs</strong></a>
+        
+            <a href="database.html"><strong>数据库系统</strong></a>
+        
+            <a href="C&C++.html"><strong>C/C++</strong></a>
+        
+            <a href="O&M.html"><strong>运维</strong></a>
+        
+            <a href="objc.html"><strong>ObjC</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14872445826285.html">MySQL 语句</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872339187000.html">MySQL5.7 从相见到👋</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872470138156.html">[译] Sequelize(6) sequelize-cli，出门必备良品</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142796.html">[译] Sequelize(5) 几对几</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142644.html">[译] Sequelize(4) 范围</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+
+
+  </body>
+</html>

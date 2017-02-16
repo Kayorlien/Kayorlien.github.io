@@ -1,0 +1,854 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  [译] Sequelize(2)  定义表格 - 几谷 博客
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:kayorl.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; 几谷 博客</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="nodejs.html">nodejs</a></li>
+        
+            <li><a href="database.html">数据库系统</a></li>
+        
+            <li><a href="C&C++.html">C/C++</a></li>
+        
+            <li><a href="O&M.html">运维</a></li>
+        
+            <li><a href="objc.html">ObjC</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>[译] Sequelize(2)  定义表格</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/9/29 16:17 下午</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='sequelize.html'>Sequelize</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>Sequelize 会自动增加 <code>createdAt</code> 和 <code>updated</code> 属性,这样能知道一个实例的创建时间和最终修改时间.</p>
+
+<p>如果不想自动生成,可以到<a href="http://docs.sequelizejs.com/en/v3/docs/models-definition/#configuration">configuration</a>去看如何实现.</p>
+
+<span id="more"></span><!-- more -->
+
+<blockquote>
+<p>定义模型与表之间的映射,使用 define 方法. </p>
+</blockquote>
+
+<pre><code class="language-js">var Project = sequelize.define(&#39;project&#39;, {
+  title: Sequelize.STRING,
+  description: Sequelize.TEXT
+})
+
+var Task = sequelize.define(&#39;task&#39;, {
+  title: Sequelize.STRING,
+  description: Sequelize.TEXT,
+  deadline: Sequelize.DATE
+})
+</code></pre>
+
+<p>还可以为每一个列增加一些可选属性</p>
+
+<pre><code class="language-js">var Foo = sequelize.define(&#39;foo&#39;, {
+ // 自动设置默认值为 true
+ flag: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: true},
+
+ //  日期默认值 =&gt; 当前时间
+ myDate: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
+
+ // 设置列的 allowNull为 false 将会为该列增加 非空 属性
+ // 在查询数据库之前想检车一个值是否为 空 ,看 validation 节
+ title: { type: Sequelize.STRING, allowNull: false},
+ 
+ // 创建两个拥有相同属性的值会抛出一个错误
+ // The unique property can be either a boolean, or a string.
+ // If you provide the same string for multiple columns, they will form a
+ // composite unique key.
+ someUnique: {type: Sequelize.STRING, unique: true},
+ uniqueOne: { type: Sequelize.STRING,  unique: &#39;compositeIndex&#39;},
+ uniqueTwo: { type: Sequelize.INTEGER, unique: &#39;compositeIndex&#39;}
+ 
+ // unique 属性同时也是创建一个 unique 索引 的简写
+ someUnique: {type: Sequelize.STRING, unique: true}
+ 
+ // 跟下面的两句定义语句等价
+ {someUnique: {type: Sequelize.STRING}},
+ {indexes: [{unique: true, fields: [&#39;someUnique&#39;]}]}
+
+ // 主码
+ identifier: { type: Sequelize.STRING, primaryKey: true},
+ 
+ // 自增
+ incrementMe: { type: Sequelize.INTEGER, autoIncrement: true },
+
+ // 注释,只有 MySQL 和 PG 可以使用
+ // Comments can be specified for each field for MySQL and PG
+ hasComment: { type: Sequelize.INTEGER, comment: &quot;I&#39;m a comment!&quot; },
+ 
+ // 在模型中的名字是小驼峰,在表中的列名可以用 field 属性来指定
+ fieldWithUnderscores: { type: Sequelize.STRING, field: &quot;field_with_underscores&quot; },
+
+ // 创建外码
+ bar_id: {
+   type: Sequelize.INTEGER,
+
+   references: {
+     // This is a reference to another model
+     model: Bar,
+     //被引用模型的  列名  (是列名,即 field 名)
+     key: &#39;id&#39;,
+     // 检查外码约束,只支持 PostgreSQL .
+     deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+   }
+ }
+})
+</code></pre>
+
+<h2 id="toc_0">数据类型</h2>
+
+<p>更详细的可以上 <a href="http://docs.sequelizejs.com/en/v3/api/datatypes">DataTypes</a> 看一看</p>
+
+<pre><code class="language-js">Sequelize.STRING                      // VARCHAR(255)
+Sequelize.STRING(1234)                // VARCHAR(1234)
+Sequelize.STRING.BINARY               // VARCHAR BINARY
+Sequelize.TEXT                        // TEXT
+Sequelize.TEXT(&#39;tiny&#39;)                // TINYTEXT
+
+Sequelize.INTEGER                     // INTEGER
+Sequelize.BIGINT                      // BIGINT
+Sequelize.BIGINT(11)                  // BIGINT(11)
+
+Sequelize.FLOAT                       // FLOAT
+Sequelize.FLOAT(11)                   // FLOAT(11)
+Sequelize.FLOAT(11, 12)               // FLOAT(11,12)
+
+Sequelize.REAL                        // REAL        PostgreSQL only.
+Sequelize.REAL(11)                    // REAL(11)    PostgreSQL only.
+Sequelize.REAL(11, 12)                // REAL(11,12) PostgreSQL only.
+
+Sequelize.DOUBLE                      // DOUBLE
+Sequelize.DOUBLE(11)                  // DOUBLE(11)
+Sequelize.DOUBLE(11, 12)              // DOUBLE(11,12)
+
+Sequelize.DECIMAL                     // DECIMAL
+Sequelize.DECIMAL(10, 2)              // DECIMAL(10,2)
+
+Sequelize.DATE                        // DATETIME for mysql / sqlite, TIMESTAMP WITH TIME ZONE for postgres
+Sequelize.DATE(6)                     // DATETIME(6) for mysql 5.6.4+. Fractional seconds support with up to 6 digits of precision 
+Sequelize.DATEONLY                    // DATE without time.
+Sequelize.BOOLEAN                     // TINYINT(1)
+
+Sequelize.ENUM(&#39;value 1&#39;, &#39;value 2&#39;)  // An ENUM with allowed values &#39;value 1&#39; and &#39;value 2&#39;
+Sequelize.ARRAY(Sequelize.TEXT)       // Defines an array. PostgreSQL only.
+
+Sequelize.JSON                        // JSON column. PostgreSQL only.
+Sequelize.JSONB                       // JSONB column. PostgreSQL only.
+
+Sequelize.BLOB                        // BLOB (bytea for PostgreSQL)
+Sequelize.BLOB(&#39;tiny&#39;)                // TINYBLOB (bytea for PostgreSQL. Other options are medium and long)
+
+Sequelize.UUID                        // UUID datatype for PostgreSQL and SQLite, CHAR(36) BINARY for MySQL (use defaultValue: Sequelize.UUIDV1 or Sequelize.UUIDV4 to make sequelize generate the ids automatically)
+
+
+Sequelize.GEOMETRY                    // Spatial column.  PostgreSQL (with PostGIS) or MySQL only.
+Sequelize.GEOMETRY(&#39;POINT&#39;)           // Spatial column with geomerty type.  PostgreSQL (with PostGIS) or MySQL only.
+Sequelize.GEOMETRY(&#39;POINT&#39;, 4326)     // Spatial column with geomerty type and SRID.  PostgreSQL (with PostGIS) or MySQL only.
+</code></pre>
+
+<p>integer, bigint, float 和 double 同样支持 unsigned 和 zerofill 约束   </p>
+
+<pre><code class="language-js">Sequelize.INTEGER.UNSIGNED              // INTEGER UNSIGNED
+Sequelize.INTEGER(11).UNSIGNED          // INTEGER(11) UNSIGNED
+Sequelize.INTEGER(11).ZEROFILL          // INTEGER(11) ZEROFILL
+Sequelize.INTEGER(11).ZEROFILL.UNSIGNED // INTEGER(11) UNSIGNED ZEROFILL
+Sequelize.INTEGER(11).UNSIGNED.ZEROFILL // INTEGER(11) UNSIGNED ZEROFILL
+</code></pre>
+
+<h3 id="toc_1">对象标记的用法</h3>
+
+<pre><code class="language-js">// for enums:
+sequelize.define(&#39;model&#39;, {
+  states: {
+    type:   Sequelize.ENUM,
+    values: [&#39;active&#39;, &#39;pending&#39;, &#39;deleted&#39;]
+  }
+})
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_2">Getters &amp; Setters 方法</h2>
+
+<p>在模型中定义&#39;对象-属性&#39;的 getter 和  setter 方法是可能的,可以被用来保护与数据库列相映射的属性,还可以定义一些<code>假</code>属性<br/>
+Getters 和 Setters 能以下面两种方式定义</p>
+
+<ul>
+<li>作为单个属性定义的一部分</li>
+<li>作为模型可选的一部分</li>
+</ul>
+
+<h2 id="toc_3">定义为属性的一部分</h2>
+
+<pre><code class="language-js">var Employee = sequelize.define(&#39;employee&#39;, {
+  name:  {
+    type     : Sequelize.STRING,
+    allowNull: false,
+    get      : function()  {
+      var title = this.getDataValue(&#39;title&#39;);
+      // &#39;this&#39; 允许你去获得实例的属性
+      return this.getDataValue(&#39;name&#39;) + &#39; (&#39; + title + &#39;)&#39;;
+    },
+  },
+  title: {
+    type     : Sequelize.STRING,
+    allowNull: false,
+    set      : function(val) {
+      this.setDataValue(&#39;title&#39;, val.toUpperCase());
+    }
+  }
+});
+
+Employee
+  .create({ name: &#39;John Doe&#39;, title: &#39;senior engineer&#39; })
+  .then(function(employee) {
+    console.log(employee.get(&#39;name&#39;)); // John Doe (SENIOR ENGINEER)
+    console.log(employee.get(&#39;title&#39;)); // SENIOR ENGINEER
+  })
+</code></pre>
+
+<h4 id="toc_4">定义为模型的一部分</h4>
+
+<p>下面是一个在模型内定义 getter 和 setter 方法的例子. 在这个例子里,<code>fullname</code> 的 getter 方法是在模型内定义<code>假属性</code>的一个例子<br/>
+,因为 <code>fullname</code>  属性不存在于数据库模式中. 实际上,假属性可以通过以下两种方式来定义</p>
+
+<ul>
+<li>通过模型的 getter 方法</li>
+<li>或者通过使用带有 <a href="http://docs.sequelizejs.com/en/v3/api/datatypes#virtual"><code>VIRTUAL</code></a> 数据类型的列, VIRTUAL 数据类型可以有 validation , 然而 virtual 数据类型的 getter 方法不行</li>
+</ul>
+
+<p>注意在 <code>fullName</code> 的 getter 方法中引用的 <code>this.firstName</code> 和 <code>this.lastName</code> 会触发各自的 getter 方法</p>
+
+<pre><code class="language-js">var Foo = sequelize.define(&#39;foo&#39;, {
+  firstname: Sequelize.STRING,
+  lastname: Sequelize.STRING
+}, {
+  getterMethods   : {
+    fullName       : function()  { return this.firstname + &#39; &#39; + this.lastname }
+  },
+  
+  setterMethods   : {
+    fullName       : function(value) {
+        var names = value.split(&#39; &#39;);
+        this.setDataValue(&#39;firstname&#39;, names.slice(0, -1).join(&#39; &#39;));
+        this.setDataValue(&#39;lastname&#39;, names.slice(-1).join(&#39; &#39;));
+    },
+  }
+});
+
+</code></pre>
+
+<h4 id="toc_5">在 getter 和 setter 方法中使用的 Helper 方法</h4>
+
+<ul>
+<li>获取一个基础属性值 , 经常用 <code>this.getDataValue()</code></li>
+<li>设置一个基础属性值 , 经常用 <code>this.setDataValue()</code></li>
+<li>坚持使用 getter 和 setter 方法 可以保护内部数据</li>
+</ul>
+
+<pre><code class="language-js">/* &#39;title&#39; 属性的 getter 方法*/
+function(){
+    return this.getDataValue(&#39;title&#39;);
+}
+
+/* &#39;title&#39; 属性的 setter 方法*/
+function(){
+    return this.setDataValue(&#39;title&#39;,title.toString().toLowerCase());
+}
+</code></pre>
+
+<h2 id="toc_6">认证 (Validation)</h2>
+
+<p>模型认证, 可以规定模型中每个属性的格式/内容 的认证. 其实现在<a href="https://github.com/chriso/validator.js">这</a></p>
+
+<p>当进行 <code>create</code>,<code>update</code> 和 <code>save</code>操作时,认证会自动运行.也可以在实例中手动认证</p>
+
+<pre><code class="language-js">var ValidateMe = sequelize.define(&#39;foo&#39;, {
+  foo: {
+    type: Sequelize.STRING,
+    validate: {
+      is: [&quot;^[a-z]+$&quot;,&#39;i&#39;],     // will only allow letters
+      is: /^[a-z]+$/i,          // same as the previous example using real RegExp
+      not: [&quot;[a-z]&quot;,&#39;i&#39;],       // will not allow letters
+      isEmail: true,            // checks for email format (foo@bar.com)
+      isUrl: true,              // checks for url format (http://foo.com)
+      isIP: true,               // checks for IPv4 (129.89.23.1) or IPv6 format
+      isIPv4: true,             // checks for IPv4 (129.89.23.1)
+      isIPv6: true,             // checks for IPv6 format
+      isAlpha: true,            // will only allow letters
+      isAlphanumeric: true,     // will only allow alphanumeric characters, so &quot;_abc&quot; will fail
+      isNumeric: true,          // will only allow numbers
+      isInt: true,              // checks for valid integers
+      isFloat: true,            // checks for valid floating point numbers
+      isDecimal: true,          // checks for any numbers
+      isLowercase: true,        // checks for lowercase
+      isUppercase: true,        // checks for uppercase
+      notNull: true,            // won&#39;t allow null
+      isNull: true,             // only allows null
+      notEmpty: true,           // don&#39;t allow empty strings
+      equals: &#39;specific value&#39;, // only allow a specific value
+      contains: &#39;foo&#39;,          // force specific substrings
+      notIn: [[&#39;foo&#39;, &#39;bar&#39;]],  // check the value is not one of these
+      isIn: [[&#39;foo&#39;, &#39;bar&#39;]],   // check the value is one of these
+      notContains: &#39;bar&#39;,       // don&#39;t allow specific substrings
+      len: [2,10],              // only allow values with length between 2 and 10
+      isUUID: 4,                // only allow uuids
+      isDate: true,             // only allow date strings
+      isAfter: &quot;2011-11-05&quot;,    // only allow date strings after a specific date
+      isBefore: &quot;2011-11-05&quot;,   // only allow date strings before a specific date
+      max: 23,                  // only allow values
+      min: 23,                  // only allow values &gt;= 23
+      isArray: true,            // only allow arrays
+      isCreditCard: true,       // check for valid credit card numbers
+
+      // custom validations are also possible:
+      isEven: function(value) {
+        if(parseInt(value) % 2 != 0) {
+          throw new Error(&#39;Only even values are allowed!&#39;)
+        // we also are in the model&#39;s context here, so this.otherField
+        // would get the value of otherField if it existed
+        }
+      }
+    }
+  }
+});
+</code></pre>
+
+<p>注意当多个参数需要被传递到内嵌的认证函数时,多个参数应该被放在一个数组中.</p>
+
+<pre><code class="language-js">isIn: [[&#39;en&#39;, &#39;zh&#39;]],   // check the value is one of these
+</code></pre>
+
+<p>不用 validator.js 提供的错误信息,自己定制错误信息</p>
+
+<pre><code class="language-js">isIn: {
+  args: [[&#39;en&#39;, &#39;zh&#39;]],
+  msg: &quot;Must be English or Chinese&quot;
+}
+</code></pre>
+
+<p>可以看<a href="https://github.com/chriso/validator.js">validator.js PROJECT</a>获取更多细节</p>
+
+<hr/>
+
+<h3 id="toc_7">认证器和 <code>allowNull</code></h3>
+
+<p>如果模型的列被设置为 <code>allowNull:true</code> 和 值被设置为 <code>null</code>的话,那认证器不会运行.</p>
+
+<p>举个栗子, 一个字符串的列长度设置为 最短为5, 但它可以存储 null</p>
+
+<h3 id="toc_8">模型认证</h3>
+
+<pre><code class="language-js">var Pub = Sequelize.define(&#39;pub&#39;, {
+  name: { type: Sequelize.STRING },
+  address: { type: Sequelize.STRING },
+  latitude: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+    defaultValue: null,
+    validate: { min: -90, max: 90 }
+  },
+  longitude: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+    defaultValue: null,
+    validate: { min: -180, max: 180 }
+  },
+}, {
+
+
+  //在这里对模型进行验证,只有 latitude 和 longtitude 同时被给予或都为空时成立
+  validate: {
+    bothCoordsOrNone: function() {
+      if ((this.latitude === null) !== (this.longitude === null)) {
+        throw new Error(&#39;Require either both latitude and longitude or neither&#39;)
+      }
+    }
+  }
+})
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_9">配置</h2>
+
+<pre><code class="language-js">var Bar = sequelize.define(&#39;bar&#39;, { /* bla */ }, {
+
+  // 不增加 TIMESTAMP 属性  (updatedAt, createdAt)
+  timestamps: false,
+  
+  //不删除数据库中原有项, 增加新属性 deletedAt 并设置为 当前日期,
+  //只有 TIMESTAMP 属性是允许的时候有效
+  paranoid: true,
+  
+  // 不要使用驼峰式语法,用下划线代替
+  // so updatedAt will be updated_at
+  underscored: true,
+  
+  // 不允许调整表名 ; 
+  // 默认地, sequelize 会自动转换所有传递的模型名字(define 的第一个参数)
+  // 为复数
+  // 如果不想这样,设置为 true
+  freezeTableName: true,
+
+  // 定义表名
+  tableName: &#39;my_very_custom_table_name&#39;
+})
+</code></pre>
+
+<p>修改引擎</p>
+
+<pre><code class="language-js">var Person = sequelize.define(&#39;person&#39;, { /* attributes */ }, {
+  engine: &#39;MYISAM&#39;
+})
+
+// or globally
+var sequelize = new Sequelize(db, user, pw, {
+  define: { engine: &#39;MYISAM&#39; }
+})
+</code></pre>
+
+<p>做注释</p>
+
+<pre><code class="language-js">var Person = sequelize.define(&#39;person&#39;, { /* attributes */ }, {
+  comment: &quot;I&#39;m a table comment!&quot;
+})
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_10">导入</h2>
+
+<p>可以把对表的定义放在单一文件中,返回对象恰好跟在 import 方法中定义的一样</p>
+
+<pre><code class="language-js">
+  // in your server file - e.g. app.js
+var Project = sequelize.import(__dirname + &quot;/path/to/models/project&quot;)
+
+  // 定义在 project.js 文件中已经定义完成了
+  // DataTypes  与上面解释的部分很像
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define(&quot;project&quot;, {
+    name: DataTypes.STRING,
+    description: DataTypes.TEXT
+  })
+}
+
+sequelize.import(&#39;project&#39;, function(sequelize, DataTypes) {
+  return sequelize.define(&quot;project&quot;, {
+    name: DataTypes.STRING,
+    description: DataTypes.TEXT
+  })
+})
+</code></pre>
+
+<h2 id="toc_11">数据库同步</h2>
+
+<p>开始一个新项目的时候,我们没有数据库架构,于是我们不需要 Sequelize.</p>
+
+<p>只需要说明我们的模型结构, 让库做剩下的部分,现在只支持 <code>表的创建与删除</code></p>
+
+<pre><code class="language-js">// 只同步还没在数据库中的模型
+// Sync all models that aren&#39;t already in the database
+sequelize.sync()
+
+// 强制同步所有数据库的模型
+sequelize.sync({force: true})
+
+// 删除所有表
+sequelize.drop()
+
+// 开始执行
+sequelize.[sync|drop]().then(function() {
+  // woot woot
+}).catch(function(error) {
+  // whooops
+})
+</code></pre>
+
+<p>因为<code>.sync({force: true})</code> 是毁灭性的操作, 可以使用 match 选项去增加更多的安全检查(正则)</p>
+
+<pre><code class="language-js">// 删除以 &#39;_test&#39; 结尾的词
+sequelize.sync({ force: true, match: /_test$/ });
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_12">模型的扩展</h2>
+
+<p>Sequelize 允许我们去给 模型和相应的实例 传递定制方法 </p>
+
+<pre><code class="language-js">var sequelize = new Sequelize(&#39;database&#39;, &#39;username&#39;, &#39;password&#39;, {
+  // 其他可选的初始化可以放在这里
+  define: {
+    classMethods: {
+      method1: function() {},
+      method2: function() {}
+    },
+    instanceMethods: {
+      method3: function() {}
+    }
+  }
+})
+
+// Example:
+var Foo = sequelize.define(&#39;foo&#39;, { /* attributes */});
+Foo.method1()
+Foo.method2()
+Foo.build().method3()
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_13">索引</h2>
+
+<p>Sequelize 支持在模型定义中增加索引, 这些索引在 <code>Model.sync()</code> 或 <code>sequelize.sync()</code>时被创建.</p>
+
+<pre><code class="language-js">sequelize.define(&#39;user&#39;, {}, {
+  indexes: [
+    // Create a unique index on email
+    {
+      unique: true,
+      fields: [&#39;email&#39;]
+    },
+
+    // Creates a gin index on data with the jsonb_path_ops operator
+    {
+      fields: [&#39;data&#39;],
+      using: &#39;gin&#39;,
+      operator: &#39;jsonb_path_ops&#39;
+    },
+
+    // By default index name will be [table]_[fields]
+    // Creates a multi column partial index
+    {
+      name: &#39;public_by_author&#39;,
+      fields: [&#39;author&#39;, &#39;status&#39;],
+      where: {
+        status: &#39;public&#39;
+      }
+    },
+
+    // A BTREE index with a ordered field
+    {
+      name: &#39;title_index&#39;,
+      method: &#39;BTREE&#39;,
+      fields: [&#39;author&#39;, {attribute: &#39;title&#39;, collate: &#39;en_US&#39;, order: &#39;DESC&#39;, length: 5}]
+    }
+  ]
+})
+</code></pre>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14872504904170.html" 
+          title="Previous Post: OC(8) 对象初始化">&laquo; OC(8) 对象初始化</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14872504904064.html" 
+          title="Next Post: OC(7) 异常">OC(7) 异常 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>几谷 博客</h1>
+                <div class="site-des">暂时还没想到什么</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Kayorlien" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:kayorl@163.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="nodejs.html"><strong>nodejs</strong></a>
+        
+            <a href="database.html"><strong>数据库系统</strong></a>
+        
+            <a href="C&C++.html"><strong>C/C++</strong></a>
+        
+            <a href="O&M.html"><strong>运维</strong></a>
+        
+            <a href="objc.html"><strong>ObjC</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14872445826285.html">MySQL 语句</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872339187000.html">MySQL5.7 从相见到👋</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872470138156.html">[译] Sequelize(6) sequelize-cli，出门必备良品</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142796.html">[译] Sequelize(5) 几对几</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142644.html">[译] Sequelize(4) 范围</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+
+
+  </body>
+</html>

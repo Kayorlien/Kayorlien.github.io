@@ -1,0 +1,2531 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[几谷 博客]]></title>
+  <link href="http://kayorl.com/atom.xml" rel="self"/>
+  <link href="http://kayorl.com/"/>
+  <updated>2017-02-16T22:10:36+08:00</updated>
+  <id>http://kayorl.com/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[MySQL 语句]]></title>
+    <link href="http://kayorl.com/14872445826285.html"/>
+    <updated>2017-02-16T19:29:42+08:00</updated>
+    <id>http://kayorl.com/14872445826285.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">存储创建时间和最后修改时间</h2>
+
+<pre><code class="language-sql">CREATE TABLE t1
+(
+    tb_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ts_modifiled TIMESTAMP DEFAULT CURRNET_TIMESTAMP
+                            ON UPDATE CURRENT_TIMESTAMP,
+    ...
+):
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MySQL5.7 从相见到👋]]></title>
+    <link href="http://kayorl.com/14872339187000.html"/>
+    <updated>2017-02-16T16:31:58+08:00</updated>
+    <id>http://kayorl.com/14872339187000.html</id>
+    <content type="html"><![CDATA[
+<p>我的意中人是个盖世英雄<br/>
+有一天他会踩着七色云彩来娶我<br/>
+我猜中了前头,<br/>
+可是我猜不着这结局</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">安装</a>
+</li>
+<li>
+<a href="#toc_1">建立与 MySQL 服务器的连接</a>
+</li>
+<li>
+<a href="#toc_2">导入 .sql 文件</a>
+</li>
+<li>
+<a href="#toc_3">修改时区</a>
+</li>
+<li>
+<a href="#toc_4">备份</a>
+</li>
+<li>
+<a href="#toc_5">卸载</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">安装</h2>
+
+<p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-16-04">DO教程</a></p>
+
+<pre><code># 安装 
+$ sudo apt-get update
+$ sudo apt-get install mysql-server
+
+# 修改数据库的安全配置，如禁用远程 root 用户
+$ sudo mysql_secure_installation
+
+## 测试数据库状态
+$ systemctl status mysql.service
+</code></pre>
+
+<h2 id="toc_1">建立与 MySQL 服务器的连接</h2>
+
+<p>为连接到 MySQL 服务器,在命令行中调用 mysql 程序</p>
+
+<pre><code>$ mysql -h host_name -p -u user_name -D database_name
+</code></pre>
+
+<ul>
+<li><code>mysql</code> 是必须的, 其他可选</li>
+<li>-h  host_name　　　主机地址,默认为本地</li>
+<li>-u  user_name　　　MySQL 用户名</li>
+<li>-p　　　　　　　　回显 Enter password: ，如果相应用户名有密码而没加此项，会显示<code>拒绝访问</code></li>
+<li>-D  database_name 选择操作(默认)的数据库<br/></li>
+</ul>
+
+<h2 id="toc_2">导入 .sql 文件</h2>
+
+<p>可以将编写好的数据库语句写入到文件名后缀为 <code>.sql</code> 的文件中,并记住其路径,最简单的方法是在命令行中进入到.sql 文件所在的目录,然后在<code>命令行</code>执行以下命令(省略了主机名,用户,密码等参数)</p>
+
+<pre><code>$ mysql sampdb &lt; create_member.sql
+</code></pre>
+
+<p>如果已经进入 mysql 程序界面,则执行</p>
+
+<pre><code>mysql&gt; source create_member.sql;
+</code></pre>
+
+<h2 id="toc_3">修改时区</h2>
+
+<pre><code># /etc/my.cnf
+
+[mysqld]
+...
+default-time-zone = &#39;+8:00&#39;
+
+$ systemctl restart mysql
+</code></pre>
+
+<h2 id="toc_4">备份</h2>
+
+<pre><code>$ mysqldump -u -p -D exampleDB &gt;my.sql
+</code></pre>
+
+<h2 id="toc_5">卸载</h2>
+
+<p>purge,翻译过来是净化的意思</p>
+
+<pre><code>sudo apt-get remove --purge mysql*
+sudo apt-get autoremove
+sudo apt-get autoclean
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[译] Sequelize(6) sequelize-cli，出门必备良品]]></title>
+    <link href="http://kayorl.com/14872470138156.html"/>
+    <updated>2017-02-16T20:10:13+08:00</updated>
+    <id>http://kayorl.com/14872470138156.html</id>
+    <content type="html"><![CDATA[
+<p>让数据库转移到那些年的状态<br/>
+通过<strong>迁移文件</strong>存储数据库不同时期的状态，每个迁移文件描述了对数据库的操作</p>
+
+<span id="more"></span><!-- more -->
+
+<p><strong>CLI</strong>:  <code>command-line interface</code> , 命令行界面</p>
+
+<h2 id="toc_0">全局安装</h2>
+
+<pre><code>$ npm install -g sequelize-cli
+</code></pre>
+
+<h3 id="toc_1">使用</h3>
+
+<pre><code>$ sequelize
+</code></pre>
+
+<p>迁移文件一般长这样</p>
+
+<blockquote>
+<p>queryInterface : 修改数据库</p>
+
+<p>Sequelize : 提供多种类型</p>
+</blockquote>
+
+<pre><code class="language-js">module.exports = {
+  up: function(queryInterface, Sequelize) {
+    // logic for transforming into the new state
+  },
+ 
+  down: function(queryInterface, Sequelize) {
+    // logic for reverting the changes
+  }
+}
+</code></pre>
+
+<p>queryInterface有一下几个函数（常用）：</p>
+
+<ul>
+<li>createTable(tableName, attributes, options)</li>
+<li>addIndex(tableName, attributes, options)</li>
+<li>dropTable(tableName, options)</li>
+</ul>
+
+<h2 id="toc_2">createTable(tableName, attributes, options)</h2>
+
+<pre><code>queryInterface.createTable(
+  &#39;nameOfTheNewTable&#39;,
+  {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    createdAt: {
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      type: Sequelize.DATE
+    },
+    attr1: Sequelize.STRING,
+    attr2: Sequelize.INTEGER,
+    attr3: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
+    },
+    //foreign key usage
+    attr4: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: &#39;another_table_name&#39;,
+            key: &#39;id&#39;
+        },
+        onUpdate: &#39;cascade&#39;,
+        onDelete: &#39;cascade&#39;
+    }
+  },
+  {
+    engine: &#39;MYISAM&#39;,                     // default: &#39;InnoDB&#39;
+    charset: &#39;utf8&#39;,                    // default: null
+    schema: &#39;public&#39;                      // default: public, PostgreSQL only.
+  }
+)
+</code></pre>
+
+<h2 id="toc_3">addIndex(tableName, attributes, options)</h2>
+
+<pre><code class="language-js">// This example will create the index person_firstname_lastname
+queryInterface.addIndex(&#39;Person&#39;, [&#39;firstname&#39;, &#39;lastname&#39;])
+
+
+
+// This example will create a unique index with the name SuperDuperIndex using the optional &#39;options&#39; field.
+// Possible options:
+// - indicesType: UNIQUE|FULLTEXT|SPATIAL
+// - indexName: The name of the index. Default is __
+// - parser: For FULLTEXT columns set your parser
+// - indexType: Set a type for the index, e.g. BTREE. See the documentation of the used dialect
+// - logging: A function that receives the sql query, e.g. console.log
+queryInterface.addIndex(
+  &#39;Person&#39;,
+  [&#39;firstname&#39;, &#39;lastname&#39;],
+  {
+    indexName: &#39;SuperDuperIndex&#39;,
+    indicesType: &#39;UNIQUE&#39;
+  }
+)
+</code></pre>
+
+<h2 id="toc_4">dropTable(tableName, options)</h2>
+
+<pre><code>queryInterface.dropTable(&#39;nameOfTheExistingTable&#39;)
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[译] Sequelize(5) 几对几]]></title>
+    <link href="http://kayorl.com/14872314142796.html"/>
+    <updated>2017-02-16T15:50:14+08:00</updated>
+    <id>http://kayorl.com/14872314142796.html</id>
+    <content type="html"><![CDATA[
+<p>一对一，一对多，多对多</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">一对一</h2>
+
+<h3 id="toc_1">hasOne</h3>
+
+<h3 id="toc_2">belongsTo</h3>
+
+<blockquote>
+<p>区别: <code>联系键</code> 添加的地方不一样</p>
+</blockquote>
+
+<pre><code class="language-js">var Player = this.sequelize.define(&#39;player&#39;, {/* attributes */}), 
+    Coach  = this.sequelize.define(&#39;coach&#39;, {/* attributes */}), 
+    Team  = this.sequelize.define(&#39;team&#39;, {/* attributes */}),
+    Game =  this.sequelize.define(&#39;game&#39;, {/* attributes */});
+
+
+Player.belongsTo(Team);     // 添加 teamId 到 Player
+Coach.hasOne(Team);         //添加 coachId 到 Team
+</code></pre>
+
+<p>通过 hasOne 方法添加的模型</p>
+
+<blockquote>
+<p>对新添加模型的 setter 和 getter 会自动以模型名为后缀</p>
+
+<p>此外，也会以  <code>模型名+id</code> 的形式生成外码</p>
+</blockquote>
+
+<p>可以通过以下代码修改</p>
+
+<pre><code class="language-js">// Person#getPerson, Person#setPerson
+
+Person.hasOne(Person);
+
+
+// 增加方法Person#getFather,Person#setFather
+// 修改外码为dadId
+
+Person.hasOne(Person, {as: &#39;Father&#39;, foreignKey: &#39;dad_id&#39;})
+</code></pre>
+
+<h2 id="toc_3">一对多</h2>
+
+<pre><code class="language-js">var User = sequelize.define(&#39;user&#39;, {/* ... */})
+var Project = sequelize.define(&#39;project&#39;, {/* ... */})
+ 
+// Project#getWorkers , Project#setWorkers
+
+Project.hasMany(User, {as: &#39;Workers&#39;})
+</code></pre>
+
+<h2 id="toc_4">多对多</h2>
+
+<blockquote>
+<p>使用belongToMany,为两个多对多的模型建立联系</p>
+
+<p>通过创建一个中间模型<code>(联系集)</code>实现</p>
+</blockquote>
+
+<pre><code class="language-js">User = sequelize.define(&#39;user&#39;, {})
+Project = sequelize.define(&#39;project&#39;, {})
+UserProjects = sequelize.define(&#39;userProjects&#39;, {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    status: DataTypes.STRING
+})
+ 
+User.belongsToMany(Project, {  as: &#39;Tasks&#39;, through: UserProjects, foreignKey: &#39;userId&#39; })
+Project.belongsToMany(User, {  as: &#39;Workers&#39;,through: UserProjects ,foreignKey: &#39;projectId&#39;})
+
+
+// 添加一个 project, 并且,设置其状态为 started
+
+user.addProject(project, { status: &#39;started&#39; })
+
+
+// 使用 through 可以选择特定属性
+
+User.findAll({
+  include: [{
+    model: Project,
+    through: {
+      attributes: [&#39;createdAt&#39;, &#39;startedAt&#39;, &#39;finishedAt&#39;],
+      where: {completed: true}
+    }
+  }]
+});
+</code></pre>
+
+<blockquote>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[译] Sequelize(4) 范围]]></title>
+    <link href="http://kayorl.com/14872314142644.html"/>
+    <updated>2017-02-16T15:50:14+08:00</updated>
+    <id>http://kayorl.com/14872314142644.html</id>
+    <content type="html"><![CDATA[
+<p>范围（<code>scope</code>）: 定义好范围,在后续的操作中可以减少选择条件的重复，比如，只在<strong>未删除用户</strong>列表中进行操作。</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">范围是对模型的一种分类</h2>
+
+<pre><code class="language-js">// 修改默认所有操作的范围 default Scope
+var Project = sequelize.define( &#39;project&#39;, {
+    // Attributes
+}, {
+    defaultScope: {
+        where: {
+            active: true
+        }
+    },
+    scopes: {
+        deleted: {
+            where: {
+                deleted: true
+            }
+        },
+        activeUsers: {
+            include: [
+                { model: User, where: { active: true } }
+      ]
+        }
+    }
+} );
+
+
+
+// 移除默认范围，设置为 deleted 范围
+Project.scope( &#39;deleted&#39; ).findAll();
+
+// 与上面等价
+var DeletedProjects = Project.scope( &#39;deleted&#39; );
+DeletedProjects.findAll();
+
+var Post = sequelize.define( &#39;post&#39;, attributes, {
+    defaultScope: {
+        where: {
+            active: true
+        }
+    },
+    scopes: {
+        deleted: {
+            where: {
+                deleted: true
+            }
+        }
+    }
+} );
+</code></pre>
+
+<h2 id="toc_1">例子</h2>
+
+<pre><code class="language-js">User.hasMany( Post ); // regular getPosts association
+User.hasMany( Post.scope( &#39;deleted&#39; ), { as: &#39;deletedPosts&#39; } );
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[译] Sequelize(3)  CRUD]]></title>
+    <link href="http://kayorl.com/14872314142502.html"/>
+    <updated>2017-02-16T15:50:14+08:00</updated>
+    <id>http://kayorl.com/14872314142502.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">模型定义</h2>
+
+<pre><code class="language-js">var Task = sequelize.define( &#39;task&#39;, {
+    title: Sequelize.STRING,
+    rank: { type: Sequelize.STRING, defaultValue: 3 }
+} );
+</code></pre>
+
+<h2 id="toc_1">Create</h2>
+
+<pre><code class="language-js">// 创建数据库中对象
+Task.create( { title: &#39;foo&#39; } );
+
+// 创建临时变量
+var task = Task.build( { title: &#39;very important task&#39; } );
+
+// 将临时变量存入数据库内, 只保存 title 属性
+task.save( { fields: [ &#39;title&#39; ] } );
+</code></pre>
+
+<h2 id="toc_2">Update</h2>
+
+<pre><code class="language-js">// 在数据库中更新 task 的 title
+task.update( { title: &#39;a very different title now&#39; } );
+
+
+// 更新 排名小于1000或者无排名的 post 的 updateAt 为 null
+Post.update( {
+    updatedAt: null,
+}, {
+    where: {
+        rank: {
+            $or: {
+                $lt: 100,
+                $eq: null
+            }
+        }
+    }
+    //// rank &lt; 1000 OR rank IS NULL
+} );
+</code></pre>
+
+<h2 id="toc_3">Delete</h2>
+
+<pre><code class="language-js">// 删除 不活跃的 post
+Post.destroy( {
+    where: {
+        status: &#39;inactive&#39;
+    }
+} );
+</code></pre>
+
+<h2 id="toc_4">Retrieve</h2>
+
+<pre><code class="language-js">// 只选择相应属性
+Model.findAll( {
+    attributes: [ &#39;foo&#39;, &#39;bar&#39; ]
+} );
+// 做聚类
+Model.findAll( {
+    attributes: { include: [ [ sequelize.fn( &#39;COUNT&#39;, sequelize.col( &#39;hats&#39; ) ), &#39;no_hats&#39; ] ] }
+} );
+// 除开某些属性
+Model.findAll( {
+    attributes: { exclude: [ &#39;baz&#39; ] }
+} );
+
+// id 查找
+Project.findById( 123 ).then();
+
+// 属性查找
+Project.findOne( { where: { title: &#39;aProject&#39; } } ).then();
+// ？
+Project.findOne( { where: { title: &#39;aProject&#39; }, attributes: [ &#39;id&#39;, [ &#39;name&#39;, &#39;title&#39; ] ] } ).then();
+
+// 找，无则创建， created 为 boolean
+User.findOrCreate( { where: { username: &#39;kayor&#39; } } ).spread( function ( user, created ) {} );
+
+// 找并且计数 count 为计数， rows 为对象数组
+Project.findAndCountAll( {
+    where: { title: { $like: &#39;foo%&#39; } },
+    offset: 10,
+    limit: 2
+} ).then( function ( result ) {
+    console.log( result.count );
+    console.log( result.rows );
+} );
+
+// 找出拥有 active profile 的用户
+User.findAndCountAll( {
+    include: [
+        { model: Profile, where: { active: true } }
+  ],
+    limit: 3
+} );
+
+
+Project.findAll();
+Project.all();
+Project.findAll( { where: { name: &quot;a Project&quot; } } );
+Project.findAll( { where: [ &quot;id&gt;?&quot;, 25 ] } );
+Project.findAll( { where: { id: [ 1, 2, 3 ] } } );
+Project.findAll( {
+    where: {
+        id: {
+            $and: { a: 5 },
+            $or: [ { a: 5 }, { a: 6 } ],
+            $gt: 6,
+            $gte: 6,
+            $lt: 10,
+            $lte: 10,
+            $ne: 20,
+            $between: [ 6, 10 ],
+            $notBetween: [ 6, 10 ],
+            $in: [ 1, 2 ],
+            $notIn: [ 1, 2 ],
+            $like: &#39;%hat&#39;
+        },
+        status: { $not: false }
+    }
+} );
+
+//只找十个
+Project.findAll( { limit: 10 } );
+// 跳过前10个
+Project.findAll( { offset: 10 } );
+// 跳过前10，取两个
+Project.findAll( { offset: 10, limit: 2 } );
+
+// 递减
+Project.findAll( { order: &#39;title DESC&#39; } );
+// 分组
+Project.findAll( { group: &#39;name&#39; } );
+// 计数
+Project.count( { where: [ &quot;id&gt;?&quot;, 25 ] } );
+// 找最大
+Project.max( &#39;age&#39; );
+
+// 内连接找到拥有符合条件工具的用户
+Post.findAll( {
+    include: [ {
+        model: Comment,
+        as: &#39;comment_my&#39;,
+        where: { name: { $like: &#39;%ooth%&#39; } }
+    } ]
+} );
+
+// 获得原数据
+Post.findOne( { where: { title: &#39;scut&#39; } } ).then( function ( post ) {
+    post.title = &#39;south china university of tecknology&#39;;
+    console.log( post.title ); // &#39;south china university of tecknology&#39;
+
+    post.reload().then( function () {
+        console.log( post.title ); // &#39;scut&#39;
+    } );
+} );
+
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[supertest 模拟客户端]]></title>
+    <link href="http://kayorl.com/14872476184764.html"/>
+    <updated>2017-02-16T20:20:18+08:00</updated>
+    <id>http://kayorl.com/14872476184764.html</id>
+    <content type="html"><![CDATA[
+<p>模拟一个客户端，可用于爬虫、API 测试等</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">安装</h2>
+
+<pre><code>$ npm install supertest --save-dev
+</code></pre>
+
+<h2 id="toc_1">例子</h2>
+
+<pre><code class="language-js">var request = require(&#39;supertest&#39;);
+var express = require(&#39;express&#39;);
+
+var app = express();
+
+app.get(&#39;/user&#39;, function(req, res) {
+  res.status(200).json({ name: &#39;tobi&#39; });
+});
+
+request(app)
+  .get(&#39;/user&#39;)
+  .expect(&#39;Content-Type&#39;, /json/)
+  .expect(&#39;Content-Length&#39;, &#39;15&#39;)
+  .expect(200)
+  .end(function(err, res) {
+    if (err) throw err;
+  });
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[pm2]]></title>
+    <link href="http://kayorl.com/14872295003201.html"/>
+    <updated>2017-02-16T15:18:20+08:00</updated>
+    <id>http://kayorl.com/14872295003201.html</id>
+    <content type="html"><![CDATA[
+<p>nodejs 的进程管理器，自带<code>负载均衡</code>以及热重载</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">全局安装</h2>
+
+<pre><code>$ npm install pm2 -g
+</code></pre>
+
+<h2 id="toc_1">开机启动</h2>
+
+<p>pm2 save 保存当前进程列表，下次启动时自动恢复列表内进程</p>
+
+<pre><code>$ pm2 startup &amp;&amp; pm2 save
+</code></pre>
+
+<h2 id="toc_2">启动</h2>
+
+<blockquote>
+<p>[ app_name ] : 应用名<br/>
+[ 4 ] :进程数目,为0时进程数目与 CPU 数相等</p>
+</blockquote>
+
+<pre><code>$ pm2 start app.js --name=[app_name] -i 4
+</code></pre>
+
+<h2 id="toc_3">暂停 | 删除</h2>
+
+<blockquote>
+<p>[ id ] : 进程 id</p>
+</blockquote>
+
+<pre><code>$ pm2 stop [id]
+$ pm2 delete [id]
+</code></pre>
+
+<p>进程数变为2</p>
+
+<blockquote>
+<p>[ app_name ] : 应用名</p>
+</blockquote>
+
+<pre><code>$ pm2 sacle [app_name] 2
+</code></pre>
+
+<h2 id="toc_4">监控</h2>
+
+<pre><code>$ pm2 list
+$ pm2 monit
+$ pm2 show [app_name]
+$ pm2 logs
+$ pm2 logs [app_name]
+</code></pre>
+
+<hr/>
+
+<p>此外，还可以通过 <a href="https://app.keymetrics.io">keymetrics</a>  实现网页监控，不过免费版只能支持一台机器的状态监控</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[nginx 从安装到卸载]]></title>
+    <link href="http://kayorl.com/14872295003080.html"/>
+    <updated>2017-02-16T15:18:20+08:00</updated>
+    <id>http://kayorl.com/14872295003080.html</id>
+    <content type="html"><![CDATA[
+<p>在<code>ubuntu16.04</code>下，对 nginx 进行</p>
+
+<ul>
+<li>
+<a href="#toc_0">源安装</a>
+</li>
+<li>
+<a href="#toc_1">配置防火墙允许 nginx 通过 80 端口</a>
+</li>
+<li>
+<a href="#toc_2">查看 nginx 状态</a>
+</li>
+<li>
+<a href="#toc_3">内核参数优化</a>
+</li>
+<li>
+<a href="#toc_4">使配置生效</a>
+</li>
+<li>
+<a href="#toc_5">nginx 配置</a>
+</li>
+</ul>
+
+
+<span id="more"></span><!-- more -->
+
+<p>参考很全面的<a href="http://bbs.linuxtone.org/thread-25588-1-1.html">教程</a>，关于 nginx 的优化，以及自己平常遇到的问题</p>
+
+<h2 id="toc_0">源安装</h2>
+
+<pre><code>sudo apt-get update
+sudo apt-get install nginx 
+
+# 安装常用 nginx 插件
+apt-get install nginx-extras 
+</code></pre>
+
+<h2 id="toc_1">配置防火墙允许 nginx 通过 80 端口</h2>
+
+<pre><code>sudo ufw app list 
+sudo ufw allow &#39;Nginx HTTP&#39; 
+sudo ufw status
+</code></pre>
+
+<h2 id="toc_2">查看 nginx 状态</h2>
+
+<pre><code>systemctl status nginx
+</code></pre>
+
+<h2 id="toc_3">内核参数优化</h2>
+
+<pre><code>#vi /etc/sysctl.conf
+net.ipv4.netfilter.ip_conntrack_tcp_timeout_established = 1800
+net.ipv4.ip_conntrack_max = 16777216　＃　如果使用默认参数,容易出现网络丢包
+net.ipv4.netfilter.ip_conntrack_max = 16777216＃　如果使用默认参数,容易出现网络丢包
+net.ipv4.tcp_max_syn_backlog = 65536
+net.core.netdev_max_backlog =  32768
+net.core.somaxconn = 32768
+net.core.wmem_default = 8388608
+net.core.rmem_default = 8388608
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+net.ipv4.tcp_timestamps = 0
+net.ipv4.tcp_synack_retries = 2
+net.ipv4.tcp_syn_retries =
+net.ipv4.tcp_tw_recycle = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_mem = 94500000 915000000 927000000
+net.ipv4.tcp_max_orphans = 3276800
+net.ipv4.ip_local_port_range = 1024  65535
+</code></pre>
+
+<h2 id="toc_4">使配置生效</h2>
+
+<pre><code># sysctl -p
+</code></pre>
+
+<h2 id="toc_5">nginx 配置</h2>
+
+<pre><code># vi /etc/nginx/nginx.conf
+
+worker_processes auto;  #开启工作进程，多少核心就多少个
+pid /run/nginx.pid;     #pid 路径
+worker_rlimit_nofile 100000; #最大打开文件数限制，解决&#39;too many open files&#39;问题
+
+events {
+        worker_connections 2048;   #一个进程能同时处理2048个请求
+        multi_accept on;    #接收到一个新连接后尽可能多链接
+        # use epoll;    #*BSD 用 kqueue，其他用 epoll，不描述的话，自动选择适合操作系统地
+}
+
+http {
+
+        ##
+        # Basic Settings
+        ##
+
+        server_tokens off;      #不向用户展示 Nginx 版本，保证安全
+
+        sendfile on;            #静态服务器启用，
+        tcp_nopush on;          #在一个数据包里发送所有头文件，不一个一个发送
+        tcp_nodelay on;         #不缓存，直接发送
+
+
+        ##
+        #Timeout Settings
+        ##
+        keepalive_timeout 10;   #服务器在超时时间过后关闭链接
+        client_header_timeout 10;
+        client_body_timeout 10;
+        reset_timedout_connection on; #关闭不响应的客户端连接
+        send_timeout 10;        #客户端的响应超时时
+
+        types_hash_max_size 2048;
+
+        ##
+        #1 user connection limit
+        ##
+        limit_conn_zone $binary_remote_addr zone=addr:5m;       #保存当前连接数的共享内存
+        limit_conn addr 100;    #同一个 ip 最多100个连接
+
+        # server_names_hash_bucket_size 64;
+        # server_name_in_redirect off;
+
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+
+        ##
+        #Log Settings
+        access_log off;
+        error_log /var/log/nginx/error.log;
+
+
+        ##
+        # SSL Settings
+        ##
+
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # Dropping SSLv3, ref: POODLE
+        ssl_prefer_server_ciphers on;
+
+
+        ##
+        # Gzip Settings
+        ##
+
+        gzip on;
+        gzip_disable &quot;msie6&quot;;   #对 IE6 及以下的版本禁用 gzip
+         # gzip_static on;
+        # gzip_vary on;
+          gzip_proxied any; #压缩所有请求
+          gzip_min_length 1000;启用压缩的最少字节数，小于1000不压缩
+          gzip_comp_level 4;    #压缩比，9最慢但压缩最强
+        # gzip_buffers 16 8k;
+        # gzip_http_version 1.1;
+          gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+        ##
+        #Open File Cache Settings
+        ##
+
+        open_file_cache max=100000 inactive=20s;    #打开缓存的同时，当20秒不活动时清除掉
+        open_file_cache_valid 30s;
+        open_file_cache_min_uses 2;
+        open_file_cache_errors on;
+
+
+        #Virtual Host Configs
+        include /etc/nginx/conf.d/*.conf;
+}
+</code></pre>
+
+<blockquote>
+<p>卸载 nginx</p>
+</blockquote>
+
+<pre><code>sudo apt-get remove nginx nginx-common # Removes all but config files.
+sudo apt-get purge nginx nginx-common # Removes everything.
+sudo apt-get autoremove # After using any of the above commands, use this in order to remove dependencies used by nginx which are no longer required.
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OC(11) 协议]]></title>
+    <link href="http://kayorl.com/14872504904620.html"/>
+    <updated>2017-02-16T21:08:10+08:00</updated>
+    <id>http://kayorl.com/14872504904620.html</id>
+    <content type="html"><![CDATA[
+<p>采用协议就是在类的@ interface 声明中列出协议的名称<br/>
+显式地采用，承诺实现该协议的所有方法,否则,编译器会找麻烦</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">声明协议</h2>
+
+<pre><code class="language-objc">@protocal NSCopying &lt;NSObject&gt;      
+- (id) copyWithZone: (NSZone *) zone;
+@end
+</code></pre>
+
+<ul>
+<li>NSObject 在这里是一种协议</li>
+<li>尖尖括号表示继承</li>
+<li>协议中不引入新的实例变量</li>
+<li>跟<code>接口</code>的感觉好像诶</li>
+</ul>
+
+<h2 id="toc_1">采用协议</h2>
+
+<pre><code class="language-objc">@interface Car : NSObject &lt;NSCopying,NSCoding&gt;
+{
+    ...
+}
+@end
+</code></pre>
+
+<ul>
+<li>这就采用了协议了,告诉人们,这辆车可以被复制,可以被编码</li>
+</ul>
+
+<h2 id="toc_2">实现协议</h2>
+
+<ul>
+<li><code>浅层复制</code>:只复制指向现有的引用对象,不会复制引用对象的本身</li>
+<li><code>深层复制</code>:复制所有的引用对象</li>
+</ul>
+
+<h2 id="toc_3">复制 Engine</h2>
+
+<p>为了能够复制 engine 对象, Engine 类需要采用 NSCopying 协议</p>
+
+<pre><code class="language-objc">@interface Engine : NSObject &lt;NSCopying&gt;
+@end    //Engine
+</code></pre>
+
+<p>因为 Engine 类采用了 NSCopying 协议, 所以 Engine 类需要实现 copyWithZone 方法</p>
+
+<pre><code class="language-objc">@implementation Engine
+
+- (id) copyWithZone: (NSZone *) zone
+{
+    Engine *engineCopy;
+    engineCopy = [ [ [self class] allocWithZone: zone] init];
+    return (engineCopy);
+}
+</code></pre>
+
+<ul>
+<li>复制的时候, engine 并没有实例变量,因此,我们要获得一个新的 engine 对象</li>
+<li>copyWIthZone 是一个类方法</li>
+<li>兼顾到 Engine 的子类在创建对象时,只会生成 Engine 类的对象,而不是其子类的对象,所以,这样做能够预防内存溢出</li>
+<li>子类不用实现 copyWithZone 方法</li>
+</ul>
+
+<h2 id="toc_4">协议和数据类型</h2>
+
+<p>id类型是一个泛型对象类型,可以将任何对象复制给一个 id 类型的变量.</p>
+
+<p>用尖括号括起来的协议跟随在 id 之后,则编译器将知道这个方法接收任意类型的对象,前提是遵守该协议</p>
+
+<pre><code class="language-objc">- (void) setObjectValue: (id&lt;NSCopying&gt;) object;
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_5">@optional 和 @require</h2>
+
+<pre><code class="language-objc">@protocal BaseballPlayer;
+- (void) drawHugeSalary;        //必须实现
+
+@optional       //可以选择实现
+- (void) slideHome;
+- (void) catchBall;
+- (void) throwBall;
+
+@require        //必须实现
+- (void) swingBat;
+@end;
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_6">委托方法</h2>
+
+<p>书上写的不详细啊</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OC(10) 类别]]></title>
+    <link href="http://kayorl.com/14872504904501.html"/>
+    <updated>2017-02-16T21:08:10+08:00</updated>
+    <id>http://kayorl.com/14872504904501.html</id>
+    <content type="html"><![CDATA[
+<p>利用 OC 的动态运行时分配机制,可以为现有的类添加新方法(无法添加变量)<br/>
+在 OC 里, 这些方法叫做类别 (category)</p>
+
+<span id="more"></span><!-- more -->
+
+<pre><code class="language-objc">@interface NSString (NumberConvinience)
+- (NSNumber *) lengthAsNumber;
+...
+@end
+
+/****************** *****************/
+
+#import &quot;NSString+NumberConvinience.h&quot;
+
+
+@implementation NSString (NumberConvinience)
+- (NSNumber *) lengthAsNumber
+{
+    NSInteger length = [self length];
+    return ([NSNumber numberWithUnsignedInteger:length]);
+}
+@end
+</code></pre>
+
+<ul>
+<li><p>NSInteger、NSUInteger、CGFLoat不是包装类，虽然他们带有NS、CG前缀，它们并不是包装类，只是<code>基本类型</code>，它们分别大致等于：long、unsigned long和double（或float）</p></li>
+<li><p><code>任何</code> NSString 都能相应 lengthAsNumber 信息</p></li>
+<li><p>缺陷: 存在<code>名称冲突</code>,与现有的方法重名时,类别方法具有更高优先级</p></li>
+</ul>
+
+<h3 id="toc_0">类别的优势</h3>
+
+<ol>
+<li>可以将类的实现代码分散到多个不同文件或框架中</li>
+<li>创建对私有方法的前向引用</li>
+<li>向对象添加非正式协议</li>
+</ol>
+
+<h2 id="toc_1">类扩展</h2>
+
+<p>不需要名字的类别,可以添加实例变量,改变只读权限</p>
+
+<ul>
+<li>( )只是获取 thing 类</li>
+<li>用来<code>信息隐藏</code></li>
+</ul>
+
+<pre><code class="language-objc">@interface thing: NSObject
+@property (assign) NSInteger thing1;
+@property (readonly,assign) NSInteger thing2;
+...
+@end
+
+/********** 变形线  ********/
+
+@interface thing ()
+{
+    NSInteger thing4;
+}
+@property (assign) NSInteger thing1;
+@property (readWrite,assign) NSInteger thing2;
+...
+@end
+
+</code></pre>
+
+<h2 id="toc_2">优势1: 用类别分散代码</h2>
+
+<pre><code class="language-objc">@interface CategoryThing : NSObject
+{
+    NSInteger thing1;
+    NSInteger thing2;
+    NSInteger thing3;
+}
+@end
+
+@interface CategortThing (Thing1)
+- (void) setThing1: (NSInteger) things1;
+- (NSInteger)things1;
+...
+@end
+
+</code></pre>
+
+<p>以上是头文件中的内容,下面是类别 Thing1.m 文件的内容</p>
+
+<pre><code class="language-objc">#import &quot;CategoryThing.h&quot;
+@implementation CategoryThing (Thing1)
+- (void)setThing1:(NSInteger)t1
+{
+    thing1=t1;
+}
+@end;
+</code></pre>
+
+<h2 id="toc_3">优势2: 创建前向引用</h2>
+
+<p>类别中声明但在类中没有声明的方法,编译器会警告,解决问题的策略是:</p>
+
+<blockquote>
+<p>将类别置于实现文件的最前面</p>
+</blockquote>
+
+<pre><code class="language-objc">@interface Car (Private)
+{
+    //其他类别中想使用的方法
+}
+@end
+
+@implemention Car
+{
+...
+}
+@end
+</code></pre>
+
+<h2 id="toc_4">优势3:非正式协议和委托类别</h2>
+
+<p>恩,暂时跳过,感觉不严谨</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[杂]]></title>
+    <link href="http://kayorl.com/14872477973050.html"/>
+    <updated>2017-02-16T20:23:17+08:00</updated>
+    <id>http://kayorl.com/14872477973050.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">Nodejs <a href="node-production">生产模式</a></h2>
+
+<h2 id="toc_1">配置 openssl 密码开关</h2>
+
+<pre><code>$ vi /etc/ssh/sshd_config
+$ sudo systemctl reload sshd
+</code></pre>
+
+<h2 id="toc_2">Redis</h2>
+
+<p><a href="http://www.linuxdiyf.com/linux/22527.html">http://www.linuxdiyf.com/linux/22527.html</a></p>
+
+<h2 id="toc_3">Mac 启动 redis</h2>
+
+<pre><code>$ sudo ../bin/redis-server ./redis.conf
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OC(9) 属性]]></title>
+    <link href="http://kayorl.com/14872504904341.html"/>
+    <updated>2017-02-16T21:08:10+08:00</updated>
+    <id>http://kayorl.com/14872504904341.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">@property</h2>
+
+<p>预编译指令, 自动声明属性的 setter 和 getter 方法</p>
+
+<pre><code>@interface Cube :
+{
+    float length;
+    float height;
+}
+@property float length;
+@property float height;
+...
+@end
+</code></pre>
+
+<h2 id="toc_1">@synthesize</h2>
+
+<ul>
+<li>Xcode4.5 之后不必使用@synthesize</li>
+<li>创建了该属性的访问代码,编译器将自动添加 setLength, getLength等方法 </li>
+</ul>
+
+<pre><code>@implementation Cube
+@synthesize length;
+@synthesize height;
+...
+@end
+</code></pre>
+
+<h3 id="toc_2">变量该在 头文件 还是 实现文件 中声明?</h3>
+
+<ol>
+<li>变量想被子类直接通过属性来访问,那就放在头文件中</li>
+<li>变量只限于当前类, 则放在实现文件中</li>
+</ol>
+
+<h2 id="toc_3">点表达式</h2>
+
+<p>点表达式出现在表达式左边,则是 setter 方法的调用; 在右边, 则是 getter 方法的调用</p>
+
+<pre><code>car.engine=[Engine new];    //setter
+benz.engine = car.engine;   //getter
+</code></pre>
+
+<h2 id="toc_4">属性扩展</h2>
+
+<ul>
+<li>name 使用了 copy 特性,所以编译器和类的使用者会知道 name 属性将被复制.</li>
+<li>因此,在实现中, name 属性将会自动利用 copy 的特性去复制字符串</li>
+<li>engine 使用的有保留和释放特性</li>
+</ul>
+
+<pre><code class="language-objc">@class Tire
+@class Engine
+@interface Car : NSObject
+{
+    NSString *name;
+    NSMutableArray *tires;
+    Engine *engine;
+}
+
+@property (copy) NSString *name;
+@property (retain) Engine *engine;
+...
+@end
+
+
+@implmentation Car
+...
+
+@synthesize name;
+@synthesize engine;
+
+@end
+</code></pre>
+
+<h2 id="toc_5">只读属性</h2>
+
+<h4 id="toc_6">怎么赋值只读属性呢?</h4>
+
+<p>默认情况下,属性是可变的.如果不想任何人我需改这个属性可以使用 <code>readOnly</code> 特性,这样,<br/>
+编译器会生成 getter 方法而不会生成 setter 方法.</p>
+
+<h2 id="toc_7">动态属性</h2>
+
+<p>通过使用<code>@dynamic</code> 指令来指定属性并告诉编译器不要创建变量或 getter 方法,创建出能在运行时计算值的方法</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OC(8) 对象初始化]]></title>
+    <link href="http://kayorl.com/14872504904170.html"/>
+    <updated>2017-02-16T21:08:10+08:00</updated>
+    <id>http://kayorl.com/14872504904170.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">分配对象</h2>
+
+<p>向某个类发送 alloc 消息,从操作系统获得一块内存,用来存储该<code>类</code>的全部实例变量,并且全部初始化为0</p>
+
+<h2 id="toc_1">初始化对象</h2>
+
+<p>与分配对应的操作是初始化,初始化从操作系统取得内存用于存储<code>对象</code></p>
+
+<pre><code class="language-objc">Car *car = [[Car alloc] init ];
+</code></pre>
+
+<p>而嵌套调用的原因是<code>类簇</code>问题, NSString 和 NSArray 等类知识一些特殊类的表象, init 方法可以接收参数,并检查其接收的参数,并决定返回另一个类的对象更合适.</p>
+
+<h3 id="toc_2">初始化方法</h3>
+
+<pre><code>(id) init
+{
+    if(self = [super init ])
+    ...
+}
+</code></pre>
+
+<p>这么初始化的作用是让超类完成其自身的初始化工作. 对于继承了 NSobject 的类来说,调用超类的 init 方法可以让 NSObject 执行它所需要的所有操作,以便对象能<code>响应信息并处理保留计数器</code>,而从对于从其他类继承的类,通过这种方法可以实现自身的全新初始化.</p>
+
+<p>在内存管理中, self 指针通过对象基址的偏移去操作一个对象, 代码中的<code>self =</code> 就是更新 self 指针,将其指向其超类初始化后的内存.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[译] Sequelize(2)  定义表格]]></title>
+    <link href="http://kayorl.com/14872314142360.html"/>
+    <updated>2017-02-16T15:50:14+08:00</updated>
+    <id>http://kayorl.com/14872314142360.html</id>
+    <content type="html"><![CDATA[
+<p>Sequelize 会自动增加 <code>createdAt</code> 和 <code>updated</code> 属性,这样能知道一个实例的创建时间和最终修改时间.</p>
+
+<p>如果不想自动生成,可以到<a href="http://docs.sequelizejs.com/en/v3/docs/models-definition/#configuration">configuration</a>去看如何实现.</p>
+
+<span id="more"></span><!-- more -->
+
+<blockquote>
+<p>定义模型与表之间的映射,使用 define 方法. </p>
+</blockquote>
+
+<pre><code class="language-js">var Project = sequelize.define(&#39;project&#39;, {
+  title: Sequelize.STRING,
+  description: Sequelize.TEXT
+})
+
+var Task = sequelize.define(&#39;task&#39;, {
+  title: Sequelize.STRING,
+  description: Sequelize.TEXT,
+  deadline: Sequelize.DATE
+})
+</code></pre>
+
+<p>还可以为每一个列增加一些可选属性</p>
+
+<pre><code class="language-js">var Foo = sequelize.define(&#39;foo&#39;, {
+ // 自动设置默认值为 true
+ flag: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: true},
+
+ //  日期默认值 =&gt; 当前时间
+ myDate: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
+
+ // 设置列的 allowNull为 false 将会为该列增加 非空 属性
+ // 在查询数据库之前想检车一个值是否为 空 ,看 validation 节
+ title: { type: Sequelize.STRING, allowNull: false},
+ 
+ // 创建两个拥有相同属性的值会抛出一个错误
+ // The unique property can be either a boolean, or a string.
+ // If you provide the same string for multiple columns, they will form a
+ // composite unique key.
+ someUnique: {type: Sequelize.STRING, unique: true},
+ uniqueOne: { type: Sequelize.STRING,  unique: &#39;compositeIndex&#39;},
+ uniqueTwo: { type: Sequelize.INTEGER, unique: &#39;compositeIndex&#39;}
+ 
+ // unique 属性同时也是创建一个 unique 索引 的简写
+ someUnique: {type: Sequelize.STRING, unique: true}
+ 
+ // 跟下面的两句定义语句等价
+ {someUnique: {type: Sequelize.STRING}},
+ {indexes: [{unique: true, fields: [&#39;someUnique&#39;]}]}
+
+ // 主码
+ identifier: { type: Sequelize.STRING, primaryKey: true},
+ 
+ // 自增
+ incrementMe: { type: Sequelize.INTEGER, autoIncrement: true },
+
+ // 注释,只有 MySQL 和 PG 可以使用
+ // Comments can be specified for each field for MySQL and PG
+ hasComment: { type: Sequelize.INTEGER, comment: &quot;I&#39;m a comment!&quot; },
+ 
+ // 在模型中的名字是小驼峰,在表中的列名可以用 field 属性来指定
+ fieldWithUnderscores: { type: Sequelize.STRING, field: &quot;field_with_underscores&quot; },
+
+ // 创建外码
+ bar_id: {
+   type: Sequelize.INTEGER,
+
+   references: {
+     // This is a reference to another model
+     model: Bar,
+     //被引用模型的  列名  (是列名,即 field 名)
+     key: &#39;id&#39;,
+     // 检查外码约束,只支持 PostgreSQL .
+     deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+   }
+ }
+})
+</code></pre>
+
+<h2 id="toc_0">数据类型</h2>
+
+<p>更详细的可以上 <a href="http://docs.sequelizejs.com/en/v3/api/datatypes">DataTypes</a> 看一看</p>
+
+<pre><code class="language-js">Sequelize.STRING                      // VARCHAR(255)
+Sequelize.STRING(1234)                // VARCHAR(1234)
+Sequelize.STRING.BINARY               // VARCHAR BINARY
+Sequelize.TEXT                        // TEXT
+Sequelize.TEXT(&#39;tiny&#39;)                // TINYTEXT
+
+Sequelize.INTEGER                     // INTEGER
+Sequelize.BIGINT                      // BIGINT
+Sequelize.BIGINT(11)                  // BIGINT(11)
+
+Sequelize.FLOAT                       // FLOAT
+Sequelize.FLOAT(11)                   // FLOAT(11)
+Sequelize.FLOAT(11, 12)               // FLOAT(11,12)
+
+Sequelize.REAL                        // REAL        PostgreSQL only.
+Sequelize.REAL(11)                    // REAL(11)    PostgreSQL only.
+Sequelize.REAL(11, 12)                // REAL(11,12) PostgreSQL only.
+
+Sequelize.DOUBLE                      // DOUBLE
+Sequelize.DOUBLE(11)                  // DOUBLE(11)
+Sequelize.DOUBLE(11, 12)              // DOUBLE(11,12)
+
+Sequelize.DECIMAL                     // DECIMAL
+Sequelize.DECIMAL(10, 2)              // DECIMAL(10,2)
+
+Sequelize.DATE                        // DATETIME for mysql / sqlite, TIMESTAMP WITH TIME ZONE for postgres
+Sequelize.DATE(6)                     // DATETIME(6) for mysql 5.6.4+. Fractional seconds support with up to 6 digits of precision 
+Sequelize.DATEONLY                    // DATE without time.
+Sequelize.BOOLEAN                     // TINYINT(1)
+
+Sequelize.ENUM(&#39;value 1&#39;, &#39;value 2&#39;)  // An ENUM with allowed values &#39;value 1&#39; and &#39;value 2&#39;
+Sequelize.ARRAY(Sequelize.TEXT)       // Defines an array. PostgreSQL only.
+
+Sequelize.JSON                        // JSON column. PostgreSQL only.
+Sequelize.JSONB                       // JSONB column. PostgreSQL only.
+
+Sequelize.BLOB                        // BLOB (bytea for PostgreSQL)
+Sequelize.BLOB(&#39;tiny&#39;)                // TINYBLOB (bytea for PostgreSQL. Other options are medium and long)
+
+Sequelize.UUID                        // UUID datatype for PostgreSQL and SQLite, CHAR(36) BINARY for MySQL (use defaultValue: Sequelize.UUIDV1 or Sequelize.UUIDV4 to make sequelize generate the ids automatically)
+
+
+Sequelize.GEOMETRY                    // Spatial column.  PostgreSQL (with PostGIS) or MySQL only.
+Sequelize.GEOMETRY(&#39;POINT&#39;)           // Spatial column with geomerty type.  PostgreSQL (with PostGIS) or MySQL only.
+Sequelize.GEOMETRY(&#39;POINT&#39;, 4326)     // Spatial column with geomerty type and SRID.  PostgreSQL (with PostGIS) or MySQL only.
+</code></pre>
+
+<p>integer, bigint, float 和 double 同样支持 unsigned 和 zerofill 约束   </p>
+
+<pre><code class="language-js">Sequelize.INTEGER.UNSIGNED              // INTEGER UNSIGNED
+Sequelize.INTEGER(11).UNSIGNED          // INTEGER(11) UNSIGNED
+Sequelize.INTEGER(11).ZEROFILL          // INTEGER(11) ZEROFILL
+Sequelize.INTEGER(11).ZEROFILL.UNSIGNED // INTEGER(11) UNSIGNED ZEROFILL
+Sequelize.INTEGER(11).UNSIGNED.ZEROFILL // INTEGER(11) UNSIGNED ZEROFILL
+</code></pre>
+
+<h3 id="toc_1">对象标记的用法</h3>
+
+<pre><code class="language-js">// for enums:
+sequelize.define(&#39;model&#39;, {
+  states: {
+    type:   Sequelize.ENUM,
+    values: [&#39;active&#39;, &#39;pending&#39;, &#39;deleted&#39;]
+  }
+})
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_2">Getters &amp; Setters 方法</h2>
+
+<p>在模型中定义&#39;对象-属性&#39;的 getter 和  setter 方法是可能的,可以被用来保护与数据库列相映射的属性,还可以定义一些<code>假</code>属性<br/>
+Getters 和 Setters 能以下面两种方式定义</p>
+
+<ul>
+<li>作为单个属性定义的一部分</li>
+<li>作为模型可选的一部分</li>
+</ul>
+
+<h2 id="toc_3">定义为属性的一部分</h2>
+
+<pre><code class="language-js">var Employee = sequelize.define(&#39;employee&#39;, {
+  name:  {
+    type     : Sequelize.STRING,
+    allowNull: false,
+    get      : function()  {
+      var title = this.getDataValue(&#39;title&#39;);
+      // &#39;this&#39; 允许你去获得实例的属性
+      return this.getDataValue(&#39;name&#39;) + &#39; (&#39; + title + &#39;)&#39;;
+    },
+  },
+  title: {
+    type     : Sequelize.STRING,
+    allowNull: false,
+    set      : function(val) {
+      this.setDataValue(&#39;title&#39;, val.toUpperCase());
+    }
+  }
+});
+
+Employee
+  .create({ name: &#39;John Doe&#39;, title: &#39;senior engineer&#39; })
+  .then(function(employee) {
+    console.log(employee.get(&#39;name&#39;)); // John Doe (SENIOR ENGINEER)
+    console.log(employee.get(&#39;title&#39;)); // SENIOR ENGINEER
+  })
+</code></pre>
+
+<h4 id="toc_4">定义为模型的一部分</h4>
+
+<p>下面是一个在模型内定义 getter 和 setter 方法的例子. 在这个例子里,<code>fullname</code> 的 getter 方法是在模型内定义<code>假属性</code>的一个例子<br/>
+,因为 <code>fullname</code>  属性不存在于数据库模式中. 实际上,假属性可以通过以下两种方式来定义</p>
+
+<ul>
+<li>通过模型的 getter 方法</li>
+<li>或者通过使用带有 <a href="http://docs.sequelizejs.com/en/v3/api/datatypes#virtual"><code>VIRTUAL</code></a> 数据类型的列, VIRTUAL 数据类型可以有 validation , 然而 virtual 数据类型的 getter 方法不行</li>
+</ul>
+
+<p>注意在 <code>fullName</code> 的 getter 方法中引用的 <code>this.firstName</code> 和 <code>this.lastName</code> 会触发各自的 getter 方法</p>
+
+<pre><code class="language-js">var Foo = sequelize.define(&#39;foo&#39;, {
+  firstname: Sequelize.STRING,
+  lastname: Sequelize.STRING
+}, {
+  getterMethods   : {
+    fullName       : function()  { return this.firstname + &#39; &#39; + this.lastname }
+  },
+  
+  setterMethods   : {
+    fullName       : function(value) {
+        var names = value.split(&#39; &#39;);
+        this.setDataValue(&#39;firstname&#39;, names.slice(0, -1).join(&#39; &#39;));
+        this.setDataValue(&#39;lastname&#39;, names.slice(-1).join(&#39; &#39;));
+    },
+  }
+});
+
+</code></pre>
+
+<h4 id="toc_5">在 getter 和 setter 方法中使用的 Helper 方法</h4>
+
+<ul>
+<li>获取一个基础属性值 , 经常用 <code>this.getDataValue()</code></li>
+<li>设置一个基础属性值 , 经常用 <code>this.setDataValue()</code></li>
+<li>坚持使用 getter 和 setter 方法 可以保护内部数据</li>
+</ul>
+
+<pre><code class="language-js">/* &#39;title&#39; 属性的 getter 方法*/
+function(){
+    return this.getDataValue(&#39;title&#39;);
+}
+
+/* &#39;title&#39; 属性的 setter 方法*/
+function(){
+    return this.setDataValue(&#39;title&#39;,title.toString().toLowerCase());
+}
+</code></pre>
+
+<h2 id="toc_6">认证 (Validation)</h2>
+
+<p>模型认证, 可以规定模型中每个属性的格式/内容 的认证. 其实现在<a href="https://github.com/chriso/validator.js">这</a></p>
+
+<p>当进行 <code>create</code>,<code>update</code> 和 <code>save</code>操作时,认证会自动运行.也可以在实例中手动认证</p>
+
+<pre><code class="language-js">var ValidateMe = sequelize.define(&#39;foo&#39;, {
+  foo: {
+    type: Sequelize.STRING,
+    validate: {
+      is: [&quot;^[a-z]+$&quot;,&#39;i&#39;],     // will only allow letters
+      is: /^[a-z]+$/i,          // same as the previous example using real RegExp
+      not: [&quot;[a-z]&quot;,&#39;i&#39;],       // will not allow letters
+      isEmail: true,            // checks for email format (foo@bar.com)
+      isUrl: true,              // checks for url format (http://foo.com)
+      isIP: true,               // checks for IPv4 (129.89.23.1) or IPv6 format
+      isIPv4: true,             // checks for IPv4 (129.89.23.1)
+      isIPv6: true,             // checks for IPv6 format
+      isAlpha: true,            // will only allow letters
+      isAlphanumeric: true,     // will only allow alphanumeric characters, so &quot;_abc&quot; will fail
+      isNumeric: true,          // will only allow numbers
+      isInt: true,              // checks for valid integers
+      isFloat: true,            // checks for valid floating point numbers
+      isDecimal: true,          // checks for any numbers
+      isLowercase: true,        // checks for lowercase
+      isUppercase: true,        // checks for uppercase
+      notNull: true,            // won&#39;t allow null
+      isNull: true,             // only allows null
+      notEmpty: true,           // don&#39;t allow empty strings
+      equals: &#39;specific value&#39;, // only allow a specific value
+      contains: &#39;foo&#39;,          // force specific substrings
+      notIn: [[&#39;foo&#39;, &#39;bar&#39;]],  // check the value is not one of these
+      isIn: [[&#39;foo&#39;, &#39;bar&#39;]],   // check the value is one of these
+      notContains: &#39;bar&#39;,       // don&#39;t allow specific substrings
+      len: [2,10],              // only allow values with length between 2 and 10
+      isUUID: 4,                // only allow uuids
+      isDate: true,             // only allow date strings
+      isAfter: &quot;2011-11-05&quot;,    // only allow date strings after a specific date
+      isBefore: &quot;2011-11-05&quot;,   // only allow date strings before a specific date
+      max: 23,                  // only allow values
+      min: 23,                  // only allow values &gt;= 23
+      isArray: true,            // only allow arrays
+      isCreditCard: true,       // check for valid credit card numbers
+
+      // custom validations are also possible:
+      isEven: function(value) {
+        if(parseInt(value) % 2 != 0) {
+          throw new Error(&#39;Only even values are allowed!&#39;)
+        // we also are in the model&#39;s context here, so this.otherField
+        // would get the value of otherField if it existed
+        }
+      }
+    }
+  }
+});
+</code></pre>
+
+<p>注意当多个参数需要被传递到内嵌的认证函数时,多个参数应该被放在一个数组中.</p>
+
+<pre><code class="language-js">isIn: [[&#39;en&#39;, &#39;zh&#39;]],   // check the value is one of these
+</code></pre>
+
+<p>不用 validator.js 提供的错误信息,自己定制错误信息</p>
+
+<pre><code class="language-js">isIn: {
+  args: [[&#39;en&#39;, &#39;zh&#39;]],
+  msg: &quot;Must be English or Chinese&quot;
+}
+</code></pre>
+
+<p>可以看<a href="https://github.com/chriso/validator.js">validator.js PROJECT</a>获取更多细节</p>
+
+<hr/>
+
+<h3 id="toc_7">认证器和 <code>allowNull</code></h3>
+
+<p>如果模型的列被设置为 <code>allowNull:true</code> 和 值被设置为 <code>null</code>的话,那认证器不会运行.</p>
+
+<p>举个栗子, 一个字符串的列长度设置为 最短为5, 但它可以存储 null</p>
+
+<h3 id="toc_8">模型认证</h3>
+
+<pre><code class="language-js">var Pub = Sequelize.define(&#39;pub&#39;, {
+  name: { type: Sequelize.STRING },
+  address: { type: Sequelize.STRING },
+  latitude: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+    defaultValue: null,
+    validate: { min: -90, max: 90 }
+  },
+  longitude: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+    defaultValue: null,
+    validate: { min: -180, max: 180 }
+  },
+}, {
+
+
+  //在这里对模型进行验证,只有 latitude 和 longtitude 同时被给予或都为空时成立
+  validate: {
+    bothCoordsOrNone: function() {
+      if ((this.latitude === null) !== (this.longitude === null)) {
+        throw new Error(&#39;Require either both latitude and longitude or neither&#39;)
+      }
+    }
+  }
+})
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_9">配置</h2>
+
+<pre><code class="language-js">var Bar = sequelize.define(&#39;bar&#39;, { /* bla */ }, {
+
+  // 不增加 TIMESTAMP 属性  (updatedAt, createdAt)
+  timestamps: false,
+  
+  //不删除数据库中原有项, 增加新属性 deletedAt 并设置为 当前日期,
+  //只有 TIMESTAMP 属性是允许的时候有效
+  paranoid: true,
+  
+  // 不要使用驼峰式语法,用下划线代替
+  // so updatedAt will be updated_at
+  underscored: true,
+  
+  // 不允许调整表名 ; 
+  // 默认地, sequelize 会自动转换所有传递的模型名字(define 的第一个参数)
+  // 为复数
+  // 如果不想这样,设置为 true
+  freezeTableName: true,
+
+  // 定义表名
+  tableName: &#39;my_very_custom_table_name&#39;
+})
+</code></pre>
+
+<p>修改引擎</p>
+
+<pre><code class="language-js">var Person = sequelize.define(&#39;person&#39;, { /* attributes */ }, {
+  engine: &#39;MYISAM&#39;
+})
+
+// or globally
+var sequelize = new Sequelize(db, user, pw, {
+  define: { engine: &#39;MYISAM&#39; }
+})
+</code></pre>
+
+<p>做注释</p>
+
+<pre><code class="language-js">var Person = sequelize.define(&#39;person&#39;, { /* attributes */ }, {
+  comment: &quot;I&#39;m a table comment!&quot;
+})
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_10">导入</h2>
+
+<p>可以把对表的定义放在单一文件中,返回对象恰好跟在 import 方法中定义的一样</p>
+
+<pre><code class="language-js">
+  // in your server file - e.g. app.js
+var Project = sequelize.import(__dirname + &quot;/path/to/models/project&quot;)
+
+  // 定义在 project.js 文件中已经定义完成了
+  // DataTypes  与上面解释的部分很像
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define(&quot;project&quot;, {
+    name: DataTypes.STRING,
+    description: DataTypes.TEXT
+  })
+}
+
+sequelize.import(&#39;project&#39;, function(sequelize, DataTypes) {
+  return sequelize.define(&quot;project&quot;, {
+    name: DataTypes.STRING,
+    description: DataTypes.TEXT
+  })
+})
+</code></pre>
+
+<h2 id="toc_11">数据库同步</h2>
+
+<p>开始一个新项目的时候,我们没有数据库架构,于是我们不需要 Sequelize.</p>
+
+<p>只需要说明我们的模型结构, 让库做剩下的部分,现在只支持 <code>表的创建与删除</code></p>
+
+<pre><code class="language-js">// 只同步还没在数据库中的模型
+// Sync all models that aren&#39;t already in the database
+sequelize.sync()
+
+// 强制同步所有数据库的模型
+sequelize.sync({force: true})
+
+// 删除所有表
+sequelize.drop()
+
+// 开始执行
+sequelize.[sync|drop]().then(function() {
+  // woot woot
+}).catch(function(error) {
+  // whooops
+})
+</code></pre>
+
+<p>因为<code>.sync({force: true})</code> 是毁灭性的操作, 可以使用 match 选项去增加更多的安全检查(正则)</p>
+
+<pre><code class="language-js">// 删除以 &#39;_test&#39; 结尾的词
+sequelize.sync({ force: true, match: /_test$/ });
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_12">模型的扩展</h2>
+
+<p>Sequelize 允许我们去给 模型和相应的实例 传递定制方法 </p>
+
+<pre><code class="language-js">var sequelize = new Sequelize(&#39;database&#39;, &#39;username&#39;, &#39;password&#39;, {
+  // 其他可选的初始化可以放在这里
+  define: {
+    classMethods: {
+      method1: function() {},
+      method2: function() {}
+    },
+    instanceMethods: {
+      method3: function() {}
+    }
+  }
+})
+
+// Example:
+var Foo = sequelize.define(&#39;foo&#39;, { /* attributes */});
+Foo.method1()
+Foo.method2()
+Foo.build().method3()
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_13">索引</h2>
+
+<p>Sequelize 支持在模型定义中增加索引, 这些索引在 <code>Model.sync()</code> 或 <code>sequelize.sync()</code>时被创建.</p>
+
+<pre><code class="language-js">sequelize.define(&#39;user&#39;, {}, {
+  indexes: [
+    // Create a unique index on email
+    {
+      unique: true,
+      fields: [&#39;email&#39;]
+    },
+
+    // Creates a gin index on data with the jsonb_path_ops operator
+    {
+      fields: [&#39;data&#39;],
+      using: &#39;gin&#39;,
+      operator: &#39;jsonb_path_ops&#39;
+    },
+
+    // By default index name will be [table]_[fields]
+    // Creates a multi column partial index
+    {
+      name: &#39;public_by_author&#39;,
+      fields: [&#39;author&#39;, &#39;status&#39;],
+      where: {
+        status: &#39;public&#39;
+      }
+    },
+
+    // A BTREE index with a ordered field
+    {
+      name: &#39;title_index&#39;,
+      method: &#39;BTREE&#39;,
+      fields: [&#39;author&#39;, {attribute: &#39;title&#39;, collate: &#39;en_US&#39;, order: &#39;DESC&#39;, length: 5}]
+    }
+  ]
+})
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OC(7) 异常]]></title>
+    <link href="http://kayorl.com/14872504904064.html"/>
+    <updated>2017-02-16T21:08:10+08:00</updated>
+    <id>http://kayorl.com/14872504904064.html</id>
+    <content type="html"><![CDATA[
+<p>在运行时系统中创建并处理异常的行为成为<code>抛出异常</code></p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>@try : 决定是否抛出异常</li>
+<li>@catch() : 接收参数,通常是 NSException ,最好是 NSException</li>
+<li>@finally : 无论如何都执行的代码</li>
+<li>@throw : 抛出异常</li>
+<li>@try建立异常不会产生消耗</li>
+<li>捕捉异常会消耗大量资源</li>
+</ul>
+
+<pre><code>@try{
+
+    //code might throw an exception
+
+}@catch(NSException *exception)
+{   
+
+    @throw exception    //或者[exception raise],这种方法只对 NSException 有效
+    
+    
+}@catch(MyException *custom){
+
+    //code to handles exception
+
+}@finally
+{
+
+    //code always be excuted. Typically for cleanup.
+
+}
+</code></pre>
+
+<h2 id="toc_0">异常的内存管理</h2>
+
+<ul>
+<li>用@finally 去收拾残局</li>
+<li>@catch 代码块会再次抛出异常, @finally 在异常重新抛出之前执行代码,诞生僵尸异常( zombie exception)</li>
+<li>上面的解决方法是: 在自动回收池之外保留异常[saveException retain]]就可以了, 记得在@finally 里,自动回收池之后提醒自动释放</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OC(6) 内存控制-管理规则]]></title>
+    <link href="http://kayorl.com/14872504903926.html"/>
+    <updated>2017-02-16T21:08:10+08:00</updated>
+    <id>http://kayorl.com/14872504903926.html</id>
+    <content type="html"><![CDATA[
+<p>当使用了 new, alloc 或 copy 方法获得对象, 就释放或者自动释放该对象</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">临时对象</h2>
+
+<pre><code>
+NSMutableArray *array;
+array= [[NSMutableArray alloc] init];   //alloc, 需要释放
+[array release];
+
+NSMutableArray *array2;
+array2= [NSMutableArray arrayWithCapacity : 18]; //非 new, alloc 或 copy , 自动释放
+</code></pre>
+
+<h2 id="toc_1">拥有对象</h2>
+
+<p>希望在多段代码中一直拥有某个对象<br/>
+* 把它们加入到 NSArray 或 NSDictionary 等集合中, 作为其他对象的实例变量来使用<br/>
+* 使用 new, alloc 或 copy 方法获得了对象, 它将一直存在,需要在<code>拥有该对象的 dealloc 方法中释放它</code><br/>
+* ?编写 GUI 应用程序时,需要保留自动释放的对象( [object retain]),以便在循环后仍然能存在<br/>
+* 自动释放池的清理时间是完全确定的<br/>
+* 大量的<code>迭代</code>每次回生成一个自动释放对象,只有方法完成时才会自动释放,解决方法是创建自己的自动释放池</p>
+
+<h2 id="toc_2">垃圾回收</h2>
+
+<ul>
+<li>只支持 OS X 应用程序开发 , 不支持 iOS 应用程序</li>
+<li>OC2 中的垃圾回收器是新型的,新创建的对象更可能是垃圾</li>
+<li>如果曾在一个实例变量中指向其他对象,不用的时候置为 <code>nil</code>,这样垃圾回收器可以进行清理</li>
+<li>iOS 开发中,<code>不要使用 autorelease 方法</code></li>
+<li><code>不要使用会返回自动释放对象的便利方法</code>, 比如 NSString 的所有 stringWith 开头的方法</li>
+<li>运行时工作</li>
+</ul>
+
+<hr/>
+
+<h2 id="toc_3">自动引用计数(automatic reference counting , ARC)</h2>
+
+<blockquote>
+<p>只需要按需分配并使用对象,编译器在<code>编译时</code>会帮你插入 retain 和 release 语句.</p>
+
+<p>但,它不跟垃圾回收一起使用</p>
+</blockquote>
+
+<p>ARC 只对可保留的对象指针(Reatainable Object Pointers)有效,包括以下三种:</p>
+
+<ol>
+<li>代码块指针</li>
+<li>OC 对象指针</li>
+<li>通过 <strong>attribute</strong>((NSObject)) 类型定义的指针</li>
+</ol>
+
+<p>ARC 需要注意的命名规则</p>
+
+<ul>
+<li>属性名称不能以 new 开头,  @property NSString *newString 是不允许的</li>
+<li>属性不能只有 read-only 而没有管理特性,默认特性是 assign</li>
+</ul>
+
+<h2 id="toc_4">弱引用 (weak reference)</h2>
+
+<blockquote>
+<p>不增加保留计数器的值</p>
+</blockquote>
+
+<h4 id="toc_5">内存泄露版</h4>
+
+<ol>
+<li>A -------&gt; B(2) -------&gt; C(1) ---------&gt; B(2)</li>
+<li>A 释放对 B 的引用</li>
+<li>B(1) -------&gt; C(1) -------&gt; B(1)</li>
+</ol>
+
+<hr/>
+
+<h4 id="toc_6">弱引用版</h4>
+
+<p>使用 <code>assign</code> 来获取对象 C 指向对象 B 的引用.</p>
+
+<ol>
+<li>A -------&gt; B(1) -------&gt; C(1) - - - - -&gt; B(1)</li>
+<li>A 释放对 B 的引用 </li>
+<li>B 被释放,同时释放对象 C</li>
+</ol>
+
+<hr/>
+
+<h4 id="toc_7">弱引用问题版</h4>
+
+<ol>
+<li>A -------&gt; B(1) &lt;- - - - - C</li>
+<li>A 释放对 B 的引用</li>
+<li>B 已经被释放</li>
+<li>C 的弱引用仍然存在</li>
+</ol>
+
+<h4 id="toc_8">归零弱引用(zero weak reference)</h4>
+
+<blockquote>
+<p>让对象自己清空若引用的对象.</p>
+</blockquote>
+
+<p>在指向的对象释放后,弱引用被设置为零(nil)</p>
+
+<p>声明方式:</p>
+
+<ol>
+<li>__weak NSString *myString</li>
+<li>@property(weak) NSString *myString</li>
+</ol>
+
+<hr/>
+
+<h2 id="toc_9">拥有者权限 (待)</h2>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OC(4.1) Foundation Kit]]></title>
+    <link href="http://kayorl.com/14872504903613.html"/>
+    <updated>2017-02-16T21:08:10+08:00</updated>
+    <id>http://kayorl.com/14872504903613.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+<p>字面量语法:  </p>
+
+<pre><code class="language-objc">NSString *str=@&quot;hello&quot;
+</code></pre>
+
+<h2 id="toc_0">字符串</h2>
+
+<h3 id="toc_1">NSString</h3>
+
+<p>不可变的数组</p>
+
+<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
+
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        NSString *some;
+        NSString *other;
+        some=[NSString stringWithFormat:@&quot;%s is useful , &quot;,&quot;Tool&quot;];
+        other=@&quot;Kit&quot;;
+        unsigned int size = 10;
+        if ([some length] &gt; size) {
+            NSLog(@&quot;%@ and it bigger than %d , \n&quot;,some,size);
+        }
+        if (![some isEqualToString:other]) {
+            NSLog(@&quot;but it is different from %@.\n\n&quot;,other);
+        }
+    }
+    
+    
+    NSString *small = @&quot;abc&quot;;
+    NSString *small2 = small;
+    NSString *big = @&quot;ABC&quot;;
+    if ([small compare:small2] == NSOrderedSame) {
+        NSLog(@&quot;%@ and %@ is the same.\n&quot;,small,small2);
+    }
+    
+    
+    /******** 大写字母小于小写字母 ***********/
+    if ([small compare:big] == NSOrderedAscending) {
+        NSLog(@&quot;%@ is asc %@ .\n&quot;,small,big);
+    }
+    if ([small compare:big] == NSOrderedDescending) {
+        NSLog(@&quot;%@ is des %@ .\n&quot;,small,big);
+    }
+    
+    if ([small compare:big options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+        NSLog(@&quot;Case insencetive, then %@ is same as %@ .\n\n&quot;,small,big);
+    }
+    
+    if ([small hasPrefix: @&quot;a&quot;]) {
+        NSLog(@&quot;%@ has prefix:  %@&quot;,small,@&quot;a&quot;);
+    }
+    
+    
+    return 0;
+}
+</code></pre>
+
+<p>输出结果</p>
+
+<pre><code>Tool is useful.  and the length of the saying bigger than 10 ,
+but it is different from Kit.
+abc and abc is the same.
+abc des ABC
+Case insencetive, then abc is same as ABC .
+abc has prefix:  a
+</code></pre>
+
+<h3 id="toc_2">NSMutableString</h3>
+
+<p>可变长度的字符串, capacity 只是建议,不限制其大小</p>
+
+<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
+
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        NSMutableString *string = [NSMutableString stringWithCapacity:50];
+        [string appendFormat:@&quot;I&#39;m %@&quot;,@&quot;kayor&quot;];
+        [string appendString:@&quot;, yeah that&#39;s me.&quot;];
+        NSLog(@&quot;%@&quot;,string);
+        NSRange nameRange= [string rangeOfString:@&quot;kayor&quot;];
+        [string replaceCharactersInRange:nameRange withString:@&quot;lien&quot;];
+        NSLog(@&quot;%@&quot;,string);
+    }
+    return 0;
+}
+
+</code></pre>
+
+<p>输出结果</p>
+
+<pre><code>I&#39;m kayor, yeah that&#39;s me.
+I&#39;m lien, yeah that&#39;s me.
+</code></pre>
+
+<h2 id="toc_3">数组</h2>
+
+<h3 id="toc_4">NSArray</h3>
+
+<p>不可变数组</p>
+
+<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
+
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        NSArray *array= [NSArray arrayWithObjects:@&quot;one&quot;, @&quot;two&quot;, @&quot;three&quot;,nil];
+        unsigned long count= [array count];
+        NSLog(@&quot;\n %@ \nwith count %lu \narray[1] : %@ \n&quot;,array,count,array[1]);
+    }
+    return 0;
+}
+</code></pre>
+
+<p>输出结果</p>
+
+<pre><code class="language-objc"> (
+    one,
+    two,
+    three
+) 
+with count 3 
+array[1] : two 
+</code></pre>
+
+<h3 id="toc_5">NSMutableArray</h3>
+
+<pre><code class="language-objc">NSMutableArray *array= [NSMutableArray arrayWithCapacity: 17];
+</code></pre>
+
+<ul>
+<li>自动填补空缺</li>
+</ul>
+
+<h2 id="toc_6">枚举</h2>
+
+<pre><code class="language-objc">NSEnumerator *enumerator =[array objectEnumerator];
+while (id thingle = [enumerator nextObject])
+{
+  NSLog(@&quot;i get %@ \n&quot;,thingle);
+}
+</code></pre>
+
+<ul>
+<li>没有可以用来创建 NSMutableArray 的字面量语法</li>
+<li>不能添加或删除对象去<code>改变容量</code></li>
+</ul>
+
+<h3 id="toc_7">快速枚举</h3>
+
+<pre><code class="language-objc">for(NSString *string in array)
+{
+    NSLog(@&quot;i get %@ \n&quot;,string);
+}
+</code></pre>
+
+<h3 id="toc_8">代码块枚举</h3>
+
+<p>使用代码块,可以循环并发执行</p>
+
+<pre><code class="language-objc">[array enumeratorObjectsUsingBlock:^(NSString *string,NSUInteger index, BOOL * stop){
+    NSLog(@&quot;i get %@ \n&quot;,string);
+}];
+</code></pre>
+
+<h2 id="toc_9">字典</h2>
+
+<p>对于频繁的查询和大型的数据集而言,字典比数组快很多</p>
+
+<h3 id="toc_10">NSDictionary</h3>
+
+<ul>
+<li>字面量语法创建对象</li>
+<li><code>[dic objectForKey]</code>方法查找或字面量语法查找</li>
+<li><code>[dic removeObjectForKey]</code>方法删除</li>
+</ul>
+
+<h3 id="toc_11">NSMutableDictionary</h3>
+
+<ul>
+<li><code>NSMutableDictionary *mDic = [NSMutableDictionary dic]</code> 方法创建对象</li>
+</ul>
+
+<h2 id="toc_12">其他值</h2>
+
+<p>NSArray 和 NSDictionary 只能存储对象,不能直接存储基本类型的数据( int 等),可以通过封装放入其中.Objective-C 不支持装箱</p>
+
+<h3 id="toc_13">NSNumber</h3>
+
+<pre><code class="language-objc">NSNumber *number;
+number = @&#39;123.45l&#39;;
+[array addObject:number];
+[dic setObject: number forKey: @&quot;vegetable&quot;];
+</code></pre>
+
+<p>封装完成后,可以通过[number floatValue] 重新获得这个值</p>
+
+<h3 id="toc_14">NSValue</h3>
+
+<p>可以用 NSValue 封装任何值(包括结构体)</p>
+
+<pre><code class="language-objc">\+ (NSValue*) valueWithByes: (const void\*) value objType:@encode( type );
+</code></pre>
+
+<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
+
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        NSMutableArray *array= [NSMutableArray arrayWithCapacity:20];
+        NSRect rect = NSMakeRect(5, 2, 10, 10);
+        NSValue *value= [NSValue valueWithBytes:&amp;rect objCType:@encode(NSRect)];
+        [array addObject:value];
+        
+        value=[array objectAtIndex:0];
+        [value getValue:&amp;rect];
+        NSLog(@&quot;%@&quot;,value);         //NSRect: {{5, 2}, {10, 10}}
+    }
+    return 0;
+}
+</code></pre>
+
+<ul>
+<li>传递的参数1为 <code>封装数值的地址</code> </li>
+<li>参数2为对象类型, @encode 编译器指令可以接收<code>数据类型的名称</code>并生成字符串</li>
+<li>getValue 表面提供的是指针,指针所指空间用来存储<code>该方法生成的数据</code></li>
+</ul>
+
+<h4 id="toc_15">常用的 struct 转成 NSValue 的方法</h4>
+
+<pre><code class="language-objc">\+ (NSValue* ) valueWithRect:(NSRect) rect;
+</code></pre>
+
+<h3 id="toc_16">NSNull</h3>
+
+<p>对象型的 Null</p>
+
+<hr/>
+
+<h2 id="toc_17">总结</h2>
+
+<ol>
+<li>可变的都没有字面量语法</li>
+<li>可变的初始化的大小值只是建议,不限制大小</li>
+<li>代码块可以让循环操作并发执行</li>
+<li>频繁查询与大型的数据集,用字典</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OC(5) 内存管理-对象生命周期]]></title>
+    <link href="http://kayorl.com/14872504903821.html"/>
+    <updated>2017-02-16T21:08:10+08:00</updated>
+    <id>http://kayorl.com/14872504903821.html</id>
+    <content type="html"><![CDATA[
+<p>跟现实中的猴子一样,程序中的对象也有他们的生命周期,包括诞生( alloc || new ) 方法实现, 生存 (接收消息并执行操作),沟通 (通过符合以及传递参数) ,以及寿终正寝 (被释放).当一生过去,猴子留下的东西,便又能</p>
+
+<blockquote>
+<p>化作春泥更护花.</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">引用计数</h2>
+
+<p>Cocoa 采用了一种叫做引用计数(reference counting)的技术, 也叫保留计数( <code>retain</code> counting ).<br/>
+每个对象都有一个与之相关联的整数,叫做引用计数器或保留计数器.</p>
+
+<ul>
+<li>访问对象时, 计数器加一</li>
+<li>访问结束时, 计数器减一</li>
+<li>计数器为0时, OC 会<code>自动</code>向对象发送[object dealloc] 消息 , 可以重写 dealloc 方法,但不要<code>直接调用</code> dealloc 方法</li>
+<li>使用 alloc, new, 或者 copy 创建对象时,对象的计数器被设置为1</li>
+<li>增加保留计数器的值,可以[object <code>retain</code>] ,同时会返回一个 id 类型的值,即对 object 的引用</li>
+<li>减少保留计数器的值,可以[object release] ,同时会返回一个 id 类型的值,即对 object 的引用</li>
+<li>获得计数器的当前值,可以[object retainCount]</li>
+</ul>
+
+<h2 id="toc_1">对象所有权</h2>
+
+<p>如果一个对象(方法,类的对象)内有指向其他对象的实例变量,则称该对象拥有这些对象</p>
+
+<ul>
+<li>如果多个对象调用同一个对象,那么可以通过[object reatain]方法来增加保留计数器的值</li>
+</ul>
+
+<h3 id="toc_2">访问方法中的保留和释放</h3>
+
+<p>v1: 保留过度,导致对象泄露</p>
+
+<pre><code class="language-objc">@implementation Car
+
+...
+
+- (void) setEngine:(Engine *) newEngine
+{
+  engine=[newEngine retain];
+  
+  //DON&#39;T DO THIS
+}
+
+...
+...
+
+//main 函数中
+
+//count : 1
+Engine *engine1=[Engine new];
+
+//count : 2 
+[car setEngine: engine1];   
+
+//count : 1 ,main 函数释放了引用,而 car 对 engine1 的引用还没释放
+[engine1 release];          
+
+//count : 1,  engine2 的保留计数器
+Engine *engine2=[Engine new]        
+
+//count : 2 , 这里的 count 包括了对 engine1 的引用 ,而 engine1 已经不受控制了
+[car setEngine: engine2];   
+
+</code></pre>
+
+<p>v2: 对 v1 的修补,对象的对象被其他对象释放,违反了<code>对象所有权</code></p>
+
+<pre><code>@implementation Car
+
+...
+
+- (void) setEngine:(Engine *) newEngine
+{
+  [engine release];
+  engine=[newEngine retain];
+  
+  //DON&#39;T DO THIS TWO!!!!!!!!
+}
+
+...
+...
+
+//main 函数中
+
+//count : 1
+Engine *engine=[Engine new];
+
+Car *car1 = [Car new];
+Car *car2 = [Car new];
+
+//count : 2
+[car1 setEngine: engine];   
+
+//count : 1 , 释放了 main 函数的引用
+[engine release];
+
+//ERROR , car1的 engine 被 car2 释放掉
+//
+[car2 setEngine: [car1 engine]];
+
+</code></pre>
+
+<p>v3:上面两种,一种是保留过度,一种是释放过度,结合两种.跟交换两个值的方法相似</p>
+
+<pre><code class="language-objc">- (void) setEngine:(Engine *) newEngine
+{
+  [newEngine retain]
+  [engine release];
+  engine= newEngine;
+}
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_3">自动释放</h2>
+
+<p>看下面的代码,是谁负责清理该字符串呢?</p>
+
+<pre><code>- (NSString *) description
+{
+  NSString *description;
+  description = [ [NSString* alloc] 
+  initWithFormat:@&quot;I am @d years old&quot; , 4];
+  
+  return (description);
+}   //description
+</code></pre>
+
+<p>调用 description 的代码将返回的字符串赋给一个变量,并在使用完毕后将其释放<br/>
+<code><br/>
+NSString *desc = [object description];<br/>
+NLog(@&quot;%@&quot;, desc);<br/>
+[desc release];<br/>
+</code></p>
+
+<p>太麻烦了,下面的方便了许多</p>
+
+<h2 id="toc_4">自动释放池(autorelease pool)</h2>
+
+<p>NSObject 提供了一个叫做 autorelease 的方法 , 这个方法预先设定在某个时间发送 release 消息,返回自己.</p>
+
+<p>当给对象发送 autorelease 消息时,实际上<code>将该对象加入到自动释放池.当销毁自动释放池时,会自动向所有对象发送 release 消息</code></p>
+
+<pre><code>- (NSString *) description
+{
+  NSString *description;
+  description = [ [NSString* alloc] 
+  initWithFormat:@&quot;I am @d years old&quot; , 4];
+  
+  //此处, description 被加入到自动释放池咯
+  return ([description autorelease] );
+}   //description
+</code></pre>
+
+<p>调用就是介么简单舒服<br/>
+<code><br/>
+NSLog(@&quot;%@&quot;,[object description]);<br/>
+</code></p>
+
+<h3 id="toc_5">自动释放池的销毁时间</h3>
+
+<p>创建自动释放池的方法</p>
+
+<ul>
+<li>@autoreleasepool关键字,适用于内存密集型</li>
+<li>NSAutoreleasePool 对象 , 不推荐 , 比楼上慢</li>
+</ul>
+
+<pre><code class="language-objc">NSAutoreleasePool *pool
+pool = [NSAutoreleasePool new];
+
+...
+
+[pool release]; 
+</code></pre>
+
+<p>自动释放池被销毁的时候,其 <code>dealloc</code> 方法被调用</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OC(4) self 隐藏很深的参数]]></title>
+    <link href="http://kayorl.com/14872504903717.html"/>
+    <updated>2017-02-16T21:08:10+08:00</updated>
+    <id>http://kayorl.com/14872504903717.html</id>
+    <content type="html"><![CDATA[
+<p>创建一个新类时,会从它的超类继承实例变量,然后根据自己情况添加实例变量.下面是 RoundedRectangle 对象的内存布局</p>
+
+<span id="more"></span><!-- more -->
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">指针</th>
+<th style="text-align: center">变量</th>
+<th style="text-align: center">类</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">self-&gt;</td>
+<td style="text-align: center">isa</td>
+<td style="text-align: center">NSObject</td>
+</tr>
+<tr>
+<td style="text-align: center">fillColor</td>
+<td style="text-align: center">Shape</td>
+<td style="text-align: center"></td>
+</tr>
+<tr>
+<td style="text-align: center">bounds</td>
+<td style="text-align: center">Shape</td>
+<td style="text-align: center"></td>
+</tr>
+<tr>
+<td style="text-align: center">radius</td>
+<td style="text-align: center">RoundedRectangle</td>
+<td style="text-align: center"></td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>@implementation Circle
+
+- (void) setFillColor: (ShapeColor) c
+{
+    fillColor = c ;
+}
+
+@end
+
+</code></pre>
+
+<ul>
+<li>每个实例都有类似上面的内存布局,</li>
+<li>每个方法调用都获得了叫 self 的隐藏参数,它是一个指向接收消息的对象的指针</li>
+<li><code>self</code> 函数指向该内存布局中的首地址,即 <code>isa</code></li>
+<li>如代码所示, fillColor = c 时,实际是 self -&gt; fillColor = c </li>
+</ul>
+
+<blockquote>
+<p>Objective-C objects are basically C structs. Each one contains a field called isa, which <code>is a pointer to the class that the object is an instance of</code>(that&#39;s how the object and Objective-C runtime knows what kind of object it is). FROM <a href="http://stackoverflow.com/questions/3405224/what-does-isa-mean-in-objective-c">stackoverflow</a></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+</feed>

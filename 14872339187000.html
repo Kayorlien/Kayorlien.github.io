@@ -1,0 +1,429 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  MySQL5.7 从相见到👋 - 几谷 博客
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:kayorl.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; 几谷 博客</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="nodejs.html">nodejs</a></li>
+        
+            <li><a href="database.html">数据库系统</a></li>
+        
+            <li><a href="C&C++.html">C/C++</a></li>
+        
+            <li><a href="O&M.html">运维</a></li>
+        
+            <li><a href="objc.html">ObjC</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>MySQL5.7 从相见到👋</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2017/2/16 16:31 下午</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='database.html'>数据库系统</a></span>
+          
+              <span class="posted-in"><a href='O&M.html'>运维</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>我的意中人是个盖世英雄<br/>
+有一天他会踩着七色云彩来娶我<br/>
+我猜中了前头,<br/>
+可是我猜不着这结局</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">安装</a>
+</li>
+<li>
+<a href="#toc_1">建立与 MySQL 服务器的连接</a>
+</li>
+<li>
+<a href="#toc_2">导入 .sql 文件</a>
+</li>
+<li>
+<a href="#toc_3">修改时区</a>
+</li>
+<li>
+<a href="#toc_4">备份</a>
+</li>
+<li>
+<a href="#toc_5">卸载</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">安装</h2>
+
+<p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-16-04">DO教程</a></p>
+
+<pre><code># 安装 
+$ sudo apt-get update
+$ sudo apt-get install mysql-server
+
+# 修改数据库的安全配置，如禁用远程 root 用户
+$ sudo mysql_secure_installation
+
+## 测试数据库状态
+$ systemctl status mysql.service
+</code></pre>
+
+<h2 id="toc_1">建立与 MySQL 服务器的连接</h2>
+
+<p>为连接到 MySQL 服务器,在命令行中调用 mysql 程序</p>
+
+<pre><code>$ mysql -h host_name -p -u user_name -D database_name
+</code></pre>
+
+<ul>
+<li><code>mysql</code> 是必须的, 其他可选</li>
+<li>-h  host_name　　　主机地址,默认为本地</li>
+<li>-u  user_name　　　MySQL 用户名</li>
+<li>-p　　　　　　　　回显 Enter password: ，如果相应用户名有密码而没加此项，会显示<code>拒绝访问</code></li>
+<li>-D  database_name 选择操作(默认)的数据库<br/></li>
+</ul>
+
+<h2 id="toc_2">导入 .sql 文件</h2>
+
+<p>可以将编写好的数据库语句写入到文件名后缀为 <code>.sql</code> 的文件中,并记住其路径,最简单的方法是在命令行中进入到.sql 文件所在的目录,然后在<code>命令行</code>执行以下命令(省略了主机名,用户,密码等参数)</p>
+
+<pre><code>$ mysql sampdb &lt; create_member.sql
+</code></pre>
+
+<p>如果已经进入 mysql 程序界面,则执行</p>
+
+<pre><code>mysql&gt; source create_member.sql;
+</code></pre>
+
+<h2 id="toc_3">修改时区</h2>
+
+<pre><code># /etc/my.cnf
+
+[mysqld]
+...
+default-time-zone = &#39;+8:00&#39;
+
+$ systemctl restart mysql
+</code></pre>
+
+<h2 id="toc_4">备份</h2>
+
+<pre><code>$ mysqldump -u -p -D exampleDB &gt;my.sql
+</code></pre>
+
+<h2 id="toc_5">卸载</h2>
+
+<p>purge,翻译过来是净化的意思</p>
+
+<pre><code>sudo apt-get remove --purge mysql*
+sudo apt-get autoremove
+sudo apt-get autoclean
+</code></pre>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14872445826285.html" 
+          title="Previous Post: MySQL 语句">&laquo; MySQL 语句</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14872470138156.html" 
+          title="Next Post: [译] Sequelize(6) sequelize-cli，出门必备良品">[译] Sequelize(6) sequelize-cli，出门必备良品 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>几谷 博客</h1>
+                <div class="site-des">暂时还没想到什么</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Kayorlien" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:kayorl@163.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="nodejs.html"><strong>nodejs</strong></a>
+        
+            <a href="database.html"><strong>数据库系统</strong></a>
+        
+            <a href="C&C++.html"><strong>C/C++</strong></a>
+        
+            <a href="O&M.html"><strong>运维</strong></a>
+        
+            <a href="objc.html"><strong>ObjC</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14872445826285.html">MySQL 语句</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872339187000.html">MySQL5.7 从相见到👋</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872470138156.html">[译] Sequelize(6) sequelize-cli，出门必备良品</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142796.html">[译] Sequelize(5) 几对几</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142644.html">[译] Sequelize(4) 范围</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+
+
+  </body>
+</html>

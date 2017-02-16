@@ -1,0 +1,579 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  OC(4.1) Foundation Kit - 几谷 博客
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:kayorl.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; 几谷 博客</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="nodejs.html">nodejs</a></li>
+        
+            <li><a href="database.html">数据库系统</a></li>
+        
+            <li><a href="C&C++.html">C/C++</a></li>
+        
+            <li><a href="O&M.html">运维</a></li>
+        
+            <li><a href="objc.html">ObjC</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>OC(4.1) Foundation Kit</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/9/27 15:3 下午</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='objc.html'>ObjC</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <span id="more"></span><!-- more -->
+
+<p>字面量语法:  </p>
+
+<pre><code class="language-objc">NSString *str=@&quot;hello&quot;
+</code></pre>
+
+<h2 id="toc_0">字符串</h2>
+
+<h3 id="toc_1">NSString</h3>
+
+<p>不可变的数组</p>
+
+<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
+
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        NSString *some;
+        NSString *other;
+        some=[NSString stringWithFormat:@&quot;%s is useful , &quot;,&quot;Tool&quot;];
+        other=@&quot;Kit&quot;;
+        unsigned int size = 10;
+        if ([some length] &gt; size) {
+            NSLog(@&quot;%@ and it bigger than %d , \n&quot;,some,size);
+        }
+        if (![some isEqualToString:other]) {
+            NSLog(@&quot;but it is different from %@.\n\n&quot;,other);
+        }
+    }
+    
+    
+    NSString *small = @&quot;abc&quot;;
+    NSString *small2 = small;
+    NSString *big = @&quot;ABC&quot;;
+    if ([small compare:small2] == NSOrderedSame) {
+        NSLog(@&quot;%@ and %@ is the same.\n&quot;,small,small2);
+    }
+    
+    
+    /******** 大写字母小于小写字母 ***********/
+    if ([small compare:big] == NSOrderedAscending) {
+        NSLog(@&quot;%@ is asc %@ .\n&quot;,small,big);
+    }
+    if ([small compare:big] == NSOrderedDescending) {
+        NSLog(@&quot;%@ is des %@ .\n&quot;,small,big);
+    }
+    
+    if ([small compare:big options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+        NSLog(@&quot;Case insencetive, then %@ is same as %@ .\n\n&quot;,small,big);
+    }
+    
+    if ([small hasPrefix: @&quot;a&quot;]) {
+        NSLog(@&quot;%@ has prefix:  %@&quot;,small,@&quot;a&quot;);
+    }
+    
+    
+    return 0;
+}
+</code></pre>
+
+<p>输出结果</p>
+
+<pre><code>Tool is useful.  and the length of the saying bigger than 10 ,
+but it is different from Kit.
+abc and abc is the same.
+abc des ABC
+Case insencetive, then abc is same as ABC .
+abc has prefix:  a
+</code></pre>
+
+<h3 id="toc_2">NSMutableString</h3>
+
+<p>可变长度的字符串, capacity 只是建议,不限制其大小</p>
+
+<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
+
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        NSMutableString *string = [NSMutableString stringWithCapacity:50];
+        [string appendFormat:@&quot;I&#39;m %@&quot;,@&quot;kayor&quot;];
+        [string appendString:@&quot;, yeah that&#39;s me.&quot;];
+        NSLog(@&quot;%@&quot;,string);
+        NSRange nameRange= [string rangeOfString:@&quot;kayor&quot;];
+        [string replaceCharactersInRange:nameRange withString:@&quot;lien&quot;];
+        NSLog(@&quot;%@&quot;,string);
+    }
+    return 0;
+}
+
+</code></pre>
+
+<p>输出结果</p>
+
+<pre><code>I&#39;m kayor, yeah that&#39;s me.
+I&#39;m lien, yeah that&#39;s me.
+</code></pre>
+
+<h2 id="toc_3">数组</h2>
+
+<h3 id="toc_4">NSArray</h3>
+
+<p>不可变数组</p>
+
+<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
+
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        NSArray *array= [NSArray arrayWithObjects:@&quot;one&quot;, @&quot;two&quot;, @&quot;three&quot;,nil];
+        unsigned long count= [array count];
+        NSLog(@&quot;\n %@ \nwith count %lu \narray[1] : %@ \n&quot;,array,count,array[1]);
+    }
+    return 0;
+}
+</code></pre>
+
+<p>输出结果</p>
+
+<pre><code class="language-objc"> (
+    one,
+    two,
+    three
+) 
+with count 3 
+array[1] : two 
+</code></pre>
+
+<h3 id="toc_5">NSMutableArray</h3>
+
+<pre><code class="language-objc">NSMutableArray *array= [NSMutableArray arrayWithCapacity: 17];
+</code></pre>
+
+<ul>
+<li>自动填补空缺</li>
+</ul>
+
+<h2 id="toc_6">枚举</h2>
+
+<pre><code class="language-objc">NSEnumerator *enumerator =[array objectEnumerator];
+while (id thingle = [enumerator nextObject])
+{
+  NSLog(@&quot;i get %@ \n&quot;,thingle);
+}
+</code></pre>
+
+<ul>
+<li>没有可以用来创建 NSMutableArray 的字面量语法</li>
+<li>不能添加或删除对象去<code>改变容量</code></li>
+</ul>
+
+<h3 id="toc_7">快速枚举</h3>
+
+<pre><code class="language-objc">for(NSString *string in array)
+{
+    NSLog(@&quot;i get %@ \n&quot;,string);
+}
+</code></pre>
+
+<h3 id="toc_8">代码块枚举</h3>
+
+<p>使用代码块,可以循环并发执行</p>
+
+<pre><code class="language-objc">[array enumeratorObjectsUsingBlock:^(NSString *string,NSUInteger index, BOOL * stop){
+    NSLog(@&quot;i get %@ \n&quot;,string);
+}];
+</code></pre>
+
+<h2 id="toc_9">字典</h2>
+
+<p>对于频繁的查询和大型的数据集而言,字典比数组快很多</p>
+
+<h3 id="toc_10">NSDictionary</h3>
+
+<ul>
+<li>字面量语法创建对象</li>
+<li><code>[dic objectForKey]</code>方法查找或字面量语法查找</li>
+<li><code>[dic removeObjectForKey]</code>方法删除</li>
+</ul>
+
+<h3 id="toc_11">NSMutableDictionary</h3>
+
+<ul>
+<li><code>NSMutableDictionary *mDic = [NSMutableDictionary dic]</code> 方法创建对象</li>
+</ul>
+
+<h2 id="toc_12">其他值</h2>
+
+<p>NSArray 和 NSDictionary 只能存储对象,不能直接存储基本类型的数据( int 等),可以通过封装放入其中.Objective-C 不支持装箱</p>
+
+<h3 id="toc_13">NSNumber</h3>
+
+<pre><code class="language-objc">NSNumber *number;
+number = @&#39;123.45l&#39;;
+[array addObject:number];
+[dic setObject: number forKey: @&quot;vegetable&quot;];
+</code></pre>
+
+<p>封装完成后,可以通过[number floatValue] 重新获得这个值</p>
+
+<h3 id="toc_14">NSValue</h3>
+
+<p>可以用 NSValue 封装任何值(包括结构体)</p>
+
+<pre><code class="language-objc">\+ (NSValue*) valueWithByes: (const void\*) value objType:@encode( type );
+</code></pre>
+
+<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
+
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        NSMutableArray *array= [NSMutableArray arrayWithCapacity:20];
+        NSRect rect = NSMakeRect(5, 2, 10, 10);
+        NSValue *value= [NSValue valueWithBytes:&amp;rect objCType:@encode(NSRect)];
+        [array addObject:value];
+        
+        value=[array objectAtIndex:0];
+        [value getValue:&amp;rect];
+        NSLog(@&quot;%@&quot;,value);         //NSRect: {{5, 2}, {10, 10}}
+    }
+    return 0;
+}
+</code></pre>
+
+<ul>
+<li>传递的参数1为 <code>封装数值的地址</code> </li>
+<li>参数2为对象类型, @encode 编译器指令可以接收<code>数据类型的名称</code>并生成字符串</li>
+<li>getValue 表面提供的是指针,指针所指空间用来存储<code>该方法生成的数据</code></li>
+</ul>
+
+<h4 id="toc_15">常用的 struct 转成 NSValue 的方法</h4>
+
+<pre><code class="language-objc">\+ (NSValue* ) valueWithRect:(NSRect) rect;
+</code></pre>
+
+<h3 id="toc_16">NSNull</h3>
+
+<p>对象型的 Null</p>
+
+<hr/>
+
+<h2 id="toc_17">总结</h2>
+
+<ol>
+<li>可变的都没有字面量语法</li>
+<li>可变的初始化的大小值只是建议,不限制大小</li>
+<li>代码块可以让循环操作并发执行</li>
+<li>频繁查询与大型的数据集,用字典</li>
+</ol>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14872504903926.html" 
+          title="Previous Post: OC(6) 内存控制-管理规则">&laquo; OC(6) 内存控制-管理规则</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14872504903821.html" 
+          title="Next Post: OC(5) 内存管理-对象生命周期">OC(5) 内存管理-对象生命周期 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>几谷 博客</h1>
+                <div class="site-des">暂时还没想到什么</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Kayorlien" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:kayorl@163.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="nodejs.html"><strong>nodejs</strong></a>
+        
+            <a href="database.html"><strong>数据库系统</strong></a>
+        
+            <a href="C&C++.html"><strong>C/C++</strong></a>
+        
+            <a href="O&M.html"><strong>运维</strong></a>
+        
+            <a href="objc.html"><strong>ObjC</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14872445826285.html">MySQL 语句</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872339187000.html">MySQL5.7 从相见到👋</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872470138156.html">[译] Sequelize(6) sequelize-cli，出门必备良品</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142796.html">[译] Sequelize(5) 几对几</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142644.html">[译] Sequelize(4) 范围</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+
+
+  </body>
+</html>

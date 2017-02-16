@@ -1,0 +1,511 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  nginx 从安装到卸载 - 几谷 博客
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:kayorl.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; 几谷 博客</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="nodejs.html">nodejs</a></li>
+        
+            <li><a href="database.html">数据库系统</a></li>
+        
+            <li><a href="C&C++.html">C/C++</a></li>
+        
+            <li><a href="O&M.html">运维</a></li>
+        
+            <li><a href="objc.html">ObjC</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>nginx 从安装到卸载</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/10/25 17:20 下午</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='O&M.html'>运维</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>在<code>ubuntu16.04</code>下，对 nginx 进行</p>
+
+<ul>
+<li>
+<a href="#toc_0">源安装</a>
+</li>
+<li>
+<a href="#toc_1">配置防火墙允许 nginx 通过 80 端口</a>
+</li>
+<li>
+<a href="#toc_2">查看 nginx 状态</a>
+</li>
+<li>
+<a href="#toc_3">内核参数优化</a>
+</li>
+<li>
+<a href="#toc_4">使配置生效</a>
+</li>
+<li>
+<a href="#toc_5">nginx 配置</a>
+</li>
+</ul>
+
+
+<span id="more"></span><!-- more -->
+
+<p>参考很全面的<a href="http://bbs.linuxtone.org/thread-25588-1-1.html">教程</a>，关于 nginx 的优化，以及自己平常遇到的问题</p>
+
+<h2 id="toc_0">源安装</h2>
+
+<pre><code>sudo apt-get update
+sudo apt-get install nginx 
+
+# 安装常用 nginx 插件
+apt-get install nginx-extras 
+</code></pre>
+
+<h2 id="toc_1">配置防火墙允许 nginx 通过 80 端口</h2>
+
+<pre><code>sudo ufw app list 
+sudo ufw allow &#39;Nginx HTTP&#39; 
+sudo ufw status
+</code></pre>
+
+<h2 id="toc_2">查看 nginx 状态</h2>
+
+<pre><code>systemctl status nginx
+</code></pre>
+
+<h2 id="toc_3">内核参数优化</h2>
+
+<pre><code>#vi /etc/sysctl.conf
+net.ipv4.netfilter.ip_conntrack_tcp_timeout_established = 1800
+net.ipv4.ip_conntrack_max = 16777216　＃　如果使用默认参数,容易出现网络丢包
+net.ipv4.netfilter.ip_conntrack_max = 16777216＃　如果使用默认参数,容易出现网络丢包
+net.ipv4.tcp_max_syn_backlog = 65536
+net.core.netdev_max_backlog =  32768
+net.core.somaxconn = 32768
+net.core.wmem_default = 8388608
+net.core.rmem_default = 8388608
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+net.ipv4.tcp_timestamps = 0
+net.ipv4.tcp_synack_retries = 2
+net.ipv4.tcp_syn_retries =
+net.ipv4.tcp_tw_recycle = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_mem = 94500000 915000000 927000000
+net.ipv4.tcp_max_orphans = 3276800
+net.ipv4.ip_local_port_range = 1024  65535
+</code></pre>
+
+<h2 id="toc_4">使配置生效</h2>
+
+<pre><code># sysctl -p
+</code></pre>
+
+<h2 id="toc_5">nginx 配置</h2>
+
+<pre><code># vi /etc/nginx/nginx.conf
+
+worker_processes auto;  #开启工作进程，多少核心就多少个
+pid /run/nginx.pid;     #pid 路径
+worker_rlimit_nofile 100000; #最大打开文件数限制，解决&#39;too many open files&#39;问题
+
+events {
+        worker_connections 2048;   #一个进程能同时处理2048个请求
+        multi_accept on;    #接收到一个新连接后尽可能多链接
+        # use epoll;    #*BSD 用 kqueue，其他用 epoll，不描述的话，自动选择适合操作系统地
+}
+
+http {
+
+        ##
+        # Basic Settings
+        ##
+
+        server_tokens off;      #不向用户展示 Nginx 版本，保证安全
+
+        sendfile on;            #静态服务器启用，
+        tcp_nopush on;          #在一个数据包里发送所有头文件，不一个一个发送
+        tcp_nodelay on;         #不缓存，直接发送
+
+
+        ##
+        #Timeout Settings
+        ##
+        keepalive_timeout 10;   #服务器在超时时间过后关闭链接
+        client_header_timeout 10;
+        client_body_timeout 10;
+        reset_timedout_connection on; #关闭不响应的客户端连接
+        send_timeout 10;        #客户端的响应超时时
+
+        types_hash_max_size 2048;
+
+        ##
+        #1 user connection limit
+        ##
+        limit_conn_zone $binary_remote_addr zone=addr:5m;       #保存当前连接数的共享内存
+        limit_conn addr 100;    #同一个 ip 最多100个连接
+
+        # server_names_hash_bucket_size 64;
+        # server_name_in_redirect off;
+
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+
+        ##
+        #Log Settings
+        access_log off;
+        error_log /var/log/nginx/error.log;
+
+
+        ##
+        # SSL Settings
+        ##
+
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # Dropping SSLv3, ref: POODLE
+        ssl_prefer_server_ciphers on;
+
+
+        ##
+        # Gzip Settings
+        ##
+
+        gzip on;
+        gzip_disable &quot;msie6&quot;;   #对 IE6 及以下的版本禁用 gzip
+         # gzip_static on;
+        # gzip_vary on;
+          gzip_proxied any; #压缩所有请求
+          gzip_min_length 1000;启用压缩的最少字节数，小于1000不压缩
+          gzip_comp_level 4;    #压缩比，9最慢但压缩最强
+        # gzip_buffers 16 8k;
+        # gzip_http_version 1.1;
+          gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+        ##
+        #Open File Cache Settings
+        ##
+
+        open_file_cache max=100000 inactive=20s;    #打开缓存的同时，当20秒不活动时清除掉
+        open_file_cache_valid 30s;
+        open_file_cache_min_uses 2;
+        open_file_cache_errors on;
+
+
+        #Virtual Host Configs
+        include /etc/nginx/conf.d/*.conf;
+}
+</code></pre>
+
+<blockquote>
+<p>卸载 nginx</p>
+</blockquote>
+
+<pre><code>sudo apt-get remove nginx nginx-common # Removes all but config files.
+sudo apt-get purge nginx nginx-common # Removes everything.
+sudo apt-get autoremove # After using any of the above commands, use this in order to remove dependencies used by nginx which are no longer required.
+</code></pre>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14872295003201.html" 
+          title="Previous Post: pm2">&laquo; pm2</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14872504904620.html" 
+          title="Next Post: OC(11) 协议">OC(11) 协议 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>几谷 博客</h1>
+                <div class="site-des">暂时还没想到什么</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Kayorlien" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:kayorl@163.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="nodejs.html"><strong>nodejs</strong></a>
+        
+            <a href="database.html"><strong>数据库系统</strong></a>
+        
+            <a href="C&C++.html"><strong>C/C++</strong></a>
+        
+            <a href="O&M.html"><strong>运维</strong></a>
+        
+            <a href="objc.html"><strong>ObjC</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14872445826285.html">MySQL 语句</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872339187000.html">MySQL5.7 从相见到👋</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872470138156.html">[译] Sequelize(6) sequelize-cli，出门必备良品</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142796.html">[译] Sequelize(5) 几对几</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142644.html">[译] Sequelize(4) 范围</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+
+
+  </body>
+</html>

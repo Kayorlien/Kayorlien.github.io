@@ -1,0 +1,512 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  OC(5) 内存管理-对象生命周期 - 几谷 博客
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:kayorl.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; 几谷 博客</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="nodejs.html">nodejs</a></li>
+        
+            <li><a href="database.html">数据库系统</a></li>
+        
+            <li><a href="C&C++.html">C/C++</a></li>
+        
+            <li><a href="O&M.html">运维</a></li>
+        
+            <li><a href="objc.html">ObjC</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>OC(5) 内存管理-对象生命周期</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/9/25 21:19 下午</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='objc.html'>ObjC</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>跟现实中的猴子一样,程序中的对象也有他们的生命周期,包括诞生( alloc || new ) 方法实现, 生存 (接收消息并执行操作),沟通 (通过符合以及传递参数) ,以及寿终正寝 (被释放).当一生过去,猴子留下的东西,便又能</p>
+
+<blockquote>
+<p>化作春泥更护花.</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">引用计数</h2>
+
+<p>Cocoa 采用了一种叫做引用计数(reference counting)的技术, 也叫保留计数( <code>retain</code> counting ).<br/>
+每个对象都有一个与之相关联的整数,叫做引用计数器或保留计数器.</p>
+
+<ul>
+<li>访问对象时, 计数器加一</li>
+<li>访问结束时, 计数器减一</li>
+<li>计数器为0时, OC 会<code>自动</code>向对象发送[object dealloc] 消息 , 可以重写 dealloc 方法,但不要<code>直接调用</code> dealloc 方法</li>
+<li>使用 alloc, new, 或者 copy 创建对象时,对象的计数器被设置为1</li>
+<li>增加保留计数器的值,可以[object <code>retain</code>] ,同时会返回一个 id 类型的值,即对 object 的引用</li>
+<li>减少保留计数器的值,可以[object release] ,同时会返回一个 id 类型的值,即对 object 的引用</li>
+<li>获得计数器的当前值,可以[object retainCount]</li>
+</ul>
+
+<h2 id="toc_1">对象所有权</h2>
+
+<p>如果一个对象(方法,类的对象)内有指向其他对象的实例变量,则称该对象拥有这些对象</p>
+
+<ul>
+<li>如果多个对象调用同一个对象,那么可以通过[object reatain]方法来增加保留计数器的值</li>
+</ul>
+
+<h3 id="toc_2">访问方法中的保留和释放</h3>
+
+<p>v1: 保留过度,导致对象泄露</p>
+
+<pre><code class="language-objc">@implementation Car
+
+...
+
+- (void) setEngine:(Engine *) newEngine
+{
+  engine=[newEngine retain];
+  
+  //DON&#39;T DO THIS
+}
+
+...
+...
+
+//main 函数中
+
+//count : 1
+Engine *engine1=[Engine new];
+
+//count : 2 
+[car setEngine: engine1];   
+
+//count : 1 ,main 函数释放了引用,而 car 对 engine1 的引用还没释放
+[engine1 release];          
+
+//count : 1,  engine2 的保留计数器
+Engine *engine2=[Engine new]        
+
+//count : 2 , 这里的 count 包括了对 engine1 的引用 ,而 engine1 已经不受控制了
+[car setEngine: engine2];   
+
+</code></pre>
+
+<p>v2: 对 v1 的修补,对象的对象被其他对象释放,违反了<code>对象所有权</code></p>
+
+<pre><code>@implementation Car
+
+...
+
+- (void) setEngine:(Engine *) newEngine
+{
+  [engine release];
+  engine=[newEngine retain];
+  
+  //DON&#39;T DO THIS TWO!!!!!!!!
+}
+
+...
+...
+
+//main 函数中
+
+//count : 1
+Engine *engine=[Engine new];
+
+Car *car1 = [Car new];
+Car *car2 = [Car new];
+
+//count : 2
+[car1 setEngine: engine];   
+
+//count : 1 , 释放了 main 函数的引用
+[engine release];
+
+//ERROR , car1的 engine 被 car2 释放掉
+//
+[car2 setEngine: [car1 engine]];
+
+</code></pre>
+
+<p>v3:上面两种,一种是保留过度,一种是释放过度,结合两种.跟交换两个值的方法相似</p>
+
+<pre><code class="language-objc">- (void) setEngine:(Engine *) newEngine
+{
+  [newEngine retain]
+  [engine release];
+  engine= newEngine;
+}
+</code></pre>
+
+<hr/>
+
+<h2 id="toc_3">自动释放</h2>
+
+<p>看下面的代码,是谁负责清理该字符串呢?</p>
+
+<pre><code>- (NSString *) description
+{
+  NSString *description;
+  description = [ [NSString* alloc] 
+  initWithFormat:@&quot;I am @d years old&quot; , 4];
+  
+  return (description);
+}   //description
+</code></pre>
+
+<p>调用 description 的代码将返回的字符串赋给一个变量,并在使用完毕后将其释放<br/>
+<code><br/>
+NSString *desc = [object description];<br/>
+NLog(@&quot;%@&quot;, desc);<br/>
+[desc release];<br/>
+</code></p>
+
+<p>太麻烦了,下面的方便了许多</p>
+
+<h2 id="toc_4">自动释放池(autorelease pool)</h2>
+
+<p>NSObject 提供了一个叫做 autorelease 的方法 , 这个方法预先设定在某个时间发送 release 消息,返回自己.</p>
+
+<p>当给对象发送 autorelease 消息时,实际上<code>将该对象加入到自动释放池.当销毁自动释放池时,会自动向所有对象发送 release 消息</code></p>
+
+<pre><code>- (NSString *) description
+{
+  NSString *description;
+  description = [ [NSString* alloc] 
+  initWithFormat:@&quot;I am @d years old&quot; , 4];
+  
+  //此处, description 被加入到自动释放池咯
+  return ([description autorelease] );
+}   //description
+</code></pre>
+
+<p>调用就是介么简单舒服<br/>
+<code><br/>
+NSLog(@&quot;%@&quot;,[object description]);<br/>
+</code></p>
+
+<h3 id="toc_5">自动释放池的销毁时间</h3>
+
+<p>创建自动释放池的方法</p>
+
+<ul>
+<li>@autoreleasepool关键字,适用于内存密集型</li>
+<li>NSAutoreleasePool 对象 , 不推荐 , 比楼上慢</li>
+</ul>
+
+<pre><code class="language-objc">NSAutoreleasePool *pool
+pool = [NSAutoreleasePool new];
+
+...
+
+[pool release]; 
+</code></pre>
+
+<p>自动释放池被销毁的时候,其 <code>dealloc</code> 方法被调用</p>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14872504903613.html" 
+          title="Previous Post: OC(4.1) Foundation Kit">&laquo; OC(4.1) Foundation Kit</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14872504903717.html" 
+          title="Next Post: OC(4) self 隐藏很深的参数">OC(4) self 隐藏很深的参数 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>几谷 博客</h1>
+                <div class="site-des">暂时还没想到什么</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Kayorlien" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:kayorl@163.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="nodejs.html"><strong>nodejs</strong></a>
+        
+            <a href="database.html"><strong>数据库系统</strong></a>
+        
+            <a href="C&C++.html"><strong>C/C++</strong></a>
+        
+            <a href="O&M.html"><strong>运维</strong></a>
+        
+            <a href="objc.html"><strong>ObjC</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14872445826285.html">MySQL 语句</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872339187000.html">MySQL5.7 从相见到👋</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872470138156.html">[译] Sequelize(6) sequelize-cli，出门必备良品</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142796.html">[译] Sequelize(5) 几对几</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142644.html">[译] Sequelize(4) 范围</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+
+
+  </body>
+</html>

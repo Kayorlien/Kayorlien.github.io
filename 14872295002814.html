@@ -1,0 +1,568 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  MySQL 数据类型 - 几谷 博客
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:kayorl.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; 几谷 博客</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="nodejs.html">nodejs</a></li>
+        
+            <li><a href="database.html">数据库系统</a></li>
+        
+            <li><a href="C&C++.html">C/C++</a></li>
+        
+            <li><a href="O&M.html">运维</a></li>
+        
+            <li><a href="objc.html">ObjC</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>MySQL 数据类型</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/9/14 10:45 上午</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='database.html'>数据库系统</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>blob ？显示宽度？</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">属性</h2>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left">类型</th>
+<th style="text-align: center">简写</th>
+<th style="text-align: center">作用</th>
+<th style="text-align: right">适用范围</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: left">UNSIGNED</td>
+<td style="text-align: center">UN</td>
+<td style="text-align: center">防止出现负值</td>
+<td style="text-align: right">除 BIT 以外</td>
+</tr>
+<tr>
+<td style="text-align: left">ZEROFILL</td>
+<td style="text-align: center">ZF</td>
+<td style="text-align: center">在列里的显示值前填充若干个0 (与显示宽度相关)</td>
+<td style="text-align: right">除 BIT 以外</td>
+</tr>
+<tr>
+<td style="text-align: left">AUTO_INCREMENT</td>
+<td style="text-align: center">AI</td>
+<td style="text-align: center">表示该列存放的是序号( ID ).如果没为 ID 列提供值,那 MySQL 会<code>自动生成</code>下一个编号.删除某几行后,删除的序号可能会被再使用,得看使用的引擎</td>
+<td style="text-align: right">一般用于整数 且有 <code>NOT NULL</code>(自动隐式添加) 和 <code>UNSIGNED</code> 属性</td>
+</tr>
+<tr>
+<td style="text-align: left">NULL/NOT NULL</td>
+<td style="text-align: center">NN</td>
+<td style="text-align: center">指定列能否为 NULL</td>
+<td style="text-align: right">除了 有 <code>AI</code> 的列</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_1">数字</h2>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left">类型</th>
+<th style="text-align: center">范围  ( 无符号 , 0~ )</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: left">TINYINT (M)</td>
+<td style="text-align: center">255</td>
+</tr>
+<tr>
+<td style="text-align: left">SMALLINT (M)</td>
+<td style="text-align: center">65535</td>
+</tr>
+<tr>
+<td style="text-align: left">MEDIUMINT (M)</td>
+<td style="text-align: center">16777215</td>
+</tr>
+<tr>
+<td style="text-align: left">INT (M)</td>
+<td style="text-align: center">2ˆ32-1</td>
+</tr>
+<tr>
+<td style="text-align: left">BIGINT  (M)</td>
+<td style="text-align: center">2ˆ64-1</td>
+</tr>
+<tr>
+<td style="text-align: left">DECIMAL ( [ M [ ,D ] ] )</td>
+<td style="text-align: center">由 M 和 D 的值决定</td>
+</tr>
+<tr>
+<td style="text-align: left">FLOAT  ( [ M [ ,D ] ] )</td>
+<td style="text-align: center">最大非零: ±3.402823466E+38</td>
+</tr>
+<tr>
+<td style="text-align: left">DOUBLE  ( [ M [ ,D ] ] )</td>
+<td style="text-align: center">最大非零: ± 1.7976931348623157E+308</td>
+</tr>
+<tr>
+<td style="text-align: left">BIT  ([M])</td>
+<td style="text-align: center">2ˆM-1,  1&lt;= M &lt;= 64</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>D</code> : 数学精确度,即小数点后的数字个数<br/>
+<code>M</code> : 显示宽度,为1~255 的整数.决定 MySQL 用多少个字符<code>显示</code>该列的值,与<code>存储该值所需的字节存储空间无关</code>,默认为最长值的长度 . 一般结合 <code>ZEROFILL</code> 使用</p>
+
+<p><strong>举例</strong> <br/>
+INT(2)的列,每个值仍占用<code>4个字节</code> (32bit) 的空间,假设有一个值取为2,那么将会显示 02 </p>
+
+<hr/>
+
+<h2 id="toc_2">字符串</h2>
+
+<p>MySQL字符串可以表示任何值, 它实际上是一种 &quot;泛型&quot; 类型.例如,可以用二进制串存储二进制数据,如图像,声音,压缩后的gzip 输出.</p>
+
+<ul>
+<li><code>二进制串</code>: 01010101010</li>
+<li>非二进制串: ......</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">类型</th>
+<th style="text-align: center">存储二进制串</th>
+<th style="text-align: center">最大长度 (字节)</th>
+<th style="text-align: center">存储空间要求 (字节)</th>
+<th style="text-align: center">说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center"><code>BINARY[(M)]</code></td>
+<td style="text-align: center">√</td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">M : 表示该列值的最大长度 (二进制串以字节为长度,非二进制串以字符单位)</td>
+</tr>
+<tr>
+<td style="text-align: center">CHAR[(M)]</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">M  x  w</td>
+<td style="text-align: center">w : 表示列字符集里<code>最&quot;宽&quot;</code>字符占用的字节数(定长补足用)</td>
+</tr>
+<tr>
+<td style="text-align: center"><code>VARBINARY(M)</code></td>
+<td style="text-align: center">√</td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">L+1 or L+2</td>
+<td style="text-align: center">L : 表示某个<code>给定值</code>的字节长度</td>
+</tr>
+<tr>
+<td style="text-align: center">VARCHAR(M)</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">L+1 or L+2</td>
+<td style="text-align: center"></td>
+</tr>
+<tr>
+<td style="text-align: center"><code>BLOB(binary large object)</code></td>
+<td style="text-align: center">√</td>
+<td style="text-align: center">2ˆ16-1</td>
+<td style="text-align: center">L+2</td>
+<td style="text-align: center">可以存储大对象(4 GB),字节为单位</td>
+</tr>
+<tr>
+<td style="text-align: center">TEXT</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">2ˆ16-1</td>
+<td style="text-align: center">L+2</td>
+<td style="text-align: center">字符为单位</td>
+</tr>
+<tr>
+<td style="text-align: center">ENUM(&#39;value1&#39;,&#39;value2&#39;,...)</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">65535个成员</td>
+<td style="text-align: center">1 or 2</td>
+<td style="text-align: center">定义的值顺序就是排序所用的顺序</td>
+</tr>
+<tr>
+<td style="text-align: center">SET(&#39;value1&#39;,&#39;value2&#39;,...)</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">64个成员</td>
+<td style="text-align: center">1,2,3,4,8</td>
+<td style="text-align: center"></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>BLOB 和 TEXT 列能否被索引取决于存储引擎,如果用 InnoDB 和 MyISAM, 必须制定一个前缀长度,方便索引.可以避免创建出可能过大的索引,那样会抵消索引带来的好处. 比较特殊的是 TEXT 列的 <code>FULLTEXT</code> 索引以索引列的完整内容为基础,自动忽略指定的前缀长度</li>
+<li>BLOB,TEXT 在多次操作之后会产生大量碎片,如果用 MyISAM 来存储 BLOB 或 TEXT, 那么定期运行 <code>OPTIMIZE TABLE</code> 可以减少碎片,改善系统性能</li>
+</ul>
+
+<hr/>
+
+<h2 id="toc_3">时态</h2>
+
+<ul>
+<li>fsp: 小数秒精度</li>
+<li>时态列的定义可以包含通用属性 NULL 或 NOT NULL. 如果都不指定, 则默认为 NULL. </li>
+<li>TIMESTAMP 和 DATETIME 有自动初始化属性和自动更新属性</li>
+<li>TIMESTAMP 的<code>默认值</code>为 NOT NULL, 如果设置为 NULL, 那么它的值会被设置为当前时间戳</li>
+<li>TIMESTAMP 不能设置为 <code>DEFAULT 0</code>,严格模式下会报错</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">类型</th>
+<th style="text-align: center">范围</th>
+<th style="text-align: center">存储要求(字节)(5.6.4以后)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">DATE</td>
+<td style="text-align: center">1000-01-01 ~ 9999-12-31</td>
+<td style="text-align: center">3</td>
+</tr>
+<tr>
+<td style="text-align: center">TIME</td>
+<td style="text-align: center">-838:59:59[.000000] ~ 838:59:59[.000000]</td>
+<td style="text-align: center">3 + fsp</td>
+</tr>
+<tr>
+<td style="text-align: center">DATETIME</td>
+<td style="text-align: center">1000-01-01 00:00:00[.000000] ~ 9999-12-31 23.59.59[.999999]</td>
+<td style="text-align: center">3 + fsp</td>
+</tr>
+<tr>
+<td style="text-align: center">TIMESTAMP</td>
+<td style="text-align: center">1970-01-01 00:00:00[.000000] ~ 2038-01-19 03:14:07[.999999]</td>
+<td style="text-align: center">4 + fsp</td>
+</tr>
+<tr>
+<td style="text-align: center">YEAR</td>
+<td style="text-align: center">1901~2155</td>
+<td style="text-align: center">1</td>
+</tr>
+</tbody>
+</table>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14872314142143.html" 
+          title="Previous Post: [译] Sequelize(1)  让Node操作MySQL更方便">&laquo; [译] Sequelize(1)  让Node操作MySQL更方便</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14872467449529.html" 
+          title="Next Post: Promises 解决Node无限回调">Promises 解决Node无限回调 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>几谷 博客</h1>
+                <div class="site-des">暂时还没想到什么</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Kayorlien" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:kayorl@163.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="nodejs.html"><strong>nodejs</strong></a>
+        
+            <a href="database.html"><strong>数据库系统</strong></a>
+        
+            <a href="C&C++.html"><strong>C/C++</strong></a>
+        
+            <a href="O&M.html"><strong>运维</strong></a>
+        
+            <a href="objc.html"><strong>ObjC</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14872445826285.html">MySQL 语句</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872339187000.html">MySQL5.7 从相见到👋</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872470138156.html">[译] Sequelize(6) sequelize-cli，出门必备良品</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142796.html">[译] Sequelize(5) 几对几</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142644.html">[译] Sequelize(4) 范围</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+
+
+  </body>
+</html>

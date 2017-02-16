@@ -1,0 +1,447 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  OC(6) 内存控制-管理规则 - 几谷 博客
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:kayorl.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; 几谷 博客</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="nodejs.html">nodejs</a></li>
+        
+            <li><a href="database.html">数据库系统</a></li>
+        
+            <li><a href="C&C++.html">C/C++</a></li>
+        
+            <li><a href="O&M.html">运维</a></li>
+        
+            <li><a href="objc.html">ObjC</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>OC(6) 内存控制-管理规则</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/9/28 21:36 下午</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='objc.html'>ObjC</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>当使用了 new, alloc 或 copy 方法获得对象, 就释放或者自动释放该对象</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">临时对象</h2>
+
+<pre><code>
+NSMutableArray *array;
+array= [[NSMutableArray alloc] init];   //alloc, 需要释放
+[array release];
+
+NSMutableArray *array2;
+array2= [NSMutableArray arrayWithCapacity : 18]; //非 new, alloc 或 copy , 自动释放
+</code></pre>
+
+<h2 id="toc_1">拥有对象</h2>
+
+<p>希望在多段代码中一直拥有某个对象<br/>
+* 把它们加入到 NSArray 或 NSDictionary 等集合中, 作为其他对象的实例变量来使用<br/>
+* 使用 new, alloc 或 copy 方法获得了对象, 它将一直存在,需要在<code>拥有该对象的 dealloc 方法中释放它</code><br/>
+* ?编写 GUI 应用程序时,需要保留自动释放的对象( [object retain]),以便在循环后仍然能存在<br/>
+* 自动释放池的清理时间是完全确定的<br/>
+* 大量的<code>迭代</code>每次回生成一个自动释放对象,只有方法完成时才会自动释放,解决方法是创建自己的自动释放池</p>
+
+<h2 id="toc_2">垃圾回收</h2>
+
+<ul>
+<li>只支持 OS X 应用程序开发 , 不支持 iOS 应用程序</li>
+<li>OC2 中的垃圾回收器是新型的,新创建的对象更可能是垃圾</li>
+<li>如果曾在一个实例变量中指向其他对象,不用的时候置为 <code>nil</code>,这样垃圾回收器可以进行清理</li>
+<li>iOS 开发中,<code>不要使用 autorelease 方法</code></li>
+<li><code>不要使用会返回自动释放对象的便利方法</code>, 比如 NSString 的所有 stringWith 开头的方法</li>
+<li>运行时工作</li>
+</ul>
+
+<hr/>
+
+<h2 id="toc_3">自动引用计数(automatic reference counting , ARC)</h2>
+
+<blockquote>
+<p>只需要按需分配并使用对象,编译器在<code>编译时</code>会帮你插入 retain 和 release 语句.</p>
+
+<p>但,它不跟垃圾回收一起使用</p>
+</blockquote>
+
+<p>ARC 只对可保留的对象指针(Reatainable Object Pointers)有效,包括以下三种:</p>
+
+<ol>
+<li>代码块指针</li>
+<li>OC 对象指针</li>
+<li>通过 <strong>attribute</strong>((NSObject)) 类型定义的指针</li>
+</ol>
+
+<p>ARC 需要注意的命名规则</p>
+
+<ul>
+<li>属性名称不能以 new 开头,  @property NSString *newString 是不允许的</li>
+<li>属性不能只有 read-only 而没有管理特性,默认特性是 assign</li>
+</ul>
+
+<h2 id="toc_4">弱引用 (weak reference)</h2>
+
+<blockquote>
+<p>不增加保留计数器的值</p>
+</blockquote>
+
+<h4 id="toc_5">内存泄露版</h4>
+
+<ol>
+<li>A -------&gt; B(2) -------&gt; C(1) ---------&gt; B(2)</li>
+<li>A 释放对 B 的引用</li>
+<li>B(1) -------&gt; C(1) -------&gt; B(1)</li>
+</ol>
+
+<hr/>
+
+<h4 id="toc_6">弱引用版</h4>
+
+<p>使用 <code>assign</code> 来获取对象 C 指向对象 B 的引用.</p>
+
+<ol>
+<li>A -------&gt; B(1) -------&gt; C(1) - - - - -&gt; B(1)</li>
+<li>A 释放对 B 的引用 </li>
+<li>B 被释放,同时释放对象 C</li>
+</ol>
+
+<hr/>
+
+<h4 id="toc_7">弱引用问题版</h4>
+
+<ol>
+<li>A -------&gt; B(1) &lt;- - - - - C</li>
+<li>A 释放对 B 的引用</li>
+<li>B 已经被释放</li>
+<li>C 的弱引用仍然存在</li>
+</ol>
+
+<h4 id="toc_8">归零弱引用(zero weak reference)</h4>
+
+<blockquote>
+<p>让对象自己清空若引用的对象.</p>
+</blockquote>
+
+<p>在指向的对象释放后,弱引用被设置为零(nil)</p>
+
+<p>声明方式:</p>
+
+<ol>
+<li>__weak NSString *myString</li>
+<li>@property(weak) NSString *myString</li>
+</ol>
+
+<hr/>
+
+<h2 id="toc_9">拥有者权限 (待)</h2>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14872504904064.html" 
+          title="Previous Post: OC(7) 异常">&laquo; OC(7) 异常</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14872504903613.html" 
+          title="Next Post: OC(4.1) Foundation Kit">OC(4.1) Foundation Kit &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>几谷 博客</h1>
+                <div class="site-des">暂时还没想到什么</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/Kayorlien" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:kayorl@163.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="nodejs.html"><strong>nodejs</strong></a>
+        
+            <a href="database.html"><strong>数据库系统</strong></a>
+        
+            <a href="C&C++.html"><strong>C/C++</strong></a>
+        
+            <a href="O&M.html"><strong>运维</strong></a>
+        
+            <a href="objc.html"><strong>ObjC</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14872445826285.html">MySQL 语句</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872339187000.html">MySQL5.7 从相见到👋</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872470138156.html">[译] Sequelize(6) sequelize-cli，出门必备良品</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142796.html">[译] Sequelize(5) 几对几</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872314142644.html">[译] Sequelize(4) 范围</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+
+
+
+  </body>
+</html>

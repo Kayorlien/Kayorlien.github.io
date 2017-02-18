@@ -2,7 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
   <loc>http://kayorl.com/</loc>
-  <lastmod>2017-02-17T12:13:28+08:00</lastmod>
+  <lastmod>2017-02-18T23:47:40+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://kayorl.com/14874190727983.html</loc>
+  <lastmod>2017-02-18T19:57:52+08:00</lastmod>
 </url>
 
 <url>
@@ -141,6 +146,14 @@
 </url>
 
 
+
+<url>
+  <loc>http://kayorl.com/java.html</loc>
+</url>
+
+<url>
+  <loc>http://kayorl.com/Thinking%20In%20Java.html</loc>
+</url>
 
 <url>
   <loc>http://kayorl.com/database.html</loc>

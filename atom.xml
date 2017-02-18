@@ -4,13 +4,81 @@
   <title><![CDATA[几谷 博客]]></title>
   <link href="http://kayorl.com/atom.xml" rel="self"/>
   <link href="http://kayorl.com/"/>
-  <updated>2017-02-16T23:25:39+08:00</updated>
+  <updated>2017-02-17T12:13:28+08:00</updated>
   <id>http://kayorl.com/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[初始化顺序、时间、位置]]></title>
+    <link href="http://kayorl.com/14874190727983.html"/>
+    <updated>2017-02-18T19:57:52+08:00</updated>
+    <id>http://kayorl.com/14874190727983.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">顺序</h2>
+
+<ol>
+<li>变量定义的顺序，决定初始化顺序</li>
+</ol>
+
+<h2 id="toc_1">时间</h2>
+
+<ol>
+<li>静态对象（静态数据）在第一次被创建(访问)时初始化</li>
+<li>静态对象（静态数据）优先于&quot;非静态&quot;对象初始化</li>
+</ol>
+
+<h2 id="toc_2">位置</h2>
+
+<ol>
+<li>在定义对象的地方</li>
+<li>在类的构造器中</li>
+<li>在即将使用对象之前，这种方式叫做<strong>惰性初始化</strong>, 这种方法可以减少额外负担，方式类似 如<code>if(member == null) { member = &quot;val&quot;; }</code></li>
+<li>使用实例初始化</li>
+</ol>
+
+<hr/>
+
+<pre><code class="language-j">/**
+ * 验证初始化顺序
+ * 1(static1) -&gt; 3(static3) -&gt; 2(public2) -&gt; 4(public4) -&gt; 5(leg1)
+ */
+package fun;
+
+public class InitSequence {
+    
+    public static void init(){
+        new Tabel();
+    }
+}
+
+
+class Tabel {
+    static int static1 = 1; 
+    
+    public int public2 = 2;
+    
+    static int static3 = 3;
+    
+    public int public4 = 4;
+    
+    static Leg leg1 ;
+    
+    public Tabel(){
+        leg1 = new Leg();
+    }
+}
+
+class Leg {}
+</code></pre>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MySQL 语句]]></title>
@@ -2456,74 +2524,6 @@ pool = [NSAutoreleasePool new];
 </code></pre>
 
 <p>自动释放池被销毁的时候,其 <code>dealloc</code> 方法被调用</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[OC(4) self 隐藏很深的参数]]></title>
-    <link href="http://kayorl.com/14872504903717.html"/>
-    <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://kayorl.com/14872504903717.html</id>
-    <content type="html"><![CDATA[
-<p>创建一个新类时,会从它的超类继承实例变量,然后根据自己情况添加实例变量.下面是 RoundedRectangle 对象的内存布局</p>
-
-<span id="more"></span><!-- more -->
-
-<table>
-<thead>
-<tr>
-<th style="text-align: center">指针</th>
-<th style="text-align: center">变量</th>
-<th style="text-align: center">类</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td style="text-align: center">self-&gt;</td>
-<td style="text-align: center">isa</td>
-<td style="text-align: center">NSObject</td>
-</tr>
-<tr>
-<td style="text-align: center">fillColor</td>
-<td style="text-align: center">Shape</td>
-<td style="text-align: center"></td>
-</tr>
-<tr>
-<td style="text-align: center">bounds</td>
-<td style="text-align: center">Shape</td>
-<td style="text-align: center"></td>
-</tr>
-<tr>
-<td style="text-align: center">radius</td>
-<td style="text-align: center">RoundedRectangle</td>
-<td style="text-align: center"></td>
-</tr>
-</tbody>
-</table>
-
-<pre><code>@implementation Circle
-
-- (void) setFillColor: (ShapeColor) c
-{
-    fillColor = c ;
-}
-
-@end
-
-</code></pre>
-
-<ul>
-<li>每个实例都有类似上面的内存布局,</li>
-<li>每个方法调用都获得了叫 self 的隐藏参数,它是一个指向接收消息的对象的指针</li>
-<li><code>self</code> 函数指向该内存布局中的首地址,即 <code>isa</code></li>
-<li>如代码所示, fillColor = c 时,实际是 self -&gt; fillColor = c </li>
-</ul>
-
-<blockquote>
-<p>Objective-C objects are basically C structs. Each one contains a field called isa, which <code>is a pointer to the class that the object is an instance of</code>(that&#39;s how the object and Objective-C runtime knows what kind of object it is). FROM <a href="http://stackoverflow.com/questions/3405224/what-does-isa-mean-in-objective-c">stackoverflow</a></p>
-</blockquote>
 
 ]]></content>
   </entry>

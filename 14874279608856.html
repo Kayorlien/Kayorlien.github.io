@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  [译] Sequelize(3)  CRUD - 几谷 博客
+  组合与继承的选择 - 几谷 博客
   
   </title>
   
@@ -111,23 +111,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>[译] Sequelize(3)  CRUD</h1>
+          <h1>组合与继承的选择</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/11/26 23:22 下午</span>
+          <span class="date">2017/2/18 22:26 下午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='sequelize.html'>Sequelize</a></span>
+              <span class="posted-in"><a href='Thinking%20In%20Java.html'>Thinking In Java</a></span>
            
          
           <span class="comments">
             
-              <a href="http://kayorl.com/14872314142502.html#disqus_thread">comments</a>
+              <a href="http://kayorl.com/14874279608856.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872314142502.html" data-count-type="comments" href="14872314142502.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="14874279608856.html" data-count-type="comments" href="14874279608856.html#ds-thread"></a>
             
           </span>
 
@@ -135,166 +135,45 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <span id="more"></span><!-- more -->
+      <p>类之间的 <u>继承</u> 是<strong>is-a</strong>关系, 类之间的组合是<strong>has-a</strong> 关系<br/>
+面临这两种技术的选型时，只需要考虑一个问题：<br/>
+新类需要向上转型吗？</p>
 
-<h2 id="toc_0">模型定义</h2>
+<span id="more"></span><!-- more -->
 
-<pre><code class="language-js">var Task = sequelize.define( &#39;task&#39;, {
-    title: Sequelize.STRING,
-    rank: { type: Sequelize.STRING, defaultValue: 3 }
-} );
-</code></pre>
+<p>需要的话，选择继承。</p>
 
-<h2 id="toc_1">Create</h2>
+<h2 id="toc_0">向上转型</h2>
 
-<pre><code class="language-js">// 创建数据库中对象
-Task.create( { title: &#39;foo&#39; } );
+<p>新类转换为基类并调用基类的动作，称为<strong>向上转型</strong>。</p>
 
-// 创建临时变量
-var task = Task.build( { title: &#39;very important task&#39; } );
+<p>下面是一个例子：</p>
 
-// 将临时变量存入数据库内, 只保存 title 属性
-task.save( { fields: [ &#39;title&#39; ] } );
-</code></pre>
-
-<h2 id="toc_2">Update</h2>
-
-<pre><code class="language-js">// 在数据库中更新 task 的 title
-task.update( { title: &#39;a very different title now&#39; } );
-
-
-// 更新 排名小于1000或者无排名的 post 的 updateAt 为 null
-Post.update( {
-    updatedAt: null,
-}, {
-    where: {
-        rank: {
-            $or: {
-                $lt: 100,
-                $eq: null
-            }
-        }
+<pre><code class="language-j">/**
+ * Wind 是 Instrument 的子类，通过向上转型调用了 Instrument 的 play 方法
+ */
+public class Transaction {
+    public static void main(String[] args) {
+        Wind flute=new Wind();
+        Instrument.tune(flute);
     }
-    //// rank &lt; 1000 OR rank IS NULL
-} );
-</code></pre>
+}
 
-<h2 id="toc_3">Delete</h2>
-
-<pre><code class="language-js">// 删除 不活跃的 post
-Post.destroy( {
-    where: {
-        status: &#39;inactive&#39;
+class Instrument {
+    void play() {};
+    static void tune(Instrument i){
+        i.play();
     }
-} );
+}
+
+class Wind extends Instrument {
+    void play() {};
+}
 </code></pre>
 
-<h2 id="toc_4">Retrieve</h2>
+<h2 id="toc_1">名称屏蔽</h2>
 
-<pre><code class="language-js">// 只选择相应属性
-Model.findAll( {
-    attributes: [ &#39;foo&#39;, &#39;bar&#39; ]
-} );
-// 做聚类
-Model.findAll( {
-    attributes: { include: [ [ sequelize.fn( &#39;COUNT&#39;, sequelize.col( &#39;hats&#39; ) ), &#39;no_hats&#39; ] ] }
-} );
-// 除开某些属性
-Model.findAll( {
-    attributes: { exclude: [ &#39;baz&#39; ] }
-} );
-
-// id 查找
-Project.findById( 123 ).then();
-
-// 属性查找
-Project.findOne( { where: { title: &#39;aProject&#39; } } ).then();
-// ？
-Project.findOne( { where: { title: &#39;aProject&#39; }, attributes: [ &#39;id&#39;, [ &#39;name&#39;, &#39;title&#39; ] ] } ).then();
-
-// 找，无则创建， created 为 boolean
-User.findOrCreate( { where: { username: &#39;kayor&#39; } } ).spread( function ( user, created ) {} );
-
-// 找并且计数 count 为计数， rows 为对象数组
-Project.findAndCountAll( {
-    where: { title: { $like: &#39;foo%&#39; } },
-    offset: 10,
-    limit: 2
-} ).then( function ( result ) {
-    console.log( result.count );
-    console.log( result.rows );
-} );
-
-// 找出拥有 active profile 的用户
-User.findAndCountAll( {
-    include: [
-        { model: Profile, where: { active: true } }
-  ],
-    limit: 3
-} );
-
-
-Project.findAll();
-Project.all();
-Project.findAll( { where: { name: &quot;a Project&quot; } } );
-Project.findAll( { where: [ &quot;id&gt;?&quot;, 25 ] } );
-Project.findAll( { where: { id: [ 1, 2, 3 ] } } );
-Project.findAll( {
-    where: {
-        id: {
-            $and: { a: 5 },
-            $or: [ { a: 5 }, { a: 6 } ],
-            $gt: 6,
-            $gte: 6,
-            $lt: 10,
-            $lte: 10,
-            $ne: 20,
-            $between: [ 6, 10 ],
-            $notBetween: [ 6, 10 ],
-            $in: [ 1, 2 ],
-            $notIn: [ 1, 2 ],
-            $like: &#39;%hat&#39;
-        },
-        status: { $not: false }
-    }
-} );
-
-//只找十个
-Project.findAll( { limit: 10 } );
-// 跳过前10个
-Project.findAll( { offset: 10 } );
-// 跳过前10，取两个
-Project.findAll( { offset: 10, limit: 2 } );
-
-// 递减
-Project.findAll( { order: &#39;title DESC&#39; } );
-// 分组
-Project.findAll( { group: &#39;name&#39; } );
-// 计数
-Project.count( { where: [ &quot;id&gt;?&quot;, 25 ] } );
-// 找最大
-Project.max( &#39;age&#39; );
-
-// 内连接找到拥有符合条件工具的用户
-Post.findAll( {
-    include: [ {
-        model: Comment,
-        as: &#39;comment_my&#39;,
-        where: { name: { $like: &#39;%ooth%&#39; } }
-    } ]
-} );
-
-// 获得原数据
-Post.findOne( { where: { title: &#39;scut&#39; } } ).then( function ( post ) {
-    post.title = &#39;south china university of tecknology&#39;;
-    console.log( post.title ); // &#39;south china university of tecknology&#39;
-
-    post.reload().then( function () {
-        console.log( post.title ); // &#39;scut&#39;
-    } );
-} );
-
-</code></pre>
+<p>Java 中， 在子类中重载方法，并<strong>不会屏蔽</strong>基类版本的方法。</p>
 
 
     
@@ -305,16 +184,16 @@ Post.findOne( { where: { title: &#39;scut&#39; } } ).then( function ( post ) {
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872314142644.html" 
-          title="Previous Post: [译] Sequelize(4) 范围">&laquo; [译] Sequelize(4) 范围</a>
+          <a href="14874724785741.html" 
+          title="Previous Post: final">&laquo; final</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872476184764.html" 
-          title="Next Post: supertest 模拟客户端">supertest 模拟客户端 &raquo;</a>
+          <a  href="14874190727983.html" 
+          title="Next Post: 初始化顺序、时间、位置">初始化顺序、时间、位置 &raquo;</a>
       
       </p>
         </div>
@@ -328,7 +207,7 @@ Post.findOne( { where: { title: &#39;scut&#39; } } ).then( function ( post ) {
           
 
           
-              <div class="ds-thread" data-thread-key="14872314142502.html" data-url="http://kayorl.com/14872314142502.html" data-title="[译] Sequelize(3)  CRUD"></div>
+              <div class="ds-thread" data-thread-key="14874279608856.html" data-url="http://kayorl.com/14874279608856.html" data-title="组合与继承的选择"></div>
           
         </div>
       </div>

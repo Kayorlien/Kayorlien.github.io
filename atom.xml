@@ -4,13 +4,118 @@
   <title><![CDATA[几谷 博客]]></title>
   <link href="http://kayorl.com/atom.xml" rel="self"/>
   <link href="http://kayorl.com/"/>
-  <updated>2017-02-17T12:13:28+08:00</updated>
+  <updated>2017-02-19T14:03:17+08:00</updated>
   <id>http://kayorl.com/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[final]]></title>
+    <link href="http://kayorl.com/14874724785741.html"/>
+    <updated>2017-02-19T10:47:58+08:00</updated>
+    <id>http://kayorl.com/14874724785741.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">final 数据</h2>
+
+<ul>
+<li>不变的编译时常量</li>
+</ul>
+
+<pre><code class="language-j">public class A {
+    static final int MAX_VALUE = 10;
+    final int val =10;
+}
+</code></pre>
+
+<ul>
+<li>运行时被初始化的值，而且不再会被改变</li>
+</ul>
+
+<pre><code class="language-j">public class B {
+    static Random rand = new Random(47)
+    
+    static final int MAX_VALUE = rand.nextInt();
+    final int val =rand.nextInt();
+}
+</code></pre>
+
+<ul>
+<li>基础类型的常量不可变</li>
+<li>对象引用的常量不可变，但对象本身可变（在容器类型的使用中，容器不变，容器的成员可变）</li>
+<li>支持先声明 <strong>空白 final</strong> , 后初始化</li>
+</ul>
+
+<h2 id="toc_1">final 参数</h2>
+
+<p>意味着无法在方法中更改参数引用所指对象</p>
+
+<h2 id="toc_2">final 方法</h2>
+
+<ol>
+<li>锁定方法，防止被继承类修改其含义</li>
+<li>效率问题，在 Java SE5/6 时，只有明确禁止覆盖时，才将方法设置为 final 。</li>
+<li>所有 private 都隐式地指定为 final
+## final 类
+该类将被打入冷宫，无法被继承
+final 类的方法都默认打上 final 的标记。</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[组合与继承的选择]]></title>
+    <link href="http://kayorl.com/14874279608856.html"/>
+    <updated>2017-02-18T22:26:00+08:00</updated>
+    <id>http://kayorl.com/14874279608856.html</id>
+    <content type="html"><![CDATA[
+<p>类之间的 <u>继承</u> 是<strong>is-a</strong>关系, 类之间的组合是<strong>has-a</strong> 关系<br/>
+面临这两种技术的选型时，只需要考虑一个问题：<br/>
+新类需要向上转型吗？</p>
+
+<span id="more"></span><!-- more -->
+
+<p>需要的话，选择继承。</p>
+
+<h2 id="toc_0">向上转型</h2>
+
+<p>新类转换为基类并调用基类的动作，称为<strong>向上转型</strong>。</p>
+
+<p>下面是一个例子：</p>
+
+<pre><code class="language-j">/**
+ * Wind 是 Instrument 的子类，通过向上转型调用了 Instrument 的 play 方法
+ */
+public class Transaction {
+    public static void main(String[] args) {
+        Wind flute=new Wind();
+        Instrument.tune(flute);
+    }
+}
+
+class Instrument {
+    void play() {};
+    static void tune(Instrument i){
+        i.play();
+    }
+}
+
+class Wind extends Instrument {
+    void play() {};
+}
+</code></pre>
+
+<h2 id="toc_1">名称屏蔽</h2>
+
+<p>Java 中， 在子类中重载方法，并<strong>不会屏蔽</strong>基类版本的方法。</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[初始化顺序、时间、位置]]></title>
@@ -2077,453 +2182,6 @@ array2= [NSMutableArray arrayWithCapacity : 18]; //非 new, alloc 或 copy , 自
 <hr/>
 
 <h2 id="toc_9">拥有者权限 (待)</h2>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[OC(4.1) Foundation Kit]]></title>
-    <link href="http://kayorl.com/14872504903613.html"/>
-    <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://kayorl.com/14872504903613.html</id>
-    <content type="html"><![CDATA[
-<span id="more"></span><!-- more -->
-
-<p>字面量语法:  </p>
-
-<pre><code class="language-objc">NSString *str=@&quot;hello&quot;
-</code></pre>
-
-<h2 id="toc_0">字符串</h2>
-
-<h3 id="toc_1">NSString</h3>
-
-<p>不可变的数组</p>
-
-<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
-
-int main(int argc, const char * argv[]) {
-    @autoreleasepool {
-        NSString *some;
-        NSString *other;
-        some=[NSString stringWithFormat:@&quot;%s is useful , &quot;,&quot;Tool&quot;];
-        other=@&quot;Kit&quot;;
-        unsigned int size = 10;
-        if ([some length] &gt; size) {
-            NSLog(@&quot;%@ and it bigger than %d , \n&quot;,some,size);
-        }
-        if (![some isEqualToString:other]) {
-            NSLog(@&quot;but it is different from %@.\n\n&quot;,other);
-        }
-    }
-    
-    
-    NSString *small = @&quot;abc&quot;;
-    NSString *small2 = small;
-    NSString *big = @&quot;ABC&quot;;
-    if ([small compare:small2] == NSOrderedSame) {
-        NSLog(@&quot;%@ and %@ is the same.\n&quot;,small,small2);
-    }
-    
-    
-    /******** 大写字母小于小写字母 ***********/
-    if ([small compare:big] == NSOrderedAscending) {
-        NSLog(@&quot;%@ is asc %@ .\n&quot;,small,big);
-    }
-    if ([small compare:big] == NSOrderedDescending) {
-        NSLog(@&quot;%@ is des %@ .\n&quot;,small,big);
-    }
-    
-    if ([small compare:big options:NSCaseInsensitiveSearch] == NSOrderedSame) {
-        NSLog(@&quot;Case insencetive, then %@ is same as %@ .\n\n&quot;,small,big);
-    }
-    
-    if ([small hasPrefix: @&quot;a&quot;]) {
-        NSLog(@&quot;%@ has prefix:  %@&quot;,small,@&quot;a&quot;);
-    }
-    
-    
-    return 0;
-}
-</code></pre>
-
-<p>输出结果</p>
-
-<pre><code>Tool is useful.  and the length of the saying bigger than 10 ,
-but it is different from Kit.
-abc and abc is the same.
-abc des ABC
-Case insencetive, then abc is same as ABC .
-abc has prefix:  a
-</code></pre>
-
-<h3 id="toc_2">NSMutableString</h3>
-
-<p>可变长度的字符串, capacity 只是建议,不限制其大小</p>
-
-<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
-
-int main(int argc, const char * argv[]) {
-    @autoreleasepool {
-        NSMutableString *string = [NSMutableString stringWithCapacity:50];
-        [string appendFormat:@&quot;I&#39;m %@&quot;,@&quot;kayor&quot;];
-        [string appendString:@&quot;, yeah that&#39;s me.&quot;];
-        NSLog(@&quot;%@&quot;,string);
-        NSRange nameRange= [string rangeOfString:@&quot;kayor&quot;];
-        [string replaceCharactersInRange:nameRange withString:@&quot;lien&quot;];
-        NSLog(@&quot;%@&quot;,string);
-    }
-    return 0;
-}
-
-</code></pre>
-
-<p>输出结果</p>
-
-<pre><code>I&#39;m kayor, yeah that&#39;s me.
-I&#39;m lien, yeah that&#39;s me.
-</code></pre>
-
-<h2 id="toc_3">数组</h2>
-
-<h3 id="toc_4">NSArray</h3>
-
-<p>不可变数组</p>
-
-<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
-
-int main(int argc, const char * argv[]) {
-    @autoreleasepool {
-        NSArray *array= [NSArray arrayWithObjects:@&quot;one&quot;, @&quot;two&quot;, @&quot;three&quot;,nil];
-        unsigned long count= [array count];
-        NSLog(@&quot;\n %@ \nwith count %lu \narray[1] : %@ \n&quot;,array,count,array[1]);
-    }
-    return 0;
-}
-</code></pre>
-
-<p>输出结果</p>
-
-<pre><code class="language-objc"> (
-    one,
-    two,
-    three
-) 
-with count 3 
-array[1] : two 
-</code></pre>
-
-<h3 id="toc_5">NSMutableArray</h3>
-
-<pre><code class="language-objc">NSMutableArray *array= [NSMutableArray arrayWithCapacity: 17];
-</code></pre>
-
-<ul>
-<li>自动填补空缺</li>
-</ul>
-
-<h2 id="toc_6">枚举</h2>
-
-<pre><code class="language-objc">NSEnumerator *enumerator =[array objectEnumerator];
-while (id thingle = [enumerator nextObject])
-{
-  NSLog(@&quot;i get %@ \n&quot;,thingle);
-}
-</code></pre>
-
-<ul>
-<li>没有可以用来创建 NSMutableArray 的字面量语法</li>
-<li>不能添加或删除对象去<code>改变容量</code></li>
-</ul>
-
-<h3 id="toc_7">快速枚举</h3>
-
-<pre><code class="language-objc">for(NSString *string in array)
-{
-    NSLog(@&quot;i get %@ \n&quot;,string);
-}
-</code></pre>
-
-<h3 id="toc_8">代码块枚举</h3>
-
-<p>使用代码块,可以循环并发执行</p>
-
-<pre><code class="language-objc">[array enumeratorObjectsUsingBlock:^(NSString *string,NSUInteger index, BOOL * stop){
-    NSLog(@&quot;i get %@ \n&quot;,string);
-}];
-</code></pre>
-
-<h2 id="toc_9">字典</h2>
-
-<p>对于频繁的查询和大型的数据集而言,字典比数组快很多</p>
-
-<h3 id="toc_10">NSDictionary</h3>
-
-<ul>
-<li>字面量语法创建对象</li>
-<li><code>[dic objectForKey]</code>方法查找或字面量语法查找</li>
-<li><code>[dic removeObjectForKey]</code>方法删除</li>
-</ul>
-
-<h3 id="toc_11">NSMutableDictionary</h3>
-
-<ul>
-<li><code>NSMutableDictionary *mDic = [NSMutableDictionary dic]</code> 方法创建对象</li>
-</ul>
-
-<h2 id="toc_12">其他值</h2>
-
-<p>NSArray 和 NSDictionary 只能存储对象,不能直接存储基本类型的数据( int 等),可以通过封装放入其中.Objective-C 不支持装箱</p>
-
-<h3 id="toc_13">NSNumber</h3>
-
-<pre><code class="language-objc">NSNumber *number;
-number = @&#39;123.45l&#39;;
-[array addObject:number];
-[dic setObject: number forKey: @&quot;vegetable&quot;];
-</code></pre>
-
-<p>封装完成后,可以通过[number floatValue] 重新获得这个值</p>
-
-<h3 id="toc_14">NSValue</h3>
-
-<p>可以用 NSValue 封装任何值(包括结构体)</p>
-
-<pre><code class="language-objc">\+ (NSValue*) valueWithByes: (const void\*) value objType:@encode( type );
-</code></pre>
-
-<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
-
-int main(int argc, const char * argv[]) {
-    @autoreleasepool {
-        NSMutableArray *array= [NSMutableArray arrayWithCapacity:20];
-        NSRect rect = NSMakeRect(5, 2, 10, 10);
-        NSValue *value= [NSValue valueWithBytes:&amp;rect objCType:@encode(NSRect)];
-        [array addObject:value];
-        
-        value=[array objectAtIndex:0];
-        [value getValue:&amp;rect];
-        NSLog(@&quot;%@&quot;,value);         //NSRect: {{5, 2}, {10, 10}}
-    }
-    return 0;
-}
-</code></pre>
-
-<ul>
-<li>传递的参数1为 <code>封装数值的地址</code> </li>
-<li>参数2为对象类型, @encode 编译器指令可以接收<code>数据类型的名称</code>并生成字符串</li>
-<li>getValue 表面提供的是指针,指针所指空间用来存储<code>该方法生成的数据</code></li>
-</ul>
-
-<h4 id="toc_15">常用的 struct 转成 NSValue 的方法</h4>
-
-<pre><code class="language-objc">\+ (NSValue* ) valueWithRect:(NSRect) rect;
-</code></pre>
-
-<h3 id="toc_16">NSNull</h3>
-
-<p>对象型的 Null</p>
-
-<hr/>
-
-<h2 id="toc_17">总结</h2>
-
-<ol>
-<li>可变的都没有字面量语法</li>
-<li>可变的初始化的大小值只是建议,不限制大小</li>
-<li>代码块可以让循环操作并发执行</li>
-<li>频繁查询与大型的数据集,用字典</li>
-</ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[OC(5) 内存管理-对象生命周期]]></title>
-    <link href="http://kayorl.com/14872504903821.html"/>
-    <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://kayorl.com/14872504903821.html</id>
-    <content type="html"><![CDATA[
-<p>跟现实中的猴子一样,程序中的对象也有他们的生命周期,包括诞生( alloc || new ) 方法实现, 生存 (接收消息并执行操作),沟通 (通过符合以及传递参数) ,以及寿终正寝 (被释放).当一生过去,猴子留下的东西,便又能</p>
-
-<blockquote>
-<p>化作春泥更护花.</p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">引用计数</h2>
-
-<p>Cocoa 采用了一种叫做引用计数(reference counting)的技术, 也叫保留计数( <code>retain</code> counting ).<br/>
-每个对象都有一个与之相关联的整数,叫做引用计数器或保留计数器.</p>
-
-<ul>
-<li>访问对象时, 计数器加一</li>
-<li>访问结束时, 计数器减一</li>
-<li>计数器为0时, OC 会<code>自动</code>向对象发送[object dealloc] 消息 , 可以重写 dealloc 方法,但不要<code>直接调用</code> dealloc 方法</li>
-<li>使用 alloc, new, 或者 copy 创建对象时,对象的计数器被设置为1</li>
-<li>增加保留计数器的值,可以[object <code>retain</code>] ,同时会返回一个 id 类型的值,即对 object 的引用</li>
-<li>减少保留计数器的值,可以[object release] ,同时会返回一个 id 类型的值,即对 object 的引用</li>
-<li>获得计数器的当前值,可以[object retainCount]</li>
-</ul>
-
-<h2 id="toc_1">对象所有权</h2>
-
-<p>如果一个对象(方法,类的对象)内有指向其他对象的实例变量,则称该对象拥有这些对象</p>
-
-<ul>
-<li>如果多个对象调用同一个对象,那么可以通过[object reatain]方法来增加保留计数器的值</li>
-</ul>
-
-<h3 id="toc_2">访问方法中的保留和释放</h3>
-
-<p>v1: 保留过度,导致对象泄露</p>
-
-<pre><code class="language-objc">@implementation Car
-
-...
-
-- (void) setEngine:(Engine *) newEngine
-{
-  engine=[newEngine retain];
-  
-  //DON&#39;T DO THIS
-}
-
-...
-...
-
-//main 函数中
-
-//count : 1
-Engine *engine1=[Engine new];
-
-//count : 2 
-[car setEngine: engine1];   
-
-//count : 1 ,main 函数释放了引用,而 car 对 engine1 的引用还没释放
-[engine1 release];          
-
-//count : 1,  engine2 的保留计数器
-Engine *engine2=[Engine new]        
-
-//count : 2 , 这里的 count 包括了对 engine1 的引用 ,而 engine1 已经不受控制了
-[car setEngine: engine2];   
-
-</code></pre>
-
-<p>v2: 对 v1 的修补,对象的对象被其他对象释放,违反了<code>对象所有权</code></p>
-
-<pre><code>@implementation Car
-
-...
-
-- (void) setEngine:(Engine *) newEngine
-{
-  [engine release];
-  engine=[newEngine retain];
-  
-  //DON&#39;T DO THIS TWO!!!!!!!!
-}
-
-...
-...
-
-//main 函数中
-
-//count : 1
-Engine *engine=[Engine new];
-
-Car *car1 = [Car new];
-Car *car2 = [Car new];
-
-//count : 2
-[car1 setEngine: engine];   
-
-//count : 1 , 释放了 main 函数的引用
-[engine release];
-
-//ERROR , car1的 engine 被 car2 释放掉
-//
-[car2 setEngine: [car1 engine]];
-
-</code></pre>
-
-<p>v3:上面两种,一种是保留过度,一种是释放过度,结合两种.跟交换两个值的方法相似</p>
-
-<pre><code class="language-objc">- (void) setEngine:(Engine *) newEngine
-{
-  [newEngine retain]
-  [engine release];
-  engine= newEngine;
-}
-</code></pre>
-
-<hr/>
-
-<h2 id="toc_3">自动释放</h2>
-
-<p>看下面的代码,是谁负责清理该字符串呢?</p>
-
-<pre><code>- (NSString *) description
-{
-  NSString *description;
-  description = [ [NSString* alloc] 
-  initWithFormat:@&quot;I am @d years old&quot; , 4];
-  
-  return (description);
-}   //description
-</code></pre>
-
-<p>调用 description 的代码将返回的字符串赋给一个变量,并在使用完毕后将其释放<br/>
-<code><br/>
-NSString *desc = [object description];<br/>
-NLog(@&quot;%@&quot;, desc);<br/>
-[desc release];<br/>
-</code></p>
-
-<p>太麻烦了,下面的方便了许多</p>
-
-<h2 id="toc_4">自动释放池(autorelease pool)</h2>
-
-<p>NSObject 提供了一个叫做 autorelease 的方法 , 这个方法预先设定在某个时间发送 release 消息,返回自己.</p>
-
-<p>当给对象发送 autorelease 消息时,实际上<code>将该对象加入到自动释放池.当销毁自动释放池时,会自动向所有对象发送 release 消息</code></p>
-
-<pre><code>- (NSString *) description
-{
-  NSString *description;
-  description = [ [NSString* alloc] 
-  initWithFormat:@&quot;I am @d years old&quot; , 4];
-  
-  //此处, description 被加入到自动释放池咯
-  return ([description autorelease] );
-}   //description
-</code></pre>
-
-<p>调用就是介么简单舒服<br/>
-<code><br/>
-NSLog(@&quot;%@&quot;,[object description]);<br/>
-</code></p>
-
-<h3 id="toc_5">自动释放池的销毁时间</h3>
-
-<p>创建自动释放池的方法</p>
-
-<ul>
-<li>@autoreleasepool关键字,适用于内存密集型</li>
-<li>NSAutoreleasePool 对象 , 不推荐 , 比楼上慢</li>
-</ul>
-
-<pre><code class="language-objc">NSAutoreleasePool *pool
-pool = [NSAutoreleasePool new];
-
-...
-
-[pool release]; 
-</code></pre>
-
-<p>自动释放池被销毁的时候,其 <code>dealloc</code> 方法被调用</p>
 
 ]]></content>
   </entry>

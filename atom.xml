@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[几谷 博客]]></title>
-  <link href="http://kayorl.com/atom.xml" rel="self"/>
-  <link href="http://kayorl.com/"/>
-  <updated>2017-02-19T14:03:45+08:00</updated>
-  <id>http://kayorl.com/</id>
+  <link href="http://blog.kayorl.com/atom.xml" rel="self"/>
+  <link href="http://blog.kayorl.com/"/>
+  <updated>2017-03-08T10:00:54+08:00</updated>
+  <id>http://blog.kayorl.com/</id>
   <author>
     <name><![CDATA[]]></name>
     
@@ -13,10 +13,78 @@
   <generator uri="http://www.mweb.im/">MWeb</generator>
   
   <entry>
+    <title type="html"><![CDATA[理解 DOCTYPE 声明的意义]]></title>
+    <link href="http://blog.kayorl.com/doctype.html"/>
+    <updated>2017-03-08T10:01:30+08:00</updated>
+    <id>http://blog.kayorl.com/doctype.html</id>
+    <content type="html"><![CDATA[
+<p>每次看到 html 文档时，已经习惯了头部有个 <code>&lt;!DOCTYPE html&gt;</code>，印象也有些模糊，趁着学习 css ，赶紧整理一下</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">DOCTYPE 声明对页面进行有效性验证</h2>
+
+<blockquote>
+<p>DTD (文档定义类型)定义 XML 或 HTML 的特定版本允许有什么，不允许有什么。</p>
+
+<p>SGML (标准通用标记语言) 是一种定义电子文档结构和描述其内容的国际标准语言</p>
+</blockquote>
+
+<p>有助于找到代码中的 bug</p>
+
+<h2 id="toc_1">DOCTYPE 声明让浏览器有不同的呈现形式</h2>
+
+<blockquote>
+<p>标准模式(standard mode)：根据规范的一种呈现形式<br/>
+混杂模式(quirk mode)：模拟老式浏览器的一种呈现形式</p>
+</blockquote>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center"></th>
+<th style="text-align: center">DTD</th>
+<th style="text-align: center">standard</th>
+<th style="text-align: center">quirk</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center"> HTML4.01</td>
+<td style="text-align: center">strict</td>
+<td style="text-align: center">yes</td>
+<td style="text-align: center"></td>
+</tr>
+<tr>
+<td style="text-align: center"></td>
+<td style="text-align: center">Transitional &amp;&amp; url</td>
+<td style="text-align: center">yes</td>
+<td style="text-align: center"></td>
+</tr>
+<tr>
+<td style="text-align: center"></td>
+<td style="text-align: center">Transitional &amp;&amp; NO url</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">yes</td>
+</tr>
+<tr>
+<td style="text-align: center">HTML5</td>
+<td style="text-align: center"> 不基于 SGML，所以不需要引用 DTD</td>
+<td style="text-align: center">yes</td>
+<td style="text-align: center"></td>
+</tr>
+</tbody>
+</table>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[final]]></title>
-    <link href="http://kayorl.com/14874724785741.html"/>
+    <link href="http://blog.kayorl.com/14874724785741.html"/>
     <updated>2017-02-19T10:47:58+08:00</updated>
-    <id>http://kayorl.com/14874724785741.html</id>
+    <id>http://blog.kayorl.com/14874724785741.html</id>
     <content type="html"><![CDATA[
 <span id="more"></span><!-- more -->
 
@@ -70,9 +138,9 @@ final 类的方法都默认打上 final 的标记。</li>
   
   <entry>
     <title type="html"><![CDATA[组合与继承的选择]]></title>
-    <link href="http://kayorl.com/14874279608856.html"/>
+    <link href="http://blog.kayorl.com/14874279608856.html"/>
     <updated>2017-02-18T22:26:00+08:00</updated>
-    <id>http://kayorl.com/14874279608856.html</id>
+    <id>http://blog.kayorl.com/14874279608856.html</id>
     <content type="html"><![CDATA[
 <p>类之间的 <u>继承</u> 是<strong>is-a</strong>关系, 类之间的组合是<strong>has-a</strong> 关系<br/>
 面临这两种技术的选型时，只需要考虑一个问题：<br/>
@@ -91,7 +159,7 @@ final 类的方法都默认打上 final 的标记。</li>
 <pre><code class="language-j">/**
  * Wind 是 Instrument 的子类，通过向上转型调用了 Instrument 的 play 方法
  */
-public class Transaction {
+public class UpCast {
     public static void main(String[] args) {
         Wind flute=new Wind();
         Instrument.tune(flute);
@@ -114,31 +182,34 @@ class Wind extends Instrument {
 
 <p>Java 中， 在子类中重载方法，并<strong>不会屏蔽</strong>基类版本的方法。</p>
 
+<h2 id="toc_2">多态只限于普通的方法调用</h2>
+
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[初始化顺序、时间、位置]]></title>
-    <link href="http://kayorl.com/14874190727983.html"/>
+    <title type="html"><![CDATA[初始化顺序、位置]]></title>
+    <link href="http://blog.kayorl.com/14874190727983.html"/>
     <updated>2017-02-18T19:57:52+08:00</updated>
-    <id>http://kayorl.com/14874190727983.html</id>
+    <id>http://blog.kayorl.com/14874190727983.html</id>
     <content type="html"><![CDATA[
-<span id="more"></span><!-- more -->
-
 <h2 id="toc_0">顺序</h2>
 
 <ol>
-<li>变量定义的顺序，决定初始化顺序</li>
+<li>在其他任何事物发生之前，将分配给对象的存储空间初始化为二进制的0</li>
+<li>调用基类构造器</li>
+<li>按照声明的顺序调用 成员 的初始化方法</li>
+<li>调用导出类的构造器主体</li>
 </ol>
 
-<h2 id="toc_1">时间</h2>
+<span id="more"></span><!-- more -->
 
-<ol>
-<li>静态对象（静态数据）在第一次被创建(访问)时初始化</li>
+<ul>
 <li>静态对象（静态数据）优先于&quot;非静态&quot;对象初始化</li>
-</ol>
+<li>静态对象（静态数据）在第一次被创建(访问)时初始化</li>
+</ul>
 
-<h2 id="toc_2">位置</h2>
+<h2 id="toc_1">位置</h2>
 
 <ol>
 <li>在定义对象的地方</li>
@@ -186,10 +257,48 @@ class Leg {}
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[html 的解析顺序，及 script 标签的位置选择]]></title>
+    <link href="http://blog.kayorl.com/script_position.html"/>
+    <updated>2017-02-16T20:05:35+08:00</updated>
+    <id>http://blog.kayorl.com/script_position.html</id>
+    <content type="html"><![CDATA[
+<p>读 《JavaScript高级程序设计》时，对 html 的标签解析感到模糊，参考了博文，根据理解画了以下的解析流程图，有误请指教哈~</p>
+
+<span id="more"></span><!-- more -->
+
+<p><img src="http://olh3adg9x.bkt.clouddn.com/decode_html.png" alt="decode_htm"/></p>
+
+<p>浏览器对非延迟执行的脚本都是立即执行的，导致浏览器呈现内容的速度变慢（即页面空白的时间过久），造成不好的用户体验。</p>
+
+<blockquote>
+<p>因此把所有脚本放到<body>元素的最后面</p>
+</blockquote>
+
+<p>有人说，全用 defer 脚本不就好了吗？ <br/>
+<strong><em>人无完人，defer 也有限制</em></strong></p>
+
+<blockquote>
+<p>延迟脚本直到 </html>解析完后加载;<br/>
+只有 ___一个__ defer 能按顺序执行;<br/>
+<strong>只适用于外部脚本文件</strong></p>
+</blockquote>
+
+<p>async 异步呢？其存在的目的是 <br/>
+<strong><em>不让页面等待两个脚本下载和执行</em></strong></p>
+
+<blockquote>
+<p>不保证先后顺序<br/>
+只适用于外部脚本文件</p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[MySQL 语句]]></title>
-    <link href="http://kayorl.com/14872445826285.html"/>
+    <link href="http://blog.kayorl.com/14872445826285.html"/>
     <updated>2017-02-16T19:29:42+08:00</updated>
-    <id>http://kayorl.com/14872445826285.html</id>
+    <id>http://blog.kayorl.com/14872445826285.html</id>
     <content type="html"><![CDATA[
 <span id="more"></span><!-- more -->
 
@@ -209,9 +318,9 @@ class Leg {}
   
   <entry>
     <title type="html"><![CDATA[MySQL5.7 从相见到👋]]></title>
-    <link href="http://kayorl.com/14872339187000.html"/>
+    <link href="http://blog.kayorl.com/14872339187000.html"/>
     <updated>2017-02-16T16:31:58+08:00</updated>
-    <id>http://kayorl.com/14872339187000.html</id>
+    <id>http://blog.kayorl.com/14872339187000.html</id>
     <content type="html"><![CDATA[
 <p>我的意中人是个盖世英雄<br/>
 有一天他会踩着七色云彩来娶我<br/>
@@ -314,9 +423,9 @@ sudo apt-get autoclean
   
   <entry>
     <title type="html"><![CDATA[[译] Sequelize(6) sequelize-cli，出门必备良品]]></title>
-    <link href="http://kayorl.com/14872470138156.html"/>
+    <link href="http://blog.kayorl.com/14872470138156.html"/>
     <updated>2017-02-16T20:10:13+08:00</updated>
-    <id>http://kayorl.com/14872470138156.html</id>
+    <id>http://blog.kayorl.com/14872470138156.html</id>
     <content type="html"><![CDATA[
 <p>让数据库转移到那些年的状态<br/>
 通过<strong>迁移文件</strong>存储数据库不同时期的状态，每个迁移文件描述了对数据库的操作</p>
@@ -438,9 +547,9 @@ queryInterface.addIndex(
   
   <entry>
     <title type="html"><![CDATA[[译] Sequelize(5) 几对几]]></title>
-    <link href="http://kayorl.com/14872314142796.html"/>
+    <link href="http://blog.kayorl.com/14872314142796.html"/>
     <updated>2017-02-16T15:50:14+08:00</updated>
-    <id>http://kayorl.com/14872314142796.html</id>
+    <id>http://blog.kayorl.com/14872314142796.html</id>
     <content type="html"><![CDATA[
 <p>一对一，一对多，多对多</p>
 
@@ -546,9 +655,9 @@ User.findAll({
   
   <entry>
     <title type="html"><![CDATA[[译] Sequelize(4) 范围]]></title>
-    <link href="http://kayorl.com/14872314142644.html"/>
+    <link href="http://blog.kayorl.com/14872314142644.html"/>
     <updated>2017-02-16T15:50:14+08:00</updated>
-    <id>http://kayorl.com/14872314142644.html</id>
+    <id>http://blog.kayorl.com/14872314142644.html</id>
     <content type="html"><![CDATA[
 <p>范围（<code>scope</code>）: 定义好范围,在后续的操作中可以减少选择条件的重复，比如，只在<strong>未删除用户</strong>列表中进行操作。</p>
 
@@ -615,9 +724,9 @@ User.hasMany( Post.scope( &#39;deleted&#39; ), { as: &#39;deletedPosts&#39; } );
   
   <entry>
     <title type="html"><![CDATA[[译] Sequelize(3)  CRUD]]></title>
-    <link href="http://kayorl.com/14872314142502.html"/>
+    <link href="http://blog.kayorl.com/14872314142502.html"/>
     <updated>2017-02-16T15:50:14+08:00</updated>
-    <id>http://kayorl.com/14872314142502.html</id>
+    <id>http://blog.kayorl.com/14872314142502.html</id>
     <content type="html"><![CDATA[
 <span id="more"></span><!-- more -->
 
@@ -785,9 +894,9 @@ Post.findOne( { where: { title: &#39;scut&#39; } } ).then( function ( post ) {
   
   <entry>
     <title type="html"><![CDATA[supertest 模拟客户端]]></title>
-    <link href="http://kayorl.com/14872476184764.html"/>
+    <link href="http://blog.kayorl.com/14872476184764.html"/>
     <updated>2017-02-16T20:20:18+08:00</updated>
-    <id>http://kayorl.com/14872476184764.html</id>
+    <id>http://blog.kayorl.com/14872476184764.html</id>
     <content type="html"><![CDATA[
 <p>模拟一个客户端，可用于爬虫、API 测试等</p>
 
@@ -824,9 +933,9 @@ request(app)
   
   <entry>
     <title type="html"><![CDATA[pm2]]></title>
-    <link href="http://kayorl.com/14872295003201.html"/>
+    <link href="http://blog.kayorl.com/14872295003201.html"/>
     <updated>2017-02-16T15:18:20+08:00</updated>
-    <id>http://kayorl.com/14872295003201.html</id>
+    <id>http://blog.kayorl.com/14872295003201.html</id>
     <content type="html"><![CDATA[
 <p>nodejs 的进程管理器，自带<code>负载均衡</code>以及热重载</p>
 
@@ -891,9 +1000,9 @@ $ pm2 logs [app_name]
   
   <entry>
     <title type="html"><![CDATA[nginx 从安装到卸载]]></title>
-    <link href="http://kayorl.com/14872295003080.html"/>
+    <link href="http://blog.kayorl.com/14872295003080.html"/>
     <updated>2017-02-16T15:18:20+08:00</updated>
-    <id>http://kayorl.com/14872295003080.html</id>
+    <id>http://blog.kayorl.com/14872295003080.html</id>
     <content type="html"><![CDATA[
 <p>在<code>ubuntu16.04</code>下，对 nginx 进行</p>
 
@@ -922,6 +1031,8 @@ $ pm2 logs [app_name]
 <span id="more"></span><!-- more -->
 
 <p>参考很全面的<a href="http://bbs.linuxtone.org/thread-25588-1-1.html">教程</a>，关于 nginx 的优化，以及自己平常遇到的问题</p>
+
+<p>[tutorial]:</p>
 
 <h2 id="toc_0">源安装</h2>
 
@@ -1045,7 +1156,7 @@ http {
          # gzip_static on;
         # gzip_vary on;
           gzip_proxied any; #压缩所有请求
-          gzip_min_length 1000;启用压缩的最少字节数，小于1000不压缩
+          gzip_min_length 1000; #启用压缩的最少字节数，小于1000不压缩
           gzip_comp_level 4;    #压缩比，9最慢但压缩最强
         # gzip_buffers 16 8k;
         # gzip_http_version 1.1;
@@ -1080,9 +1191,9 @@ sudo apt-get autoremove # After using any of the above commands, use this in ord
   
   <entry>
     <title type="html"><![CDATA[OC(11) 协议]]></title>
-    <link href="http://kayorl.com/14872504904620.html"/>
+    <link href="http://blog.kayorl.com/14872504904620.html"/>
     <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://kayorl.com/14872504904620.html</id>
+    <id>http://blog.kayorl.com/14872504904620.html</id>
     <content type="html"><![CDATA[
 <p>采用协议就是在类的@ interface 声明中列出协议的名称<br/>
 显式地采用，承诺实现该协议的所有方法,否则,编译器会找麻烦</p>
@@ -1187,9 +1298,9 @@ sudo apt-get autoremove # After using any of the above commands, use this in ord
   
   <entry>
     <title type="html"><![CDATA[OC(10) 类别]]></title>
-    <link href="http://kayorl.com/14872504904501.html"/>
+    <link href="http://blog.kayorl.com/14872504904501.html"/>
     <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://kayorl.com/14872504904501.html</id>
+    <id>http://blog.kayorl.com/14872504904501.html</id>
     <content type="html"><![CDATA[
 <p>利用 OC 的动态运行时分配机制,可以为现有的类添加新方法(无法添加变量)<br/>
 在 OC 里, 这些方法叫做类别 (category)</p>
@@ -1316,9 +1427,9 @@ sudo apt-get autoremove # After using any of the above commands, use this in ord
   
   <entry>
     <title type="html"><![CDATA[杂]]></title>
-    <link href="http://kayorl.com/14872477973050.html"/>
+    <link href="http://blog.kayorl.com/14872477973050.html"/>
     <updated>2017-02-16T20:23:17+08:00</updated>
-    <id>http://kayorl.com/14872477973050.html</id>
+    <id>http://blog.kayorl.com/14872477973050.html</id>
     <content type="html"><![CDATA[
 <span id="more"></span><!-- more -->
 
@@ -1344,9 +1455,9 @@ $ sudo systemctl reload sshd
   
   <entry>
     <title type="html"><![CDATA[OC(9) 属性]]></title>
-    <link href="http://kayorl.com/14872504904341.html"/>
+    <link href="http://blog.kayorl.com/14872504904341.html"/>
     <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://kayorl.com/14872504904341.html</id>
+    <id>http://blog.kayorl.com/14872504904341.html</id>
     <content type="html"><![CDATA[
 <span id="more"></span><!-- more -->
 
@@ -1442,9 +1553,9 @@ benz.engine = car.engine;   //getter
   
   <entry>
     <title type="html"><![CDATA[OC(8) 对象初始化]]></title>
-    <link href="http://kayorl.com/14872504904170.html"/>
+    <link href="http://blog.kayorl.com/14872504904170.html"/>
     <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://kayorl.com/14872504904170.html</id>
+    <id>http://blog.kayorl.com/14872504904170.html</id>
     <content type="html"><![CDATA[
 <span id="more"></span><!-- more -->
 
@@ -1479,9 +1590,9 @@ benz.engine = car.engine;   //getter
   
   <entry>
     <title type="html"><![CDATA[[译] Sequelize(2)  定义表格]]></title>
-    <link href="http://kayorl.com/14872314142360.html"/>
+    <link href="http://blog.kayorl.com/14872314142360.html"/>
     <updated>2017-02-16T15:50:14+08:00</updated>
-    <id>http://kayorl.com/14872314142360.html</id>
+    <id>http://blog.kayorl.com/14872314142360.html</id>
     <content type="html"><![CDATA[
 <p>Sequelize 会自动增加 <code>createdAt</code> 和 <code>updated</code> 属性,这样能知道一个实例的创建时间和最终修改时间.</p>
 
@@ -2005,183 +2116,6 @@ Foo.build().method3()
   ]
 })
 </code></pre>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[OC(7) 异常]]></title>
-    <link href="http://kayorl.com/14872504904064.html"/>
-    <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://kayorl.com/14872504904064.html</id>
-    <content type="html"><![CDATA[
-<p>在运行时系统中创建并处理异常的行为成为<code>抛出异常</code></p>
-
-<span id="more"></span><!-- more -->
-
-<ul>
-<li>@try : 决定是否抛出异常</li>
-<li>@catch() : 接收参数,通常是 NSException ,最好是 NSException</li>
-<li>@finally : 无论如何都执行的代码</li>
-<li>@throw : 抛出异常</li>
-<li>@try建立异常不会产生消耗</li>
-<li>捕捉异常会消耗大量资源</li>
-</ul>
-
-<pre><code>@try{
-
-    //code might throw an exception
-
-}@catch(NSException *exception)
-{   
-
-    @throw exception    //或者[exception raise],这种方法只对 NSException 有效
-    
-    
-}@catch(MyException *custom){
-
-    //code to handles exception
-
-}@finally
-{
-
-    //code always be excuted. Typically for cleanup.
-
-}
-</code></pre>
-
-<h2 id="toc_0">异常的内存管理</h2>
-
-<ul>
-<li>用@finally 去收拾残局</li>
-<li>@catch 代码块会再次抛出异常, @finally 在异常重新抛出之前执行代码,诞生僵尸异常( zombie exception)</li>
-<li>上面的解决方法是: 在自动回收池之外保留异常[saveException retain]]就可以了, 记得在@finally 里,自动回收池之后提醒自动释放</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[OC(6) 内存控制-管理规则]]></title>
-    <link href="http://kayorl.com/14872504903926.html"/>
-    <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://kayorl.com/14872504903926.html</id>
-    <content type="html"><![CDATA[
-<p>当使用了 new, alloc 或 copy 方法获得对象, 就释放或者自动释放该对象</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">临时对象</h2>
-
-<pre><code>
-NSMutableArray *array;
-array= [[NSMutableArray alloc] init];   //alloc, 需要释放
-[array release];
-
-NSMutableArray *array2;
-array2= [NSMutableArray arrayWithCapacity : 18]; //非 new, alloc 或 copy , 自动释放
-</code></pre>
-
-<h2 id="toc_1">拥有对象</h2>
-
-<p>希望在多段代码中一直拥有某个对象<br/>
-* 把它们加入到 NSArray 或 NSDictionary 等集合中, 作为其他对象的实例变量来使用<br/>
-* 使用 new, alloc 或 copy 方法获得了对象, 它将一直存在,需要在<code>拥有该对象的 dealloc 方法中释放它</code><br/>
-* ?编写 GUI 应用程序时,需要保留自动释放的对象( [object retain]),以便在循环后仍然能存在<br/>
-* 自动释放池的清理时间是完全确定的<br/>
-* 大量的<code>迭代</code>每次回生成一个自动释放对象,只有方法完成时才会自动释放,解决方法是创建自己的自动释放池</p>
-
-<h2 id="toc_2">垃圾回收</h2>
-
-<ul>
-<li>只支持 OS X 应用程序开发 , 不支持 iOS 应用程序</li>
-<li>OC2 中的垃圾回收器是新型的,新创建的对象更可能是垃圾</li>
-<li>如果曾在一个实例变量中指向其他对象,不用的时候置为 <code>nil</code>,这样垃圾回收器可以进行清理</li>
-<li>iOS 开发中,<code>不要使用 autorelease 方法</code></li>
-<li><code>不要使用会返回自动释放对象的便利方法</code>, 比如 NSString 的所有 stringWith 开头的方法</li>
-<li>运行时工作</li>
-</ul>
-
-<hr/>
-
-<h2 id="toc_3">自动引用计数(automatic reference counting , ARC)</h2>
-
-<blockquote>
-<p>只需要按需分配并使用对象,编译器在<code>编译时</code>会帮你插入 retain 和 release 语句.</p>
-
-<p>但,它不跟垃圾回收一起使用</p>
-</blockquote>
-
-<p>ARC 只对可保留的对象指针(Reatainable Object Pointers)有效,包括以下三种:</p>
-
-<ol>
-<li>代码块指针</li>
-<li>OC 对象指针</li>
-<li>通过 <strong>attribute</strong>((NSObject)) 类型定义的指针</li>
-</ol>
-
-<p>ARC 需要注意的命名规则</p>
-
-<ul>
-<li>属性名称不能以 new 开头,  @property NSString *newString 是不允许的</li>
-<li>属性不能只有 read-only 而没有管理特性,默认特性是 assign</li>
-</ul>
-
-<h2 id="toc_4">弱引用 (weak reference)</h2>
-
-<blockquote>
-<p>不增加保留计数器的值</p>
-</blockquote>
-
-<h4 id="toc_5">内存泄露版</h4>
-
-<ol>
-<li>A -------&gt; B(2) -------&gt; C(1) ---------&gt; B(2)</li>
-<li>A 释放对 B 的引用</li>
-<li>B(1) -------&gt; C(1) -------&gt; B(1)</li>
-</ol>
-
-<hr/>
-
-<h4 id="toc_6">弱引用版</h4>
-
-<p>使用 <code>assign</code> 来获取对象 C 指向对象 B 的引用.</p>
-
-<ol>
-<li>A -------&gt; B(1) -------&gt; C(1) - - - - -&gt; B(1)</li>
-<li>A 释放对 B 的引用 </li>
-<li>B 被释放,同时释放对象 C</li>
-</ol>
-
-<hr/>
-
-<h4 id="toc_7">弱引用问题版</h4>
-
-<ol>
-<li>A -------&gt; B(1) &lt;- - - - - C</li>
-<li>A 释放对 B 的引用</li>
-<li>B 已经被释放</li>
-<li>C 的弱引用仍然存在</li>
-</ol>
-
-<h4 id="toc_8">归零弱引用(zero weak reference)</h4>
-
-<blockquote>
-<p>让对象自己清空若引用的对象.</p>
-</blockquote>
-
-<p>在指向的对象释放后,弱引用被设置为零(nil)</p>
-
-<p>声明方式:</p>
-
-<ol>
-<li>__weak NSString *myString</li>
-<li>@property(weak) NSString *myString</li>
-</ol>
-
-<hr/>
-
-<h2 id="toc_9">拥有者权限 (待)</h2>
 
 ]]></content>
   </entry>

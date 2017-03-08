@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  初始化顺序、时间、位置 - 几谷 博客
+  初始化顺序、位置 - 几谷 博客
   
   </title>
   <meta name="keywords" content="thinking in java" />
@@ -20,7 +20,7 @@
   <script>hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript">
   function before_search(){
-    var searchVal = 'site:kayorl.com ' + document.getElementById('search_input').value;
+    var searchVal = 'site:blog.kayorl.com ' + document.getElementById('search_input').value;
     document.getElementById('search_q').value = searchVal;
     return true;
   }
@@ -78,15 +78,15 @@
     <li><label>Categories</label></li>
 
         
-            <li><a href="java.html">Java</a></li>
+            <li><a href="web.html">web</a></li>
         
             <li><a href="nodejs.html">nodejs</a></li>
         
-            <li><a href="database.html">数据库系统</a></li>
+            <li><a href="O&M.html">运维</a></li>
+        
+            <li><a href="java.html">Java</a></li>
         
             <li><a href="C&C++.html">C/C++</a></li>
-        
-            <li><a href="O&M.html">运维</a></li>
         
             <li><a href="objc.html">ObjC</a></li>
          
@@ -111,7 +111,7 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>初始化顺序、时间、位置</h1>
+          <h1>初始化顺序、位置</h1>
      
         <div class="read-more clearfix">
           <span class="date">2017/2/18 19:57 下午</span>
@@ -123,7 +123,7 @@
          
           <span class="comments">
             
-              <a href="http://kayorl.com/14874190727983.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/14874190727983.html#disqus_thread">comments</a>
             
 
             
@@ -135,22 +135,23 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <span id="more"></span><!-- more -->
-
-<h2 id="toc_0">顺序</h2>
+      <h2 id="toc_0">顺序</h2>
 
 <ol>
-<li>变量定义的顺序，决定初始化顺序</li>
+<li>在其他任何事物发生之前，将分配给对象的存储空间初始化为二进制的0</li>
+<li>调用基类构造器</li>
+<li>按照声明的顺序调用 成员 的初始化方法</li>
+<li>调用导出类的构造器主体</li>
 </ol>
 
-<h2 id="toc_1">时间</h2>
+<span id="more"></span><!-- more -->
 
-<ol>
-<li>静态对象（静态数据）在第一次被创建(访问)时初始化</li>
+<ul>
 <li>静态对象（静态数据）优先于&quot;非静态&quot;对象初始化</li>
-</ol>
+<li>静态对象（静态数据）在第一次被创建(访问)时初始化</li>
+</ul>
 
-<h2 id="toc_2">位置</h2>
+<h2 id="toc_1">位置</h2>
 
 <ol>
 <li>在定义对象的地方</li>
@@ -211,8 +212,8 @@ class Leg {}
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872445826285.html" 
-          title="Next Post: MySQL 语句">MySQL 语句 &raquo;</a>
+          <a  href="script_position.html" 
+          title="Next Post: html 的解析顺序，及 script 标签的位置选择">html 的解析顺序，及 script 标签的位置选择 &raquo;</a>
       
       </p>
         </div>
@@ -226,7 +227,7 @@ class Leg {}
           
 
           
-              <div class="ds-thread" data-thread-key="14874190727983.html" data-url="http://kayorl.com/14874190727983.html" data-title="初始化顺序、时间、位置"></div>
+              <div class="ds-thread" data-thread-key="14874190727983.html" data-url="http://blog.kayorl.com/14874190727983.html" data-title="初始化顺序、位置"></div>
           
         </div>
       </div>
@@ -272,15 +273,15 @@ class Leg {}
 
       	<p class="cat-list">
         
-            <a href="java.html"><strong>Java</strong></a>
+            <a href="web.html"><strong>web</strong></a>
         
             <a href="nodejs.html"><strong>nodejs</strong></a>
         
-            <a href="database.html"><strong>数据库系统</strong></a>
+            <a href="O&M.html"><strong>运维</strong></a>
+        
+            <a href="java.html"><strong>Java</strong></a>
         
             <a href="C&C++.html"><strong>C/C++</strong></a>
-        
-            <a href="O&M.html"><strong>运维</strong></a>
         
             <a href="objc.html"><strong>ObjC</strong></a>
          
@@ -299,6 +300,12 @@ class Leg {}
 	      
 		      
 			      <li class="post">
+			        <a href="doctype.html">理解 DOCTYPE 声明的意义</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="14874724785741.html">final</a>
 			      </li>
 		     
@@ -311,19 +318,13 @@ class Leg {}
 		  
 		      
 			      <li class="post">
-			        <a href="14874190727983.html">初始化顺序、时间、位置</a>
+			        <a href="14874190727983.html">初始化顺序、位置</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14872445826285.html">MySQL 语句</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14872339187000.html">MySQL5.7 从相见到👋</a>
+			        <a href="script_position.html">html 的解析顺序，及 script 标签的位置选择</a>
 			      </li>
 		     
 		  

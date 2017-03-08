@@ -20,7 +20,7 @@
   <script>hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript">
   function before_search(){
-    var searchVal = 'site:kayorl.com ' + document.getElementById('search_input').value;
+    var searchVal = 'site:blog.kayorl.com ' + document.getElementById('search_input').value;
     document.getElementById('search_q').value = searchVal;
     return true;
   }
@@ -78,15 +78,15 @@
     <li><label>Categories</label></li>
 
         
-            <li><a href="java.html">Java</a></li>
+            <li><a href="web.html">web</a></li>
         
             <li><a href="nodejs.html">nodejs</a></li>
         
-            <li><a href="database.html">数据库系统</a></li>
+            <li><a href="O&M.html">运维</a></li>
+        
+            <li><a href="java.html">Java</a></li>
         
             <li><a href="C&C++.html">C/C++</a></li>
-        
-            <li><a href="O&M.html">运维</a></li>
         
             <li><a href="objc.html">ObjC</a></li>
          
@@ -123,7 +123,7 @@
          
           <span class="comments">
             
-              <a href="http://kayorl.com/14872295003080.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/14872295003080.html#disqus_thread">comments</a>
             
 
             
@@ -162,6 +162,8 @@
 <span id="more"></span><!-- more -->
 
 <p>参考很全面的<a href="http://bbs.linuxtone.org/thread-25588-1-1.html">教程</a>，关于 nginx 的优化，以及自己平常遇到的问题</p>
+
+<p>[tutorial]:</p>
 
 <h2 id="toc_0">源安装</h2>
 
@@ -285,7 +287,7 @@ http {
          # gzip_static on;
         # gzip_vary on;
           gzip_proxied any; #压缩所有请求
-          gzip_min_length 1000;启用压缩的最少字节数，小于1000不压缩
+          gzip_min_length 1000; #启用压缩的最少字节数，小于1000不压缩
           gzip_comp_level 4;    #压缩比，9最慢但压缩最强
         # gzip_buffers 16 8k;
         # gzip_http_version 1.1;
@@ -347,7 +349,7 @@ sudo apt-get autoremove # After using any of the above commands, use this in ord
           
 
           
-              <div class="ds-thread" data-thread-key="14872295003080.html" data-url="http://kayorl.com/14872295003080.html" data-title="nginx 从安装到卸载"></div>
+              <div class="ds-thread" data-thread-key="14872295003080.html" data-url="http://blog.kayorl.com/14872295003080.html" data-title="nginx 从安装到卸载"></div>
           
         </div>
       </div>
@@ -393,15 +395,15 @@ sudo apt-get autoremove # After using any of the above commands, use this in ord
 
       	<p class="cat-list">
         
-            <a href="java.html"><strong>Java</strong></a>
+            <a href="web.html"><strong>web</strong></a>
         
             <a href="nodejs.html"><strong>nodejs</strong></a>
         
-            <a href="database.html"><strong>数据库系统</strong></a>
+            <a href="O&M.html"><strong>运维</strong></a>
+        
+            <a href="java.html"><strong>Java</strong></a>
         
             <a href="C&C++.html"><strong>C/C++</strong></a>
-        
-            <a href="O&M.html"><strong>运维</strong></a>
         
             <a href="objc.html"><strong>ObjC</strong></a>
          
@@ -420,6 +422,12 @@ sudo apt-get autoremove # After using any of the above commands, use this in ord
 	      
 		      
 			      <li class="post">
+			        <a href="doctype.html">理解 DOCTYPE 声明的意义</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="14874724785741.html">final</a>
 			      </li>
 		     
@@ -432,19 +440,13 @@ sudo apt-get autoremove # After using any of the above commands, use this in ord
 		  
 		      
 			      <li class="post">
-			        <a href="14874190727983.html">初始化顺序、时间、位置</a>
+			        <a href="14874190727983.html">初始化顺序、位置</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14872445826285.html">MySQL 语句</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14872339187000.html">MySQL5.7 从相见到👋</a>
+			        <a href="script_position.html">html 的解析顺序，及 script 标签的位置选择</a>
 			      </li>
 		     
 		  

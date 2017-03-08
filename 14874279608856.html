@@ -20,7 +20,7 @@
   <script>hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript">
   function before_search(){
-    var searchVal = 'site:kayorl.com ' + document.getElementById('search_input').value;
+    var searchVal = 'site:blog.kayorl.com ' + document.getElementById('search_input').value;
     document.getElementById('search_q').value = searchVal;
     return true;
   }
@@ -78,15 +78,15 @@
     <li><label>Categories</label></li>
 
         
-            <li><a href="java.html">Java</a></li>
+            <li><a href="web.html">web</a></li>
         
             <li><a href="nodejs.html">nodejs</a></li>
         
-            <li><a href="database.html">数据库系统</a></li>
+            <li><a href="O&M.html">运维</a></li>
+        
+            <li><a href="java.html">Java</a></li>
         
             <li><a href="C&C++.html">C/C++</a></li>
-        
-            <li><a href="O&M.html">运维</a></li>
         
             <li><a href="objc.html">ObjC</a></li>
          
@@ -123,7 +123,7 @@
          
           <span class="comments">
             
-              <a href="http://kayorl.com/14874279608856.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/14874279608856.html#disqus_thread">comments</a>
             
 
             
@@ -152,7 +152,7 @@
 <pre><code class="language-j">/**
  * Wind 是 Instrument 的子类，通过向上转型调用了 Instrument 的 play 方法
  */
-public class Transaction {
+public class UpCast {
     public static void main(String[] args) {
         Wind flute=new Wind();
         Instrument.tune(flute);
@@ -175,6 +175,8 @@ class Wind extends Instrument {
 
 <p>Java 中， 在子类中重载方法，并<strong>不会屏蔽</strong>基类版本的方法。</p>
 
+<h2 id="toc_2">多态只限于普通的方法调用</h2>
+
 
     
 
@@ -193,7 +195,7 @@ class Wind extends Instrument {
       <p class="text-right" style="padding:15px 0px;">
       
           <a  href="14874190727983.html" 
-          title="Next Post: 初始化顺序、时间、位置">初始化顺序、时间、位置 &raquo;</a>
+          title="Next Post: 初始化顺序、位置">初始化顺序、位置 &raquo;</a>
       
       </p>
         </div>
@@ -207,7 +209,7 @@ class Wind extends Instrument {
           
 
           
-              <div class="ds-thread" data-thread-key="14874279608856.html" data-url="http://kayorl.com/14874279608856.html" data-title="组合与继承的选择"></div>
+              <div class="ds-thread" data-thread-key="14874279608856.html" data-url="http://blog.kayorl.com/14874279608856.html" data-title="组合与继承的选择"></div>
           
         </div>
       </div>
@@ -253,15 +255,15 @@ class Wind extends Instrument {
 
       	<p class="cat-list">
         
-            <a href="java.html"><strong>Java</strong></a>
+            <a href="web.html"><strong>web</strong></a>
         
             <a href="nodejs.html"><strong>nodejs</strong></a>
         
-            <a href="database.html"><strong>数据库系统</strong></a>
+            <a href="O&M.html"><strong>运维</strong></a>
+        
+            <a href="java.html"><strong>Java</strong></a>
         
             <a href="C&C++.html"><strong>C/C++</strong></a>
-        
-            <a href="O&M.html"><strong>运维</strong></a>
         
             <a href="objc.html"><strong>ObjC</strong></a>
          
@@ -280,6 +282,12 @@ class Wind extends Instrument {
 	      
 		      
 			      <li class="post">
+			        <a href="doctype.html">理解 DOCTYPE 声明的意义</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="14874724785741.html">final</a>
 			      </li>
 		     
@@ -292,19 +300,13 @@ class Wind extends Instrument {
 		  
 		      
 			      <li class="post">
-			        <a href="14874190727983.html">初始化顺序、时间、位置</a>
+			        <a href="14874190727983.html">初始化顺序、位置</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14872445826285.html">MySQL 语句</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14872339187000.html">MySQL5.7 从相见到👋</a>
+			        <a href="script_position.html">html 的解析顺序，及 script 标签的位置选择</a>
 			      </li>
 		     
 		  

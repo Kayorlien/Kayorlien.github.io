@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  OC(10) 类别 - 几谷 博客
+  理解 DOCTYPE 声明的意义 - 几谷 博客
   
   </title>
-  
-  
+  <meta name="keywords" content="doctype DTD SGML" />
+  <meta name="description" content="理解 DOCTYPE 声明的意义" />
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
     <link rel="stylesheet" href="asset/css/docs.css" />
@@ -111,23 +111,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>OC(10) 类别</h1>
+          <h1>理解 DOCTYPE 声明的意义</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/10/6 20:29 下午</span>
+          <span class="date">2017/3/8 10:1 上午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='objc.html'>ObjC</a></span>
+              <span class="posted-in"><a href='web.html'>web</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872504904501.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/doctype.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872504904501.html" data-count-type="comments" href="14872504904501.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="doctype.html" data-count-type="comments" href="doctype.html#ds-thread"></a>
             
           </span>
 
@@ -135,125 +135,64 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>利用 OC 的动态运行时分配机制,可以为现有的类添加新方法(无法添加变量)<br/>
-在 OC 里, 这些方法叫做类别 (category)</p>
+      <p>每次看到 html 文档时，已经习惯了头部有个 <code>&lt;!DOCTYPE html&gt;</code>，印象也有些模糊，趁着学习 css ，赶紧整理一下</p>
 
 <span id="more"></span><!-- more -->
 
-<pre><code class="language-objc">@interface NSString (NumberConvinience)
-- (NSNumber *) lengthAsNumber;
-...
-@end
-
-/****************** *****************/
-
-#import &quot;NSString+NumberConvinience.h&quot;
-
-
-@implementation NSString (NumberConvinience)
-- (NSNumber *) lengthAsNumber
-{
-    NSInteger length = [self length];
-    return ([NSNumber numberWithUnsignedInteger:length]);
-}
-@end
-</code></pre>
-
-<ul>
-<li><p>NSInteger、NSUInteger、CGFLoat不是包装类，虽然他们带有NS、CG前缀，它们并不是包装类，只是<code>基本类型</code>，它们分别大致等于：long、unsigned long和double（或float）</p></li>
-<li><p><code>任何</code> NSString 都能相应 lengthAsNumber 信息</p></li>
-<li><p>缺陷: 存在<code>名称冲突</code>,与现有的方法重名时,类别方法具有更高优先级</p></li>
-</ul>
-
-<h3 id="toc_0">类别的优势</h3>
-
-<ol>
-<li>可以将类的实现代码分散到多个不同文件或框架中</li>
-<li>创建对私有方法的前向引用</li>
-<li>向对象添加非正式协议</li>
-</ol>
-
-<h2 id="toc_1">类扩展</h2>
-
-<p>不需要名字的类别,可以添加实例变量,改变只读权限</p>
-
-<ul>
-<li>( )只是获取 thing 类</li>
-<li>用来<code>信息隐藏</code></li>
-</ul>
-
-<pre><code class="language-objc">@interface thing: NSObject
-@property (assign) NSInteger thing1;
-@property (readonly,assign) NSInteger thing2;
-...
-@end
-
-/********** 变形线  ********/
-
-@interface thing ()
-{
-    NSInteger thing4;
-}
-@property (assign) NSInteger thing1;
-@property (readWrite,assign) NSInteger thing2;
-...
-@end
-
-</code></pre>
-
-<h2 id="toc_2">优势1: 用类别分散代码</h2>
-
-<pre><code class="language-objc">@interface CategoryThing : NSObject
-{
-    NSInteger thing1;
-    NSInteger thing2;
-    NSInteger thing3;
-}
-@end
-
-@interface CategortThing (Thing1)
-- (void) setThing1: (NSInteger) things1;
-- (NSInteger)things1;
-...
-@end
-
-</code></pre>
-
-<p>以上是头文件中的内容,下面是类别 Thing1.m 文件的内容</p>
-
-<pre><code class="language-objc">#import &quot;CategoryThing.h&quot;
-@implementation CategoryThing (Thing1)
-- (void)setThing1:(NSInteger)t1
-{
-    thing1=t1;
-}
-@end;
-</code></pre>
-
-<h2 id="toc_3">优势2: 创建前向引用</h2>
-
-<p>类别中声明但在类中没有声明的方法,编译器会警告,解决问题的策略是:</p>
+<h2 id="toc_0">DOCTYPE 声明对页面进行有效性验证</h2>
 
 <blockquote>
-<p>将类别置于实现文件的最前面</p>
+<p>DTD (文档定义类型)定义 XML 或 HTML 的特定版本允许有什么，不允许有什么。</p>
+
+<p>SGML (标准通用标记语言) 是一种定义电子文档结构和描述其内容的国际标准语言</p>
 </blockquote>
 
-<pre><code class="language-objc">@interface Car (Private)
-{
-    //其他类别中想使用的方法
-}
-@end
+<p>有助于找到代码中的 bug</p>
 
-@implemention Car
-{
-...
-}
-@end
-</code></pre>
+<h2 id="toc_1">DOCTYPE 声明让浏览器有不同的呈现形式</h2>
 
-<h2 id="toc_4">优势3:非正式协议和委托类别</h2>
+<blockquote>
+<p>标准模式(standard mode)：根据规范的一种呈现形式<br/>
+混杂模式(quirk mode)：模拟老式浏览器的一种呈现形式</p>
+</blockquote>
 
-<p>恩,暂时跳过,感觉不严谨</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center"></th>
+<th style="text-align: center">DTD</th>
+<th style="text-align: center">standard</th>
+<th style="text-align: center">quirk</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center"> HTML4.01</td>
+<td style="text-align: center">strict</td>
+<td style="text-align: center">yes</td>
+<td style="text-align: center"></td>
+</tr>
+<tr>
+<td style="text-align: center"></td>
+<td style="text-align: center">Transitional &amp;&amp; url</td>
+<td style="text-align: center">yes</td>
+<td style="text-align: center"></td>
+</tr>
+<tr>
+<td style="text-align: center"></td>
+<td style="text-align: center">Transitional &amp;&amp; NO url</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">yes</td>
+</tr>
+<tr>
+<td style="text-align: center">HTML5</td>
+<td style="text-align: center"> 不基于 SGML，所以不需要引用 DTD</td>
+<td style="text-align: center">yes</td>
+<td style="text-align: center"></td>
+</tr>
+</tbody>
+</table>
 
 
     
@@ -264,16 +203,13 @@
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872504904620.html" 
-          title="Previous Post: OC(11) 协议">&laquo; OC(11) 协议</a>
-      
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872477973050.html" 
-          title="Next Post: 杂">杂 &raquo;</a>
+          <a  href="14874724785741.html" 
+          title="Next Post: final">final &raquo;</a>
       
       </p>
         </div>
@@ -287,7 +223,7 @@
           
 
           
-              <div class="ds-thread" data-thread-key="14872504904501.html" data-url="http://blog.kayorl.com/14872504904501.html" data-title="OC(10) 类别"></div>
+              <div class="ds-thread" data-thread-key="doctype.html" data-url="http://blog.kayorl.com/doctype.html" data-title="理解 DOCTYPE 声明的意义"></div>
           
         </div>
       </div>

@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  OC(10) 类别 - 几谷 博客
+  几谷 博客
   
   </title>
-  
+  <meta name="keywords" content="MySQL mysql rdbms" />
   
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
@@ -102,200 +102,107 @@
        
 
  <script type="text/javascript">
-  $(function(){
-    $('#menu_item_index').addClass('is_active');
-  });
+	$(function(){
+		$('#menu_item_index').addClass('is_active');
+	});
 </script>
 <div class="row">
-  <div class="large-8 medium-8 columns">
-      <div class="markdown-body article-wrap">
-       <div class="article">
-          
-          <h1>OC(10) 类别</h1>
-     
-        <div class="read-more clearfix">
-          <span class="date">2016/10/6 20:29 下午</span>
-
-          <span>posted in&nbsp;</span> 
-          
-              <span class="posted-in"><a href='objc.html'>ObjC</a></span>
-           
-         
-          <span class="comments">
-            
-              <a href="http://blog.kayorl.com/14872504904501.html#disqus_thread">comments</a>
-            
-
-            
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872504904501.html" data-count-type="comments" href="14872504904501.html#ds-thread"></a>
-            
-          </span>
-
-        </div>
-      </div><!-- article -->
-
-      <div class="article-content">
-      <p>利用 OC 的动态运行时分配机制,可以为现有的类添加新方法(无法添加变量)<br/>
-在 OC 里, 这些方法叫做类别 (category)</p>
-
-<span id="more"></span><!-- more -->
-
-<pre><code class="language-objc">@interface NSString (NumberConvinience)
-- (NSNumber *) lengthAsNumber;
-...
-@end
-
-/****************** *****************/
-
-#import &quot;NSString+NumberConvinience.h&quot;
+	<div class="large-8 medium-8 columns">
+		<div class="markdown-body home-categories">
+		
+			<div class="article">
+                <a class="clearlink" href="14872467449529.html">
+                
+                  <h1>Promises 解决Node无限回调</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>Promises 是异步代码（如 Node.js） 实现控制流的方式， 可以让代码更干净，可读。</p>
 
 
-@implementation NSString (NumberConvinience)
-- (NSNumber *) lengthAsNumber
-{
-    NSInteger length = [self length];
-    return ([NSNumber numberWithUnsignedInteger:length]);
-}
-@end
-</code></pre>
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14872467449529.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/14 10:25 上午</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='nodejs.html'>nodejs</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+                        <a href="http://blog.kayorl.com/14872467449529.html#disqus_thread">comments</a>
+                      
 
-<ul>
-<li><p>NSInteger、NSUInteger、CGFLoat不是包装类，虽然他们带有NS、CG前缀，它们并不是包装类，只是<code>基本类型</code>，它们分别大致等于：long、unsigned long和double（或float）</p></li>
-<li><p><code>任何</code> NSString 都能相应 lengthAsNumber 信息</p></li>
-<li><p>缺陷: 存在<code>名称冲突</code>,与现有的方法重名时,类别方法具有更高优先级</p></li>
-</ul>
-
-<h3 id="toc_0">类别的优势</h3>
-
-<ol>
-<li>可以将类的实现代码分散到多个不同文件或框架中</li>
-<li>创建对私有方法的前向引用</li>
-<li>向对象添加非正式协议</li>
-</ol>
-
-<h2 id="toc_1">类扩展</h2>
-
-<p>不需要名字的类别,可以添加实例变量,改变只读权限</p>
-
-<ul>
-<li>( )只是获取 thing 类</li>
-<li>用来<code>信息隐藏</code></li>
-</ul>
-
-<pre><code class="language-objc">@interface thing: NSObject
-@property (assign) NSInteger thing1;
-@property (readonly,assign) NSInteger thing2;
-...
-@end
-
-/********** 变形线  ********/
-
-@interface thing ()
-{
-    NSInteger thing4;
-}
-@property (assign) NSInteger thing1;
-@property (readWrite,assign) NSInteger thing2;
-...
-@end
-
-</code></pre>
-
-<h2 id="toc_2">优势1: 用类别分散代码</h2>
-
-<pre><code class="language-objc">@interface CategoryThing : NSObject
-{
-    NSInteger thing1;
-    NSInteger thing2;
-    NSInteger thing3;
-}
-@end
-
-@interface CategortThing (Thing1)
-- (void) setThing1: (NSInteger) things1;
-- (NSInteger)things1;
-...
-@end
-
-</code></pre>
-
-<p>以上是头文件中的内容,下面是类别 Thing1.m 文件的内容</p>
-
-<pre><code class="language-objc">#import &quot;CategoryThing.h&quot;
-@implementation CategoryThing (Thing1)
-- (void)setThing1:(NSInteger)t1
-{
-    thing1=t1;
-}
-@end;
-</code></pre>
-
-<h2 id="toc_3">优势2: 创建前向引用</h2>
-
-<p>类别中声明但在类中没有声明的方法,编译器会警告,解决问题的策略是:</p>
-
-<blockquote>
-<p>将类别置于实现文件的最前面</p>
-</blockquote>
-
-<pre><code class="language-objc">@interface Car (Private)
-{
-    //其他类别中想使用的方法
-}
-@end
-
-@implemention Car
-{
-...
-}
-@end
-</code></pre>
-
-<h2 id="toc_4">优势3:非正式协议和委托类别</h2>
-
-<p>恩,暂时跳过,感觉不严谨</p>
+                      
+                        &nbsp;<a  class="ds-thread-count" data-thread-key="14872467449529.html" data-count-type="comments" href="14872467449529.html#ds-thread"></a>
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14872294485144.html">
+                
+                  <h1>MySQL 术语</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>MySQL？mysql？ 什么来的</p>
 
 
-    
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14872294485144.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/12 11:25 上午</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='database.html'>数据库系统</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+                        <a href="http://blog.kayorl.com/14872294485144.html#disqus_thread">comments</a>
+                      
 
-      </div>
-
-      <div class="row">
-        <div class="large-6 columns">
-        <p class="text-left" style="padding:15px 0px;">
-      
-          <a href="14872504904620.html" 
-          title="Previous Post: OC(11) 协议">&laquo; OC(11) 协议</a>
-      
-        </p>
-        </div>
-        <div class="large-6 columns">
-      <p class="text-right" style="padding:15px 0px;">
-      
-          <a  href="14872477973050.html" 
-          title="Next Post: 杂">杂 &raquo;</a>
-      
-      </p>
-        </div>
-      </div>
-      <div class="comments-wrap">
-        <div class="share-comments">
-          
-
-          
-            <div id="disqus_thread"></div>
-          
-
-          
-              <div class="ds-thread" data-thread-key="14872504904501.html" data-url="http://blog.kayorl.com/14872504904501.html" data-title="OC(10) 类别"></div>
-          
-        </div>
-      </div>
-    </div><!-- article-wrap -->
-  </div><!-- large 8 -->
+                      
+                        &nbsp;<a  class="ds-thread-count" data-thread-key="14872294485144.html" data-count-type="comments" href="14872294485144.html#ds-thread"></a>
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+              
 
 
-
+			<div class="row">
+			  <div class="large-6 columns">
+			  <p class="text-left" style="padding-top:25px;">
+			   <a href="all_1.html">&laquo; Prev Page</a>  
+			  </p>
+			  </div>
+			  <div class="large-6 columns">
+			<p class="text-right" style="padding-top:25px;">
+			
+			</p>
+			  </div>
+			</div>
+		</div>
+	</div><!-- large 8 -->
 
  <div class="large-4 medium-4 columns">
   <div class="hide-for-small">

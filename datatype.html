@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  OC(10) 类别 - 几谷 博客
+  数据类型 - 几谷 博客
   
   </title>
   
@@ -84,11 +84,7 @@
         
             <li><a href="O&M.html">运维</a></li>
         
-            <li><a href="java.html">Java</a></li>
-        
             <li><a href="C&C++.html">C/C++</a></li>
-        
-            <li><a href="objc.html">ObjC</a></li>
          
 
       </ul>
@@ -111,23 +107,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>OC(10) 类别</h1>
+          <h1>数据类型</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/10/6 20:29 下午</span>
+          <span class="date">2017/2/9 16:5 下午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='objc.html'>ObjC</a></span>
+              <span class="posted-in"><a href='web.html'>web</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872504904501.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/datatype.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872504904501.html" data-count-type="comments" href="14872504904501.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="datatype.html" data-count-type="comments" href="datatype.html#ds-thread"></a>
             
           </span>
 
@@ -135,125 +131,180 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>利用 OC 的动态运行时分配机制,可以为现有的类添加新方法(无法添加变量)<br/>
-在 OC 里, 这些方法叫做类别 (category)</p>
+      <p>学会数据类型，防止自己挖坑自己跳 (￣o￣) . z Z</p>
 
 <span id="more"></span><!-- more -->
 
-<pre><code class="language-objc">@interface NSString (NumberConvinience)
-- (NSNumber *) lengthAsNumber;
-...
-@end
-
-/****************** *****************/
-
-#import &quot;NSString+NumberConvinience.h&quot;
-
-
-@implementation NSString (NumberConvinience)
-- (NSNumber *) lengthAsNumber
-{
-    NSInteger length = [self length];
-    return ([NSNumber numberWithUnsignedInteger:length]);
-}
-@end
-</code></pre>
-
-<ul>
-<li><p>NSInteger、NSUInteger、CGFLoat不是包装类，虽然他们带有NS、CG前缀，它们并不是包装类，只是<code>基本类型</code>，它们分别大致等于：long、unsigned long和double（或float）</p></li>
-<li><p><code>任何</code> NSString 都能相应 lengthAsNumber 信息</p></li>
-<li><p>缺陷: 存在<code>名称冲突</code>,与现有的方法重名时,类别方法具有更高优先级</p></li>
-</ul>
-
-<h3 id="toc_0">类别的优势</h3>
+<h2 id="toc_0">Undefined类型，只有一个值 undefined</h2>
 
 <ol>
-<li>可以将类的实现代码分散到多个不同文件或框架中</li>
-<li>创建对私有方法的前向引用</li>
-<li>向对象添加非正式协议</li>
+<li>声明，但不赋值变量，默认值为 undefined</li>
+<li>不声明，直接操作变量， <u>不会有默认值</u></li>
+<li>奇怪的是 typeof 操作符都返回 undefined</li>
 </ol>
 
-<h2 id="toc_1">类扩展</h2>
+<pre><code>var msg;
+alert (msg == undefiend);   // true
+alert (age == undefined);   // ERROR!
 
-<p>不需要名字的类别,可以添加实例变量,改变只读权限</p>
-
-<ul>
-<li>( )只是获取 thing 类</li>
-<li>用来<code>信息隐藏</code></li>
-</ul>
-
-<pre><code class="language-objc">@interface thing: NSObject
-@property (assign) NSInteger thing1;
-@property (readonly,assign) NSInteger thing2;
-...
-@end
-
-/********** 变形线  ********/
-
-@interface thing ()
-{
-    NSInteger thing4;
-}
-@property (assign) NSInteger thing1;
-@property (readWrite,assign) NSInteger thing2;
-...
-@end
-
+alert (typeof undefined);   // undefined
+alert (typeof undefined);   // undefined
 </code></pre>
 
-<h2 id="toc_2">优势1: 用类别分散代码</h2>
+<h2 id="toc_1">Null类型, 只有一个值 null</h2>
 
-<pre><code class="language-objc">@interface CategoryThing : NSObject
-{
-    NSInteger thing1;
-    NSInteger thing2;
-    NSInteger thing3;
+<ol>
+<li>null 表示一个空对象指针 </li>
+<li>用 typeof 检测时会返回 <u>object</u>.</li>
+<li>如果变量以后要保存对象，那么初始化为 null 会更好</li>
+</ol>
+
+<pre><code>alert (typeof null);    // object
+
+if ( car ! = null ) {
+    //对 car 对象进行操作
 }
-@end
-
-@interface CategortThing (Thing1)
-- (void) setThing1: (NSInteger) things1;
-- (NSInteger)things1;
-...
-@end
-
 </code></pre>
 
-<p>以上是头文件中的内容,下面是类别 Thing1.m 文件的内容</p>
+<h2 id="toc_2">Number</h2>
 
-<pre><code class="language-objc">#import &quot;CategoryThing.h&quot;
-@implementation CategoryThing (Thing1)
-- (void)setThing1:(NSInteger)t1
-{
-    thing1=t1;
-}
-@end;
-</code></pre>
+<ol>
+<li>浮点运算会产生误差，不要测定特定的浮点数值</li>
+<li>无穷值用 <code>isFinite()</code> 检查</li>
+<li>范围数值的操作数未返回数值，用 NaN 表示，用 <code>isNaN()</code> 检查</li>
+</ol>
 
-<h2 id="toc_3">优势2: 创建前向引用</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center"></th>
+<th style="text-align: center">“hello&quot;</th>
+<th style="text-align: center">undefined</th>
+<th style="text-align: center">null</th>
+<th style="text-align: center">“”</th>
+<th style="text-align: center">true</th>
+<th style="text-align: center">“000011&quot;</th>
+<th style="text-align: center">22.5</th>
+<th style="text-align: center">22.5.5</th>
+<th style="text-align: center">1234hdhd</th>
+</tr>
+</thead>
 
-<p>类别中声明但在类中没有声明的方法,编译器会警告,解决问题的策略是:</p>
+<tbody>
+<tr>
+<td style="text-align: center">Number()</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">0</td>
+<td style="text-align: center">0</td>
+<td style="text-align: center">1</td>
+<td style="text-align: center">11</td>
+<td style="text-align: center">22.5</td>
+<td style="text-align: center">ERROR</td>
+<td style="text-align: center">ERROR</td>
+</tr>
+<tr>
+<td style="text-align: center">parseInt(obj,base)</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">11</td>
+<td style="text-align: center">22</td>
+<td style="text-align: center">22</td>
+<td style="text-align: center">1234</td>
+</tr>
+<tr>
+<td style="text-align: center">parseFloat()</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">11</td>
+<td style="text-align: center">22.5</td>
+<td style="text-align: center">22.5</td>
+<td style="text-align: center">1234</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_3">String 类型，值不变</h2>
+
+<ol>
+<li>确定值不为 null 或 undefined 时直接用 <code>toString()</code> 方法</li>
+<li>null 与 undefined 无 <code>toString()</code> 方法</li>
+<li>调用 <code>String()</code> 方法,可以将任意值转换为字符串 (个人觉得为了安全还是不要的好)</li>
+<li>
+```js</li>
+</ol>
+
+<p>function String(obj){<br/>
+    if(typeof obj.toString() === &quot;function&quot;) {<br/>
+        return obj.toString();      // 方法<br/>
+    }<br/>
+    if(obj === null) {<br/>
+        return &quot;null&quot;;<br/>
+    }<br/>
+    if(typeof obj === undefined) {<br/>
+        return &quot;undefined&quot;;<br/>
+    }<br/>
+}<br/>
+```</p>
+
+<h2 id="toc_4">Object 类型</h2>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left">方法</th>
+<th style="text-align: left">描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: left">constructor</td>
+<td style="text-align: left">构造函数</td>
+</tr>
+<tr>
+<td style="text-align: left">hasOwnProperty(propertyName)</td>
+<td style="text-align: left">检查属性是否存在当前对象实例中</td>
+</tr>
+<tr>
+<td style="text-align: left">isPrototypeOf(object)</td>
+<td style="text-align: left">检查传入对象是否为当前对象的原型</td>
+</tr>
+<tr>
+<td style="text-align: left">toLocalString()</td>
+<td style="text-align: left">返还执行环境地区的字符串</td>
+</tr>
+<tr>
+<td style="text-align: left">toString()</td>
+<td style="text-align: left">返回字符串表示</td>
+</tr>
+<tr>
+<td style="text-align: left">valueOf()</td>
+<td style="text-align: left">返回字符串、数值或布尔值表示</td>
+</tr>
+</tbody>
+</table>
 
 <blockquote>
-<p>将类别置于实现文件的最前面</p>
+<p>内置函数和操作符的操作流程</p>
 </blockquote>
 
-<pre><code class="language-objc">@interface Car (Private)
-{
-    //其他类别中想使用的方法
+<pre><code class="language-js">if( !obj.valueOf().func() ){
+    return ...;
+}else{
+    if( ! obj.toString().func() ) {
+        return ...;
+    }else {
+        return ...;
+    }
 }
-@end
-
-@implemention Car
-{
-...
-}
-@end
 </code></pre>
-
-<h2 id="toc_4">优势3:非正式协议和委托类别</h2>
-
-<p>恩,暂时跳过,感觉不严谨</p>
 
 
     
@@ -264,16 +315,13 @@
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872504904620.html" 
-          title="Previous Post: OC(11) 协议">&laquo; OC(11) 协议</a>
-      
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872477973050.html" 
-          title="Next Post: 杂">杂 &raquo;</a>
+          <a  href="script_position.html" 
+          title="Next Post: html 的解析顺序，及 script 标签的位置选择">html 的解析顺序，及 script 标签的位置选择 &raquo;</a>
       
       </p>
         </div>
@@ -287,7 +335,7 @@
           
 
           
-              <div class="ds-thread" data-thread-key="14872504904501.html" data-url="http://blog.kayorl.com/14872504904501.html" data-title="OC(10) 类别"></div>
+              <div class="ds-thread" data-thread-key="datatype.html" data-url="http://blog.kayorl.com/datatype.html" data-title="数据类型"></div>
           
         </div>
       </div>
@@ -339,11 +387,7 @@
         
             <a href="O&M.html"><strong>运维</strong></a>
         
-            <a href="java.html"><strong>Java</strong></a>
-        
             <a href="C&C++.html"><strong>C/C++</strong></a>
-        
-            <a href="objc.html"><strong>ObjC</strong></a>
          
         </p>
 
@@ -360,25 +404,7 @@
 	      
 		      
 			      <li class="post">
-			        <a href="doctype.html">理解 DOCTYPE 声明的意义</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14874724785741.html">final</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14874279608856.html">组合与继承的选择</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14874190727983.html">初始化顺序、位置</a>
+			        <a href="datatype.html">数据类型</a>
 			      </li>
 		     
 		  
@@ -389,6 +415,22 @@
 		     
 		  
 		      
+			      <li class="post">
+			        <a href="doctype.html">理解 DOCTYPE 声明的意义</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872445826285.html">MySQL 语句</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14872339187000.html">MySQL5.7 从相见到👋</a>
+			      </li>
+		     
 		  
 		      
 		  

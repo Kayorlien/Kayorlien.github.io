@@ -2,42 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
   <loc>http://blog.kayorl.com/</loc>
-  <lastmod>2017-03-08T10:40:11+08:00</lastmod>
+  <lastmod>2017-03-08T13:02:52+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/doctype.html</loc>
-  <lastmod>2017-03-08T10:01:30+08:00</lastmod>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/14874724785741.html</loc>
-  <lastmod>2017-02-19T10:47:58+08:00</lastmod>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/14874279608856.html</loc>
-  <lastmod>2017-02-18T22:26:00+08:00</lastmod>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/14874190727983.html</loc>
-  <lastmod>2017-02-18T19:57:52+08:00</lastmod>
+  <loc>http://blog.kayorl.com/datatype.html</loc>
+  <lastmod>2017-02-09T16:05:35+08:00</lastmod>
 </url>
 
 <url>
   <loc>http://blog.kayorl.com/script_position.html</loc>
-  <lastmod>2017-02-16T20:05:35+08:00</lastmod>
+  <lastmod>2017-02-08T20:05:35+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://blog.kayorl.com/doctype.html</loc>
+  <lastmod>2017-02-06T10:01:30+08:00</lastmod>
 </url>
 
 <url>
   <loc>http://blog.kayorl.com/14872445826285.html</loc>
-  <lastmod>2017-02-16T19:29:42+08:00</lastmod>
+  <lastmod>2016-12-04T19:29:42+08:00</lastmod>
 </url>
 
 <url>
   <loc>http://blog.kayorl.com/14872339187000.html</loc>
-  <lastmod>2017-02-16T16:31:58+08:00</lastmod>
+  <lastmod>2016-12-03T13:31:58+08:00</lastmod>
 </url>
 
 <url>
@@ -76,68 +66,13 @@
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872504904620.html</loc>
-  <lastmod>2016-10-06T23:50:10+08:00</lastmod>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/14872504904501.html</loc>
-  <lastmod>2016-10-06T20:29:10+08:00</lastmod>
-</url>
-
-<url>
   <loc>http://blog.kayorl.com/14872477973050.html</loc>
   <lastmod>2016-10-06T17:12:17+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872504904341.html</loc>
-  <lastmod>2016-10-05T21:15:10+08:00</lastmod>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/14872504904170.html</loc>
-  <lastmod>2016-10-05T16:05:10+08:00</lastmod>
-</url>
-
-<url>
   <loc>http://blog.kayorl.com/14872314142360.html</loc>
   <lastmod>2016-09-29T16:17:14+08:00</lastmod>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/14872504904064.html</loc>
-  <lastmod>2016-09-28T22:47:10+08:00</lastmod>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/14872504903926.html</loc>
-  <lastmod>2016-09-28T21:36:10+08:00</lastmod>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/14872504903613.html</loc>
-  <lastmod>2016-09-27T15:03:10+08:00</lastmod>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/14872504903821.html</loc>
-  <lastmod>2016-09-25T21:19:10+08:00</lastmod>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/14872504903717.html</loc>
-  <lastmod>2016-09-25T19:48:10+08:00</lastmod>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/14872504903507.html</loc>
-  <lastmod>2016-09-23T23:16:10+08:00</lastmod>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/14872504902898.html</loc>
-  <lastmod>2016-09-23T19:11:10+08:00</lastmod>
 </url>
 
 <url>
@@ -168,14 +103,6 @@
 
 
 <url>
-  <loc>http://blog.kayorl.com/java.html</loc>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/Thinking%20In%20Java.html</loc>
-</url>
-
-<url>
   <loc>http://blog.kayorl.com/nodejs.html</loc>
 </url>
 
@@ -193,10 +120,6 @@
 
 <url>
   <loc>http://blog.kayorl.com/O&M.html</loc>
-</url>
-
-<url>
-  <loc>http://blog.kayorl.com/objc.html</loc>
 </url>
 
 <url>

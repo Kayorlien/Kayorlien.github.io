@@ -4,13 +4,235 @@
   <title><![CDATA[几谷 博客]]></title>
   <link href="http://blog.kayorl.com/atom.xml" rel="self"/>
   <link href="http://blog.kayorl.com/"/>
-  <updated>2017-03-08T10:00:54+08:00</updated>
+  <updated>2017-03-08T13:02:40+08:00</updated>
   <id>http://blog.kayorl.com/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[数据类型]]></title>
+    <link href="http://blog.kayorl.com/datatype.html"/>
+    <updated>2017-02-16T20:05:35+08:00</updated>
+    <id>http://blog.kayorl.com/datatype.html</id>
+    <content type="html"><![CDATA[
+<p>学会数据类型，防止自己挖坑自己跳 (￣o￣) . z Z</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">Undefined类型，只有一个值 undefined</h2>
+
+<ol>
+<li>声明，但不赋值变量，默认值为 undefined</li>
+<li>不声明，直接操作变量， <u>不会有默认值</u></li>
+<li>奇怪的是 typeof 操作符都返回 undefined</li>
+</ol>
+
+<pre><code>var msg;
+alert (msg == undefiend);   // true
+alert (age == undefined);   // ERROR!
+
+alert (typeof undefined);   // undefined
+alert (typeof undefined);   // undefined
+</code></pre>
+
+<h2 id="toc_1">Null类型, 只有一个值 null</h2>
+
+<ol>
+<li>null 表示一个空对象指针 </li>
+<li>用 typeof 检测时会返回 <u>object</u>.</li>
+<li>如果变量以后要保存对象，那么初始化为 null 会更好</li>
+</ol>
+
+<pre><code>alert (typeof null);    // object
+
+if ( car ! = null ) {
+    //对 car 对象进行操作
+}
+</code></pre>
+
+<h2 id="toc_2">Number</h2>
+
+<ol>
+<li>浮点运算会产生误差，不要测定特定的浮点数值</li>
+<li>无穷值用 <code>isFinite()</code> 检查</li>
+<li>范围数值的操作数未返回数值，用 NaN 表示，用 <code>isNaN()</code> 检查</li>
+</ol>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center"></th>
+<th style="text-align: center">“hello&quot;</th>
+<th style="text-align: center">undefined</th>
+<th style="text-align: center">null</th>
+<th style="text-align: center">“”</th>
+<th style="text-align: center">true</th>
+<th style="text-align: center">“000011&quot;</th>
+<th style="text-align: center">22.5</th>
+<th style="text-align: center">22.5.5</th>
+<th style="text-align: center">1234hdhd</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">Number()</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">0</td>
+<td style="text-align: center">0</td>
+<td style="text-align: center">1</td>
+<td style="text-align: center">11</td>
+<td style="text-align: center">22.5</td>
+<td style="text-align: center">ERROR</td>
+<td style="text-align: center">ERROR</td>
+</tr>
+<tr>
+<td style="text-align: center">parseInt(obj,base)</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">11</td>
+<td style="text-align: center">22</td>
+<td style="text-align: center">22</td>
+<td style="text-align: center">1234</td>
+</tr>
+<tr>
+<td style="text-align: center">parseFloat()</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">NaN</td>
+<td style="text-align: center">11</td>
+<td style="text-align: center">22.5</td>
+<td style="text-align: center">22.5</td>
+<td style="text-align: center">1234</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_3">String 类型，值不变</h2>
+
+<ol>
+<li>确定值不为 null 或 undefined 时直接用 <code>toString()</code> 方法</li>
+<li>null 与 undefined 无 <code>toString()</code> 方法</li>
+<li>调用 <code>String()</code> 方法,可以将任意值转换为字符串 (个人觉得为了安全还是不要的好)</li>
+<li>
+```js</li>
+</ol>
+
+<p>function String(obj){<br/>
+    if(typeof obj.toString() === &quot;function&quot;) {<br/>
+        return obj.toString();      // 方法<br/>
+    }<br/>
+    if(obj === null) {<br/>
+        return &quot;null&quot;;<br/>
+    }<br/>
+    if(typeof obj === undefined) {<br/>
+        return &quot;undefined&quot;;<br/>
+    }<br/>
+}<br/>
+```</p>
+
+<h2 id="toc_4">Object 类型</h2>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left">方法</th>
+<th style="text-align: left">描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: left">constructor</td>
+<td style="text-align: left">构造函数</td>
+</tr>
+<tr>
+<td style="text-align: left">hasOwnProperty(propertyName)</td>
+<td style="text-align: left">检查属性是否存在当前对象实例中</td>
+</tr>
+<tr>
+<td style="text-align: left">isPrototypeOf(object)</td>
+<td style="text-align: left">检查传入对象是否为当前对象的原型</td>
+</tr>
+<tr>
+<td style="text-align: left">toLocalString()</td>
+<td style="text-align: left">返还执行环境地区的字符串</td>
+</tr>
+<tr>
+<td style="text-align: left">toString()</td>
+<td style="text-align: left">返回字符串表示</td>
+</tr>
+<tr>
+<td style="text-align: left">valueOf()</td>
+<td style="text-align: left">返回字符串、数值或布尔值表示</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>内置函数和操作符的操作流程</p>
+</blockquote>
+
+<pre><code class="language-js">if( !obj.valueOf().func() ){
+    return ...;
+}else{
+    if( ! obj.toString().func() ) {
+        return ...;
+    }else {
+        return ...;
+    }
+}
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[html 的解析顺序，及 script 标签的位置选择]]></title>
+    <link href="http://blog.kayorl.com/script_position.html"/>
+    <updated>2017-02-16T20:05:35+08:00</updated>
+    <id>http://blog.kayorl.com/script_position.html</id>
+    <content type="html"><![CDATA[
+<p>读 《JavaScript高级程序设计》时，对 html 的标签解析感到模糊，参考了博文，根据理解画了以下的解析流程图，有误请指教哈~</p>
+
+<span id="more"></span><!-- more -->
+
+<p><img src="http://olh3adg9x.bkt.clouddn.com/decode_html.png" alt="decode_htm"/></p>
+
+<p>浏览器对非延迟执行的脚本都是立即执行的，导致浏览器呈现内容的速度变慢（即页面空白的时间过久），造成不好的用户体验。</p>
+
+<blockquote>
+<p>因此把所有脚本放到<body>元素的最后面</p>
+</blockquote>
+
+<p>有人说，全用 defer 脚本不就好了吗？ <br/>
+<strong><em>人无完人，defer 也有限制</em></strong></p>
+
+<blockquote>
+<p>延迟脚本直到 </html>解析完后加载;<br/>
+只有 ___一个__ defer 能按顺序执行;<br/>
+<strong>只适用于外部脚本文件</strong></p>
+</blockquote>
+
+<p>async 异步呢？其存在的目的是 <br/>
+<strong><em>不让页面等待两个脚本下载和执行</em></strong></p>
+
+<blockquote>
+<p>不保证先后顺序<br/>
+只适用于外部脚本文件</p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[理解 DOCTYPE 声明的意义]]></title>
@@ -76,220 +298,6 @@
 </tr>
 </tbody>
 </table>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[final]]></title>
-    <link href="http://blog.kayorl.com/14874724785741.html"/>
-    <updated>2017-02-19T10:47:58+08:00</updated>
-    <id>http://blog.kayorl.com/14874724785741.html</id>
-    <content type="html"><![CDATA[
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">final 数据</h2>
-
-<ul>
-<li>不变的编译时常量</li>
-</ul>
-
-<pre><code class="language-j">public class A {
-    static final int MAX_VALUE = 10;
-    final int val =10;
-}
-</code></pre>
-
-<ul>
-<li>运行时被初始化的值，而且不再会被改变</li>
-</ul>
-
-<pre><code class="language-j">public class B {
-    static Random rand = new Random(47)
-    
-    static final int MAX_VALUE = rand.nextInt();
-    final int val =rand.nextInt();
-}
-</code></pre>
-
-<ul>
-<li>基础类型的常量不可变</li>
-<li>对象引用的常量不可变，但对象本身可变（在容器类型的使用中，容器不变，容器的成员可变）</li>
-<li>支持先声明 <strong>空白 final</strong> , 后初始化</li>
-</ul>
-
-<h2 id="toc_1">final 参数</h2>
-
-<p>意味着无法在方法中更改参数引用所指对象</p>
-
-<h2 id="toc_2">final 方法</h2>
-
-<ol>
-<li>锁定方法，防止被继承类修改其含义</li>
-<li>效率问题，在 Java SE5/6 时，只有明确禁止覆盖时，才将方法设置为 final 。</li>
-<li>所有 private 都隐式地指定为 final
-## final 类
-该类将被打入冷宫，无法被继承
-final 类的方法都默认打上 final 的标记。</li>
-</ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[组合与继承的选择]]></title>
-    <link href="http://blog.kayorl.com/14874279608856.html"/>
-    <updated>2017-02-18T22:26:00+08:00</updated>
-    <id>http://blog.kayorl.com/14874279608856.html</id>
-    <content type="html"><![CDATA[
-<p>类之间的 <u>继承</u> 是<strong>is-a</strong>关系, 类之间的组合是<strong>has-a</strong> 关系<br/>
-面临这两种技术的选型时，只需要考虑一个问题：<br/>
-新类需要向上转型吗？</p>
-
-<span id="more"></span><!-- more -->
-
-<p>需要的话，选择继承。</p>
-
-<h2 id="toc_0">向上转型</h2>
-
-<p>新类转换为基类并调用基类的动作，称为<strong>向上转型</strong>。</p>
-
-<p>下面是一个例子：</p>
-
-<pre><code class="language-j">/**
- * Wind 是 Instrument 的子类，通过向上转型调用了 Instrument 的 play 方法
- */
-public class UpCast {
-    public static void main(String[] args) {
-        Wind flute=new Wind();
-        Instrument.tune(flute);
-    }
-}
-
-class Instrument {
-    void play() {};
-    static void tune(Instrument i){
-        i.play();
-    }
-}
-
-class Wind extends Instrument {
-    void play() {};
-}
-</code></pre>
-
-<h2 id="toc_1">名称屏蔽</h2>
-
-<p>Java 中， 在子类中重载方法，并<strong>不会屏蔽</strong>基类版本的方法。</p>
-
-<h2 id="toc_2">多态只限于普通的方法调用</h2>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[初始化顺序、位置]]></title>
-    <link href="http://blog.kayorl.com/14874190727983.html"/>
-    <updated>2017-02-18T19:57:52+08:00</updated>
-    <id>http://blog.kayorl.com/14874190727983.html</id>
-    <content type="html"><![CDATA[
-<h2 id="toc_0">顺序</h2>
-
-<ol>
-<li>在其他任何事物发生之前，将分配给对象的存储空间初始化为二进制的0</li>
-<li>调用基类构造器</li>
-<li>按照声明的顺序调用 成员 的初始化方法</li>
-<li>调用导出类的构造器主体</li>
-</ol>
-
-<span id="more"></span><!-- more -->
-
-<ul>
-<li>静态对象（静态数据）优先于&quot;非静态&quot;对象初始化</li>
-<li>静态对象（静态数据）在第一次被创建(访问)时初始化</li>
-</ul>
-
-<h2 id="toc_1">位置</h2>
-
-<ol>
-<li>在定义对象的地方</li>
-<li>在类的构造器中</li>
-<li>在即将使用对象之前，这种方式叫做<strong>惰性初始化</strong>, 这种方法可以减少额外负担，方式类似 如<code>if(member == null) { member = &quot;val&quot;; }</code></li>
-<li>使用实例初始化</li>
-</ol>
-
-<hr/>
-
-<pre><code class="language-j">/**
- * 验证初始化顺序
- * 1(static1) -&gt; 3(static3) -&gt; 2(public2) -&gt; 4(public4) -&gt; 5(leg1)
- */
-package fun;
-
-public class InitSequence {
-    
-    public static void init(){
-        new Tabel();
-    }
-}
-
-
-class Tabel {
-    static int static1 = 1; 
-    
-    public int public2 = 2;
-    
-    static int static3 = 3;
-    
-    public int public4 = 4;
-    
-    static Leg leg1 ;
-    
-    public Tabel(){
-        leg1 = new Leg();
-    }
-}
-
-class Leg {}
-</code></pre>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[html 的解析顺序，及 script 标签的位置选择]]></title>
-    <link href="http://blog.kayorl.com/script_position.html"/>
-    <updated>2017-02-16T20:05:35+08:00</updated>
-    <id>http://blog.kayorl.com/script_position.html</id>
-    <content type="html"><![CDATA[
-<p>读 《JavaScript高级程序设计》时，对 html 的标签解析感到模糊，参考了博文，根据理解画了以下的解析流程图，有误请指教哈~</p>
-
-<span id="more"></span><!-- more -->
-
-<p><img src="http://olh3adg9x.bkt.clouddn.com/decode_html.png" alt="decode_htm"/></p>
-
-<p>浏览器对非延迟执行的脚本都是立即执行的，导致浏览器呈现内容的速度变慢（即页面空白的时间过久），造成不好的用户体验。</p>
-
-<blockquote>
-<p>因此把所有脚本放到<body>元素的最后面</p>
-</blockquote>
-
-<p>有人说，全用 defer 脚本不就好了吗？ <br/>
-<strong><em>人无完人，defer 也有限制</em></strong></p>
-
-<blockquote>
-<p>延迟脚本直到 </html>解析完后加载;<br/>
-只有 ___一个__ defer 能按顺序执行;<br/>
-<strong>只适用于外部脚本文件</strong></p>
-</blockquote>
-
-<p>async 异步呢？其存在的目的是 <br/>
-<strong><em>不让页面等待两个脚本下载和执行</em></strong></p>
-
-<blockquote>
-<p>不保证先后顺序<br/>
-只适用于外部脚本文件</p>
-</blockquote>
 
 ]]></content>
   </entry>
@@ -1190,242 +1198,6 @@ sudo apt-get autoremove # After using any of the above commands, use this in ord
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[OC(11) 协议]]></title>
-    <link href="http://blog.kayorl.com/14872504904620.html"/>
-    <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://blog.kayorl.com/14872504904620.html</id>
-    <content type="html"><![CDATA[
-<p>采用协议就是在类的@ interface 声明中列出协议的名称<br/>
-显式地采用，承诺实现该协议的所有方法,否则,编译器会找麻烦</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">声明协议</h2>
-
-<pre><code class="language-objc">@protocal NSCopying &lt;NSObject&gt;      
-- (id) copyWithZone: (NSZone *) zone;
-@end
-</code></pre>
-
-<ul>
-<li>NSObject 在这里是一种协议</li>
-<li>尖尖括号表示继承</li>
-<li>协议中不引入新的实例变量</li>
-<li>跟<code>接口</code>的感觉好像诶</li>
-</ul>
-
-<h2 id="toc_1">采用协议</h2>
-
-<pre><code class="language-objc">@interface Car : NSObject &lt;NSCopying,NSCoding&gt;
-{
-    ...
-}
-@end
-</code></pre>
-
-<ul>
-<li>这就采用了协议了,告诉人们,这辆车可以被复制,可以被编码</li>
-</ul>
-
-<h2 id="toc_2">实现协议</h2>
-
-<ul>
-<li><code>浅层复制</code>:只复制指向现有的引用对象,不会复制引用对象的本身</li>
-<li><code>深层复制</code>:复制所有的引用对象</li>
-</ul>
-
-<h2 id="toc_3">复制 Engine</h2>
-
-<p>为了能够复制 engine 对象, Engine 类需要采用 NSCopying 协议</p>
-
-<pre><code class="language-objc">@interface Engine : NSObject &lt;NSCopying&gt;
-@end    //Engine
-</code></pre>
-
-<p>因为 Engine 类采用了 NSCopying 协议, 所以 Engine 类需要实现 copyWithZone 方法</p>
-
-<pre><code class="language-objc">@implementation Engine
-
-- (id) copyWithZone: (NSZone *) zone
-{
-    Engine *engineCopy;
-    engineCopy = [ [ [self class] allocWithZone: zone] init];
-    return (engineCopy);
-}
-</code></pre>
-
-<ul>
-<li>复制的时候, engine 并没有实例变量,因此,我们要获得一个新的 engine 对象</li>
-<li>copyWIthZone 是一个类方法</li>
-<li>兼顾到 Engine 的子类在创建对象时,只会生成 Engine 类的对象,而不是其子类的对象,所以,这样做能够预防内存溢出</li>
-<li>子类不用实现 copyWithZone 方法</li>
-</ul>
-
-<h2 id="toc_4">协议和数据类型</h2>
-
-<p>id类型是一个泛型对象类型,可以将任何对象复制给一个 id 类型的变量.</p>
-
-<p>用尖括号括起来的协议跟随在 id 之后,则编译器将知道这个方法接收任意类型的对象,前提是遵守该协议</p>
-
-<pre><code class="language-objc">- (void) setObjectValue: (id&lt;NSCopying&gt;) object;
-</code></pre>
-
-<hr/>
-
-<h2 id="toc_5">@optional 和 @require</h2>
-
-<pre><code class="language-objc">@protocal BaseballPlayer;
-- (void) drawHugeSalary;        //必须实现
-
-@optional       //可以选择实现
-- (void) slideHome;
-- (void) catchBall;
-- (void) throwBall;
-
-@require        //必须实现
-- (void) swingBat;
-@end;
-</code></pre>
-
-<hr/>
-
-<h2 id="toc_6">委托方法</h2>
-
-<p>书上写的不详细啊</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[OC(10) 类别]]></title>
-    <link href="http://blog.kayorl.com/14872504904501.html"/>
-    <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://blog.kayorl.com/14872504904501.html</id>
-    <content type="html"><![CDATA[
-<p>利用 OC 的动态运行时分配机制,可以为现有的类添加新方法(无法添加变量)<br/>
-在 OC 里, 这些方法叫做类别 (category)</p>
-
-<span id="more"></span><!-- more -->
-
-<pre><code class="language-objc">@interface NSString (NumberConvinience)
-- (NSNumber *) lengthAsNumber;
-...
-@end
-
-/****************** *****************/
-
-#import &quot;NSString+NumberConvinience.h&quot;
-
-
-@implementation NSString (NumberConvinience)
-- (NSNumber *) lengthAsNumber
-{
-    NSInteger length = [self length];
-    return ([NSNumber numberWithUnsignedInteger:length]);
-}
-@end
-</code></pre>
-
-<ul>
-<li><p>NSInteger、NSUInteger、CGFLoat不是包装类，虽然他们带有NS、CG前缀，它们并不是包装类，只是<code>基本类型</code>，它们分别大致等于：long、unsigned long和double（或float）</p></li>
-<li><p><code>任何</code> NSString 都能相应 lengthAsNumber 信息</p></li>
-<li><p>缺陷: 存在<code>名称冲突</code>,与现有的方法重名时,类别方法具有更高优先级</p></li>
-</ul>
-
-<h3 id="toc_0">类别的优势</h3>
-
-<ol>
-<li>可以将类的实现代码分散到多个不同文件或框架中</li>
-<li>创建对私有方法的前向引用</li>
-<li>向对象添加非正式协议</li>
-</ol>
-
-<h2 id="toc_1">类扩展</h2>
-
-<p>不需要名字的类别,可以添加实例变量,改变只读权限</p>
-
-<ul>
-<li>( )只是获取 thing 类</li>
-<li>用来<code>信息隐藏</code></li>
-</ul>
-
-<pre><code class="language-objc">@interface thing: NSObject
-@property (assign) NSInteger thing1;
-@property (readonly,assign) NSInteger thing2;
-...
-@end
-
-/********** 变形线  ********/
-
-@interface thing ()
-{
-    NSInteger thing4;
-}
-@property (assign) NSInteger thing1;
-@property (readWrite,assign) NSInteger thing2;
-...
-@end
-
-</code></pre>
-
-<h2 id="toc_2">优势1: 用类别分散代码</h2>
-
-<pre><code class="language-objc">@interface CategoryThing : NSObject
-{
-    NSInteger thing1;
-    NSInteger thing2;
-    NSInteger thing3;
-}
-@end
-
-@interface CategortThing (Thing1)
-- (void) setThing1: (NSInteger) things1;
-- (NSInteger)things1;
-...
-@end
-
-</code></pre>
-
-<p>以上是头文件中的内容,下面是类别 Thing1.m 文件的内容</p>
-
-<pre><code class="language-objc">#import &quot;CategoryThing.h&quot;
-@implementation CategoryThing (Thing1)
-- (void)setThing1:(NSInteger)t1
-{
-    thing1=t1;
-}
-@end;
-</code></pre>
-
-<h2 id="toc_3">优势2: 创建前向引用</h2>
-
-<p>类别中声明但在类中没有声明的方法,编译器会警告,解决问题的策略是:</p>
-
-<blockquote>
-<p>将类别置于实现文件的最前面</p>
-</blockquote>
-
-<pre><code class="language-objc">@interface Car (Private)
-{
-    //其他类别中想使用的方法
-}
-@end
-
-@implemention Car
-{
-...
-}
-@end
-</code></pre>
-
-<h2 id="toc_4">优势3:非正式协议和委托类别</h2>
-
-<p>恩,暂时跳过,感觉不严谨</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[杂]]></title>
     <link href="http://blog.kayorl.com/14872477973050.html"/>
     <updated>2017-02-16T20:23:17+08:00</updated>
@@ -1449,141 +1221,6 @@ $ sudo systemctl reload sshd
 
 <pre><code>$ sudo ../bin/redis-server ./redis.conf
 </code></pre>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[OC(9) 属性]]></title>
-    <link href="http://blog.kayorl.com/14872504904341.html"/>
-    <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://blog.kayorl.com/14872504904341.html</id>
-    <content type="html"><![CDATA[
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">@property</h2>
-
-<p>预编译指令, 自动声明属性的 setter 和 getter 方法</p>
-
-<pre><code>@interface Cube :
-{
-    float length;
-    float height;
-}
-@property float length;
-@property float height;
-...
-@end
-</code></pre>
-
-<h2 id="toc_1">@synthesize</h2>
-
-<ul>
-<li>Xcode4.5 之后不必使用@synthesize</li>
-<li>创建了该属性的访问代码,编译器将自动添加 setLength, getLength等方法 </li>
-</ul>
-
-<pre><code>@implementation Cube
-@synthesize length;
-@synthesize height;
-...
-@end
-</code></pre>
-
-<h3 id="toc_2">变量该在 头文件 还是 实现文件 中声明?</h3>
-
-<ol>
-<li>变量想被子类直接通过属性来访问,那就放在头文件中</li>
-<li>变量只限于当前类, 则放在实现文件中</li>
-</ol>
-
-<h2 id="toc_3">点表达式</h2>
-
-<p>点表达式出现在表达式左边,则是 setter 方法的调用; 在右边, 则是 getter 方法的调用</p>
-
-<pre><code>car.engine=[Engine new];    //setter
-benz.engine = car.engine;   //getter
-</code></pre>
-
-<h2 id="toc_4">属性扩展</h2>
-
-<ul>
-<li>name 使用了 copy 特性,所以编译器和类的使用者会知道 name 属性将被复制.</li>
-<li>因此,在实现中, name 属性将会自动利用 copy 的特性去复制字符串</li>
-<li>engine 使用的有保留和释放特性</li>
-</ul>
-
-<pre><code class="language-objc">@class Tire
-@class Engine
-@interface Car : NSObject
-{
-    NSString *name;
-    NSMutableArray *tires;
-    Engine *engine;
-}
-
-@property (copy) NSString *name;
-@property (retain) Engine *engine;
-...
-@end
-
-
-@implmentation Car
-...
-
-@synthesize name;
-@synthesize engine;
-
-@end
-</code></pre>
-
-<h2 id="toc_5">只读属性</h2>
-
-<h4 id="toc_6">怎么赋值只读属性呢?</h4>
-
-<p>默认情况下,属性是可变的.如果不想任何人我需改这个属性可以使用 <code>readOnly</code> 特性,这样,<br/>
-编译器会生成 getter 方法而不会生成 setter 方法.</p>
-
-<h2 id="toc_7">动态属性</h2>
-
-<p>通过使用<code>@dynamic</code> 指令来指定属性并告诉编译器不要创建变量或 getter 方法,创建出能在运行时计算值的方法</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[OC(8) 对象初始化]]></title>
-    <link href="http://blog.kayorl.com/14872504904170.html"/>
-    <updated>2017-02-16T21:08:10+08:00</updated>
-    <id>http://blog.kayorl.com/14872504904170.html</id>
-    <content type="html"><![CDATA[
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">分配对象</h2>
-
-<p>向某个类发送 alloc 消息,从操作系统获得一块内存,用来存储该<code>类</code>的全部实例变量,并且全部初始化为0</p>
-
-<h2 id="toc_1">初始化对象</h2>
-
-<p>与分配对应的操作是初始化,初始化从操作系统取得内存用于存储<code>对象</code></p>
-
-<pre><code class="language-objc">Car *car = [[Car alloc] init ];
-</code></pre>
-
-<p>而嵌套调用的原因是<code>类簇</code>问题, NSString 和 NSArray 等类知识一些特殊类的表象, init 方法可以接收参数,并检查其接收的参数,并决定返回另一个类的对象更合适.</p>
-
-<h3 id="toc_2">初始化方法</h3>
-
-<pre><code>(id) init
-{
-    if(self = [super init ])
-    ...
-}
-</code></pre>
-
-<p>这么初始化的作用是让超类完成其自身的初始化工作. 对于继承了 NSobject 的类来说,调用超类的 init 方法可以让 NSObject 执行它所需要的所有操作,以便对象能<code>响应信息并处理保留计数器</code>,而从对于从其他类继承的类,通过这种方法可以实现自身的全新初始化.</p>
-
-<p>在内存管理中, self 指针通过对象基址的偏移去操作一个对象, 代码中的<code>self =</code> 就是更新 self 指针,将其指向其超类初始化后的内存.</p>
 
 ]]></content>
   </entry>
@@ -2116,6 +1753,651 @@ Foo.build().method3()
   ]
 })
 </code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[字符数组 vs 字符串常量]]></title>
+    <link href="http://blog.kayorl.com/14872295002950.html"/>
+    <updated>2017-02-16T15:18:20+08:00</updated>
+    <id>http://blog.kayorl.com/14872295002950.html</id>
+    <content type="html"><![CDATA[
+<p>两者区别在哪？</p>
+
+<span id="more"></span><!-- more -->
+
+<p>在 C 语言中,有两种表示字符串的方法</p>
+
+<ol>
+<li>字符串数组 char str[6]=&quot;123456&quot;;</li>
+<li>字符串常量    char *str=&quot;123456&quot;;</li>
+</ol>
+
+<h2 id="toc_0">字符数组</h2>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(int argc, const char * argv[]) {
+    char str[6]=&quot;123456&quot;;
+    //%x ,十六进制
+    printf(&quot;%x\n&quot;,&amp;str);
+    printf(&quot;%x\n&quot;,str);
+    printf(&quot;%x\n&quot;,&amp;str[0]);
+    return 0;
+}
+</code></pre>
+
+<p>输出结果如下:</p>
+
+<pre><code>5fbff849    
+5fbff849
+5fbff849
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">表达</th>
+<th style="text-align: center">解释</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">&amp;str</td>
+<td style="text-align: center">str[6]=...时已为分配了6字节的内存地址给 str 数组,打印出的是首字符的内存地址</td>
+</tr>
+<tr>
+<td style="text-align: center">str</td>
+<td style="text-align: center">可以理解成数组变量退化的指针，并且指向数组的开头</td>
+</tr>
+<tr>
+<td style="text-align: center">&amp;str[0]</td>
+<td style="text-align: center">数组中第一个字符的内存地址</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_1">字符串常量</h2>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(int argc, const char * argv[]) {
+    char *str;
+    str=&quot;123456&quot;;
+    //
+    //等价
+    //char *str=&quot;123456&quot;;
+    //
+    printf(&quot;%x\n&quot;,&amp;str);
+    printf(&quot;%x\n&quot;,str);
+    printf(&quot;%x\n&quot;,&amp;str[0]);
+    return 0;
+}
+</code></pre>
+
+<p>输出结果如下</p>
+
+<pre><code>5fbff848
+f92
+f92
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">表达</th>
+<th style="text-align: center">解释</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">&amp;str</td>
+<td style="text-align: center">char *str=&quot;123456&quot; , 声明了一个 char 类型的指针变量,该指针指向存放&quot;123456&quot;内存地址,所以该指针变量的地址跟下面两个不一样</td>
+</tr>
+<tr>
+<td style="text-align: center">str</td>
+<td style="text-align: center">指针变量所指地址空间的内存地址</td>
+</tr>
+<tr>
+<td style="text-align: center">&amp;str[0]</td>
+<td style="text-align: center">数组中第一个字符的内存地址</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_2">区别</h2>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left">方式</th>
+<th style="text-align: center">存储位置</th>
+<th style="text-align: right">权限</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: left">字符数组</td>
+<td style="text-align: center">全局数据区或栈区</td>
+<td style="text-align: right">读取,写入</td>
+</tr>
+<tr>
+<td style="text-align: left">字符串常量</td>
+<td style="text-align: center">常量</td>
+<td style="text-align: right">读取</td>
+</tr>
+</tbody>
+</table>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[译] Sequelize(1)  让Node操作MySQL更方便]]></title>
+    <link href="http://blog.kayorl.com/14872314142143.html"/>
+    <updated>2017-02-16T15:50:14+08:00</updated>
+    <id>http://blog.kayorl.com/14872314142143.html</id>
+    <content type="html"><![CDATA[
+<p>Sequelize是一种为 Node.js 和 io.js  提供 promise-based 的 的<code>对象关系映射</code>（ORM），支持  PostgreSQL, <code>MySQL</code>, MariaDB, SQLite 和 MSSQL 等数据库管理系统 ，同时提供 <code>事务支持</code>，<code>关系</code>，<code>复制</code>还有其他等特性. </p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">ORM</h2>
+
+<p><a href="https://zh.wikipedia.org/wiki/%E5%AF%B9%E8%B1%A1%E5%85%B3%E7%B3%BB%E6%98%A0%E5%B0%84">对象关系映射</a>（英语：Object Relational Mapping，简称ORM），是一种程序设计技术，用于实现面向对象编程语言里不同类型系统的数据之间的转换。从效果上说，它其实是创建了一个可在编程语言里使用的“虚拟对象数据库”。</p>
+
+<h2 id="toc_1">例子（ mysql 为例 ）</h2>
+
+<pre><code class="language-js">var Sequelize = require(&#39;sequelize&#39;);
+var sequelize = new Sequelize(&#39;database&#39;, &#39;username&#39;, &#39;password&#39;);
+
+var User = sequelize.define(&#39;user&#39;, {
+  username: Sequelize.STRING,
+  birthday: Sequelize.DATE
+});
+
+sequelize.sync().then(function() {
+  return User.create({
+    username: &#39;janedoe&#39;,
+    birthday: new Date(1980, 6, 20)
+  });
+}).then(function(jane) {
+  console.log(jane.get({
+    plain: true
+  }));
+});
+</code></pre>
+
+<p></br></p>
+
+<h2 id="toc_2">安装</h2>
+
+<pre><code>$ npm install --save sequelize
+$ npm install --save mysql
+</code></pre>
+
+<p></br></p>
+
+<h2 id="toc_3">建立连接</h2>
+
+<pre><code class="language-js">var sequelize = new Sequelize(&#39;database&#39;, &#39;username&#39;, &#39;password&#39;, {
+  host: &#39;localhost&#39;,
+  /* 数据库类型 */
+  dialect: &#39;mysql&#39; 
+});
+</code></pre>
+
+<p></br></p>
+
+<h2 id="toc_4">第一个模型</h2>
+
+<p>定义模型： <code>sequelize.define(&#39;name&#39;, {attributes}, {options})</code></p>
+
+<pre><code class="language-js">var User = sequelize.define(&#39;user&#39;, {
+  firstName: {
+    type: Sequelize.STRING,
+    /* User模型拥有firstName属性，在数据库中相应的属性为first_name  */
+    field: &#39;first_name&#39;   
+    },
+  lastName: {
+    type: Sequelize.STRING
+  }
+}, {
+  /* 数据库表名与模型名字一致 */
+  freezeTableName: true 
+});
+
+User.sync({force: true}).then(function () {
+  // Table created
+  return User.create({
+    firstName: &#39;kayor&#39;,
+    lastName: &#39;lien&#39;
+  });
+});
+</code></pre>
+
+<p>按照以前的习惯,我们可能会通过下面这种方式来获取<code>user</code>.</p>
+
+<pre><code class="language-js">// DON&#39;T DO THIS !!!
+
+user = User.findOne()
+
+console.log(user.get(&#39;firstName&#39;));
+</code></pre>
+
+<p></br></p>
+
+<p>然而这行不通(不信去试试😝)</p>
+
+<p>为什么呢? 接下来引入一个概念</p>
+
+<h2 id="toc_5">Promises</h2>
+
+<p>Sequelize 使用 Promises 控制异步流。 可以看看 <a href="14872467449529.html">Promises 解决Node无限回调</a></p>
+
+<blockquote>
+<p><a href="https://www.promisejs.org/">Promises</a>的核心是:</p>
+
+<p>一个 promise 代表了<strong>异步运算的结果</strong>，它有三种状态：</p>
+</blockquote>
+
+<ul>
+<li>pending - promise 的初始状态（即将发生）</li>
+<li>fulfilled  - 一次成功运算后 promise 的状态</li>
+<li>rejected - 一次失败运算后 promise 的状态</li>
+</ul>
+
+<pre><code class="language-js">function readFile(filename, enc){
+  /*  
+   *使用 new promise 构建一个新的 promise  */
+  return new Promise(function (fulfill, reject){
+    fs.readFile(filename, enc, function (err, res){
+      if (err) reject(err);         //失败运算
+      else fulfill(res);            //成功运算
+    });
+  });
+}
+</code></pre>
+
+<p><code>user</code>是一个 promise 对象， 不是数据库的对象，正确的打开姿势是，在获取到<code>user</code>的状态（如 fulfilled, rejected ）后，对其进行操作：</p>
+
+<pre><code class="language-js">User.findOne().then(function (user) {
+    console.log(user.get(&#39;firstName&#39;));
+});
+</code></pre>
+
+<hr/>
+
+<p>本文参考: <a href="http://docs.sequelizejs.com/en/v3/">Sequelize</a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MySQL 数据类型]]></title>
+    <link href="http://blog.kayorl.com/14872295002814.html"/>
+    <updated>2017-02-16T15:18:20+08:00</updated>
+    <id>http://blog.kayorl.com/14872295002814.html</id>
+    <content type="html"><![CDATA[
+<p>blob ？显示宽度？</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">属性</h2>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left">类型</th>
+<th style="text-align: center">简写</th>
+<th style="text-align: center">作用</th>
+<th style="text-align: right">适用范围</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: left">UNSIGNED</td>
+<td style="text-align: center">UN</td>
+<td style="text-align: center">防止出现负值</td>
+<td style="text-align: right">除 BIT 以外</td>
+</tr>
+<tr>
+<td style="text-align: left">ZEROFILL</td>
+<td style="text-align: center">ZF</td>
+<td style="text-align: center">在列里的显示值前填充若干个0 (与显示宽度相关)</td>
+<td style="text-align: right">除 BIT 以外</td>
+</tr>
+<tr>
+<td style="text-align: left">AUTO_INCREMENT</td>
+<td style="text-align: center">AI</td>
+<td style="text-align: center">表示该列存放的是序号( ID ).如果没为 ID 列提供值,那 MySQL 会<code>自动生成</code>下一个编号.删除某几行后,删除的序号可能会被再使用,得看使用的引擎</td>
+<td style="text-align: right">一般用于整数 且有 <code>NOT NULL</code>(自动隐式添加) 和 <code>UNSIGNED</code> 属性</td>
+</tr>
+<tr>
+<td style="text-align: left">NULL/NOT NULL</td>
+<td style="text-align: center">NN</td>
+<td style="text-align: center">指定列能否为 NULL</td>
+<td style="text-align: right">除了 有 <code>AI</code> 的列</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_1">数字</h2>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left">类型</th>
+<th style="text-align: center">范围  ( 无符号 , 0~ )</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: left">TINYINT (M)</td>
+<td style="text-align: center">255</td>
+</tr>
+<tr>
+<td style="text-align: left">SMALLINT (M)</td>
+<td style="text-align: center">65535</td>
+</tr>
+<tr>
+<td style="text-align: left">MEDIUMINT (M)</td>
+<td style="text-align: center">16777215</td>
+</tr>
+<tr>
+<td style="text-align: left">INT (M)</td>
+<td style="text-align: center">2ˆ32-1</td>
+</tr>
+<tr>
+<td style="text-align: left">BIGINT  (M)</td>
+<td style="text-align: center">2ˆ64-1</td>
+</tr>
+<tr>
+<td style="text-align: left">DECIMAL ( [ M [ ,D ] ] )</td>
+<td style="text-align: center">由 M 和 D 的值决定</td>
+</tr>
+<tr>
+<td style="text-align: left">FLOAT  ( [ M [ ,D ] ] )</td>
+<td style="text-align: center">最大非零: ±3.402823466E+38</td>
+</tr>
+<tr>
+<td style="text-align: left">DOUBLE  ( [ M [ ,D ] ] )</td>
+<td style="text-align: center">最大非零: ± 1.7976931348623157E+308</td>
+</tr>
+<tr>
+<td style="text-align: left">BIT  ([M])</td>
+<td style="text-align: center">2ˆM-1,  1&lt;= M &lt;= 64</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>D</code> : 数学精确度,即小数点后的数字个数<br/>
+<code>M</code> : 显示宽度,为1~255 的整数.决定 MySQL 用多少个字符<code>显示</code>该列的值,与<code>存储该值所需的字节存储空间无关</code>,默认为最长值的长度 . 一般结合 <code>ZEROFILL</code> 使用</p>
+
+<p><strong>举例</strong> <br/>
+INT(2)的列,每个值仍占用<code>4个字节</code> (32bit) 的空间,假设有一个值取为2,那么将会显示 02 </p>
+
+<hr/>
+
+<h2 id="toc_2">字符串</h2>
+
+<p>MySQL字符串可以表示任何值, 它实际上是一种 &quot;泛型&quot; 类型.例如,可以用二进制串存储二进制数据,如图像,声音,压缩后的gzip 输出.</p>
+
+<ul>
+<li><code>二进制串</code>: 01010101010</li>
+<li>非二进制串: ......</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">类型</th>
+<th style="text-align: center">存储二进制串</th>
+<th style="text-align: center">最大长度 (字节)</th>
+<th style="text-align: center">存储空间要求 (字节)</th>
+<th style="text-align: center">说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center"><code>BINARY[(M)]</code></td>
+<td style="text-align: center">√</td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">M : 表示该列值的最大长度 (二进制串以字节为长度,非二进制串以字符单位)</td>
+</tr>
+<tr>
+<td style="text-align: center">CHAR[(M)]</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">M  x  w</td>
+<td style="text-align: center">w : 表示列字符集里<code>最&quot;宽&quot;</code>字符占用的字节数(定长补足用)</td>
+</tr>
+<tr>
+<td style="text-align: center"><code>VARBINARY(M)</code></td>
+<td style="text-align: center">√</td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">L+1 or L+2</td>
+<td style="text-align: center">L : 表示某个<code>给定值</code>的字节长度</td>
+</tr>
+<tr>
+<td style="text-align: center">VARCHAR(M)</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">L+1 or L+2</td>
+<td style="text-align: center"></td>
+</tr>
+<tr>
+<td style="text-align: center"><code>BLOB(binary large object)</code></td>
+<td style="text-align: center">√</td>
+<td style="text-align: center">2ˆ16-1</td>
+<td style="text-align: center">L+2</td>
+<td style="text-align: center">可以存储大对象(4 GB),字节为单位</td>
+</tr>
+<tr>
+<td style="text-align: center">TEXT</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">2ˆ16-1</td>
+<td style="text-align: center">L+2</td>
+<td style="text-align: center">字符为单位</td>
+</tr>
+<tr>
+<td style="text-align: center">ENUM(&#39;value1&#39;,&#39;value2&#39;,...)</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">65535个成员</td>
+<td style="text-align: center">1 or 2</td>
+<td style="text-align: center">定义的值顺序就是排序所用的顺序</td>
+</tr>
+<tr>
+<td style="text-align: center">SET(&#39;value1&#39;,&#39;value2&#39;,...)</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">64个成员</td>
+<td style="text-align: center">1,2,3,4,8</td>
+<td style="text-align: center"></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>BLOB 和 TEXT 列能否被索引取决于存储引擎,如果用 InnoDB 和 MyISAM, 必须制定一个前缀长度,方便索引.可以避免创建出可能过大的索引,那样会抵消索引带来的好处. 比较特殊的是 TEXT 列的 <code>FULLTEXT</code> 索引以索引列的完整内容为基础,自动忽略指定的前缀长度</li>
+<li>BLOB,TEXT 在多次操作之后会产生大量碎片,如果用 MyISAM 来存储 BLOB 或 TEXT, 那么定期运行 <code>OPTIMIZE TABLE</code> 可以减少碎片,改善系统性能</li>
+</ul>
+
+<hr/>
+
+<h2 id="toc_3">时态</h2>
+
+<ul>
+<li>fsp: 小数秒精度</li>
+<li>时态列的定义可以包含通用属性 NULL 或 NOT NULL. 如果都不指定, 则默认为 NULL. </li>
+<li>TIMESTAMP 和 DATETIME 有自动初始化属性和自动更新属性</li>
+<li>TIMESTAMP 的<code>默认值</code>为 NOT NULL, 如果设置为 NULL, 那么它的值会被设置为当前时间戳</li>
+<li>TIMESTAMP 不能设置为 <code>DEFAULT 0</code>,严格模式下会报错</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">类型</th>
+<th style="text-align: center">范围</th>
+<th style="text-align: center">存储要求(字节)(5.6.4以后)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">DATE</td>
+<td style="text-align: center">1000-01-01 ~ 9999-12-31</td>
+<td style="text-align: center">3</td>
+</tr>
+<tr>
+<td style="text-align: center">TIME</td>
+<td style="text-align: center">-838:59:59[.000000] ~ 838:59:59[.000000]</td>
+<td style="text-align: center">3 + fsp</td>
+</tr>
+<tr>
+<td style="text-align: center">DATETIME</td>
+<td style="text-align: center">1000-01-01 00:00:00[.000000] ~ 9999-12-31 23.59.59[.999999]</td>
+<td style="text-align: center">3 + fsp</td>
+</tr>
+<tr>
+<td style="text-align: center">TIMESTAMP</td>
+<td style="text-align: center">1970-01-01 00:00:00[.000000] ~ 2038-01-19 03:14:07[.999999]</td>
+<td style="text-align: center">4 + fsp</td>
+</tr>
+<tr>
+<td style="text-align: center">YEAR</td>
+<td style="text-align: center">1901~2155</td>
+<td style="text-align: center">1</td>
+</tr>
+</tbody>
+</table>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Promises 解决Node无限回调]]></title>
+    <link href="http://blog.kayorl.com/14872467449529.html"/>
+    <updated>2017-02-16T20:05:44+08:00</updated>
+    <id>http://blog.kayorl.com/14872467449529.html</id>
+    <content type="html"><![CDATA[
+<p>Promises 是异步代码（如 Node.js） 实现控制流的方式， 可以让代码更干净，可读。</p>
+
+<span id="more"></span><!-- more -->
+
+<p>利用 Promises 可以将</p>
+
+<pre><code class="language-js">fs.readFile(&quot;file.json&quot;, function (err, val) {
+    if (err) {
+        console.error(&quot;unable to read file&quot;);
+    }
+    else {
+        try {
+            val = JSON.parse(val);
+            console.log(val.success);
+        }
+        catch (e) {
+            console.error(&quot;invalid json in file&quot;);
+        }
+    }
+});
+</code></pre>
+
+<p>转化成</p>
+
+<pre><code class="language-js">fs.readFileAsync(&quot;file.json&quot;).then(JSON.parse).then(function (val) {
+    console.log(val.success);
+})
+.catch(SyntaxError, function (e) {
+    console.error(&quot;invalid json in file&quot;);
+})
+.catch(function (e) {
+    console.error(&quot;unable to read file&quot;);
+});
+</code></pre>
+
+<p></br><br/>
+然而 核心模块 <code>fs</code> 并没有 <code>readFileAsync</code> 方法, 可以使用 <a href="http://bluebirdjs.com/docs/api/promisification.html">promisfication</a> 大法.</p>
+
+<h2 id="toc_0">Promisfication</h2>
+
+<p>Promisfication 可以转化已存在的 promise-unaware API  为 promise-returning API</p>
+
+<p>通常 Node 使用 promises 的办法是去 <code>Promise.promisifyAll</code> 一些 API</p>
+
+<pre><code class="language-js">var fs = require(&quot;fs&quot;);
+Promise.promisifyAll(fs);
+
+fs.readFileAsync(&quot;file.js&quot;, &quot;utf8&quot;).then(...)
+</code></pre>
+
+<p>要注意到这是特殊状况, 因为 <code>fs</code> 是一个单例.  大多数库能够通过 <code>require</code> 一些库里的类(构造函数)和在 <code>.prototype</code>上调用 promisify 对该实例 promise 化.</p>
+
+<p>每个实例的 promise 化在应用的生命周期内只需被调用一次,此后依据该实例原来的文档进行操作, <code>除了在方法后面增加Async 和用 promise 接口替代原来的 callback 接口</code>.</p>
+
+<pre><code class="language-js">// Mysql 模块
+var Promise = require(&quot;bluebird&quot;);
+//
+// 库里面的类并不是模块直接导出,所以需要手动的require
+//
+Promise.promisifyAll(require(&quot;mysql/lib/Connection&quot;).prototype);
+Promise.promisifyAll(require(&quot;mysql/lib/Pool&quot;).prototype);
+</code></pre>
+
+<p>参考<a href="http://bluebirdjs.com/docs/why-promises.html">bluebirkjs</a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MySQL 术语]]></title>
+    <link href="http://blog.kayorl.com/14872294485144.html"/>
+    <updated>2017-02-16T15:17:28+08:00</updated>
+    <id>http://blog.kayorl.com/14872294485144.html</id>
+    <content type="html"><![CDATA[
+<p>MySQL？mysql？ 什么来的</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">结构术语</h2>
+
+<p>MySQL被划分为关系数据库管理系统(<code>RDBMS</code>)</p>
+
+<ul>
+<li>数据库(DataBase, <code>DB</code> ), 是以用来存储信息的仓库,他的结构简单,规则.</li>
+<li>管理系统(Manage System, <code>MS</code> ) , 是一个软件,可以通过它来 insert, retrieve, modify, 或者 delete 记录.</li>
+<li>关系(Relational, <code>R</code> ), 表示这是一种特殊的 DBMS, 可以将多个表通过联系链接起来.</li>
+</ul>
+
+<h2 id="toc_1">MySQL 的查询结构术语</h2>
+
+<p>使用 MySQL 的时候,实际上至少会用到两个程序,因为 MySQL 采用的是 <code>CS</code> 体系结构.</p>
+
+<ul>
+<li><code>mysqld</code> : MySQL 服务器,它运行在存放数据库的机器上,提供服务</li>
+<li><code>MySQL 客户端</code> : 它负责连接到数据库服务器,并发起请求</li>
+</ul>
+
+<p>这种结构有下面的好处:</p>
+
+<ul>
+<li>服务器强制执行<code>并发控制</code>,可以防止两个用户修改同一条数据库.所有请求都会经过服务器,由服务器安排先后顺序</li>
+</ul>
+
+<blockquote>
+<p>MySQL与 mysql 的差异:</p>
+</blockquote>
+
+<ul>
+<li>MySQL, 是 RDBMS </li>
+<li>mysql, 是 客户端程序(运行在命令行中的)</li>
+</ul>
 
 ]]></content>
   </entry>

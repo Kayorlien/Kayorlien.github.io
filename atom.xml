@@ -4,7 +4,7 @@
   <title><![CDATA[几谷 博客]]></title>
   <link href="http://blog.kayorl.com/atom.xml" rel="self"/>
   <link href="http://blog.kayorl.com/"/>
-  <updated>2017-03-08T13:02:40+08:00</updated>
+  <updated>2017-03-08T13:02:52+08:00</updated>
   <id>http://blog.kayorl.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -13,7 +13,151 @@
   <generator uri="http://www.mweb.im/">MWeb</generator>
   
   <entry>
-    <title type="html"><![CDATA[数据类型]]></title>
+    <title type="html"><![CDATA[JavaScript 中，静若处子动若脱兔的函数]]></title>
+    <link href="http://blog.kayorl.com/14889550410525.html"/>
+    <updated>2017-03-08T14:37:21+08:00</updated>
+    <id>http://blog.kayorl.com/14889550410525.html</id>
+    <content type="html"><![CDATA[
+<p>学会使用大杀器，走遍天下都不怕</p>
+
+<span id="more"></span><!-- more -->
+
+<ol>
+<li>函数名是变量，函数是值</li>
+<li>可以把变量（函数名）作为参数使用</li>
+</ol>
+
+<pre><code class="language-js">function add1 (num){
+    return num;
+}
+
+function callFunc(func,num){
+    return func(num);
+}
+
+callFunc(add1,2);
+
+</code></pre>
+
+<h2 id="toc_0">所有函数的参数都是按值传递的，包括对象</h2>
+
+<p>局部作用域中修改的 <strong>对象</strong> 会在全局作用域中体现出来, <u>无法说明参数是按引用传递的</u>;对此的解释是<br/>
+如果是按值传递的话，那么打印结果应该是 alien ,但实际结果是 cowboy，<br/>
+说明</p>
+
+<blockquote>
+<p>对象不是按引用传递的</p>
+</blockquote>
+
+<pre><code class="language-js">function setName(obj){
+    obj.name = &quot;cowboy&quot;; // 参数值被修改，原始引用不变
+    obj= new Object();   // obj 被重写后引用的是局部对象了，并不是传入的 person
+    obj.name = &quot;alien&quot;;
+} // 执行完后的 obj 会被销毁
+
+var person = new Object();
+setName( person );
+alert( person.name );    // &quot;cowboy&quot;
+</code></pre>
+
+<h2 id="toc_1">用 instanceof 检测引用类型</h2>
+
+<blockquote>
+<p>typeof 只用于检测基本数据类型 （Boolean，String，Number，undefined，null 等）</p>
+</blockquote>
+
+<pre><code class="language-js">alert( person instanceof Object);
+</code></pre>
+
+<h2 id="toc_2">函数内部的</h2>
+
+<h3 id="toc_3">对象</h3>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">类别</th>
+<th style="text-align: center">名称</th>
+<th style="text-align: center">意义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center"> 内部属性</td>
+<td style="text-align: center">  arguments</td>
+<td style="text-align: center">该对象有属性 callee 指向函数本身，~严格模式下调用 callee 会导致错误~</td>
+</tr>
+<tr>
+<td style="text-align: center"> 内部属性</td>
+<td style="text-align: center">this</td>
+<td style="text-align: center">指向环境对象</td>
+</tr>
+<tr>
+<td style="text-align: center">对象属性</td>
+<td style="text-align: center">length</td>
+<td style="text-align: center"> 函数希望接收的命名参数的个数</td>
+</tr>
+<tr>
+<td style="text-align: center">对象属性</td>
+<td style="text-align: center"> prototype</td>
+<td style="text-align: center">保存所有实例方法</td>
+</tr>
+<tr>
+<td style="text-align: center">方法</td>
+<td style="text-align: center"> <code>apply(scope, array)</code></td>
+<td style="text-align: center">设置函数体内 this 对象的值，扩充函数运行的作用域</td>
+</tr>
+<tr>
+<td style="text-align: center">方法</td>
+<td style="text-align: center"><code>call(scope, arg1,arg2,..)</code></td>
+<td style="text-align: center">设置函数体内 this 对象的值，扩充函数运行的作用域</td>
+</tr>
+<tr>
+<td style="text-align: center">方法(ES5)</td>
+<td style="text-align: center"><code>bind(scope)</code></td>
+<td style="text-align: center">创建一个函数的实例</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-js">// arguments.callee
+function factorial(num) {
+    if( num &lt;= 1 ) {
+        return 1;
+    }else{
+        return arguments.callee(num-1); // 解耦，改变函数名时不用都改变
+    }
+}
+
+// .length
+alert(factorial.length); //希望接收参数数量为1
+</code></pre>
+
+<blockquote>
+<p>利用 <code>apply()</code> 与 <code>call()</code>  可以将对象与方法解耦</p>
+</blockquote>
+
+<pre><code class="language-js">// 扩充函数运行作用域
+window.color = &quot;red&quot; ; 
+var o = { color: &quot;blue&quot;};
+
+function sayColor(){ alert(this.color); }
+
+sayColor();             //red
+sayColor.call(this);    //red
+sayColor.call(window);  //red
+sayColor.call(o);       //blue
+
+var objectSayColor = sayColor.bind(o);
+objectSayColor();       //blue
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[了解 JavaScript 数据类型的性格]]></title>
     <link href="http://blog.kayorl.com/datatype.html"/>
     <updated>2017-02-16T20:05:35+08:00</updated>
     <id>http://blog.kayorl.com/datatype.html</id>
@@ -22,7 +166,7 @@
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">Undefined类型，只有一个值 undefined</h2>
+<h2 id="toc_0">Undefined 类型，只有一个值 undefined</h2>
 
 <ol>
 <li>声明，但不赋值变量，默认值为 undefined</li>
@@ -38,7 +182,7 @@ alert (typeof undefined);   // undefined
 alert (typeof undefined);   // undefined
 </code></pre>
 
-<h2 id="toc_1">Null类型, 只有一个值 null</h2>
+<h2 id="toc_1">Null 类型, 只有一个值 null</h2>
 
 <ol>
 <li>null 表示一个空对象指针 </li>
@@ -53,7 +197,7 @@ if ( car ! = null ) {
 }
 </code></pre>
 
-<h2 id="toc_2">Number</h2>
+<h2 id="toc_2">Number 类型</h2>
 
 <ol>
 <li>浮点运算会产生误差，不要测定特定的浮点数值</li>

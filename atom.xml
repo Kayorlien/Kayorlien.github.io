@@ -4,7 +4,7 @@
   <title><![CDATA[几谷 博客]]></title>
   <link href="http://blog.kayorl.com/atom.xml" rel="self"/>
   <link href="http://blog.kayorl.com/"/>
-  <updated>2017-03-08T13:02:52+08:00</updated>
+  <updated>2017-03-15T15:59:08+08:00</updated>
   <id>http://blog.kayorl.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -13,41 +13,123 @@
   <generator uri="http://www.mweb.im/">MWeb</generator>
   
   <entry>
-    <title type="html"><![CDATA[JavaScript 中，静若处子动若脱兔的函数]]></title>
-    <link href="http://blog.kayorl.com/14889550410525.html"/>
-    <updated>2017-03-08T14:37:21+08:00</updated>
-    <id>http://blog.kayorl.com/14889550410525.html</id>
+    <title type="html"><![CDATA[对象属性的特征值]]></title>
+    <link href="http://blog.kayorl.com/character.html"/>
+    <updated>2017-03-15T14:37:18+08:00</updated>
+    <id>http://blog.kayorl.com/character.html</id>
     <content type="html"><![CDATA[
-<p>学会使用大杀器，走遍天下都不怕</p>
+<pre><code>Uncaught TypeError: Cannot redefine property: name
+</code></pre>
+
+<p>这里讨论的，是对象属性的特征值。</p>
 
 <span id="more"></span><!-- more -->
 
-<ol>
-<li>函数名是变量，函数是值</li>
-<li>可以把变量（函数名）作为参数使用</li>
-</ol>
+<h2 id="toc_0">数据属性</h2>
 
-<pre><code class="language-js">function add1 (num){
-    return num;
-}
+<table>
+<thead>
+<tr>
+<th style="text-align: center">属性特征</th>
+<th style="text-align: center">意义</th>
+<th style="text-align: center">默认值</th>
+</tr>
+</thead>
 
-function callFunc(func,num){
-    return func(num);
-}
+<tbody>
+<tr>
+<td style="text-align: center">[[Configurable]]</td>
+<td style="text-align: center">能否通过 delete 删除属性从而重新定义属性</td>
+<td style="text-align: center">字面量定义时，true</td>
+</tr>
+<tr>
+<td style="text-align: center">[[Enumerable]]</td>
+<td style="text-align: center">能否通过 for-in 循环返回属性</td>
+<td style="text-align: center">字面量定义时，true</td>
+</tr>
+<tr>
+<td style="text-align: center">[[Writable]]</td>
+<td style="text-align: center">表示能否修改属性的值</td>
+<td style="text-align: center">字面量定义时，true</td>
+</tr>
+<tr>
+<td style="text-align: center">[[Value]]</td>
+<td style="text-align: center">包含这个属性的数据值</td>
+<td style="text-align: center"> undefined</td>
+</tr>
+</tbody>
+</table>
 
-callFunc(add1,2);
+<pre><code class="language-js">var person = {};
+
+
+/* 测试[[ Value ]] ，[[ Value ]]特性被设置为&quot;kayor&quot; */
+Object.defineProperty(person,&quot;name&quot;,{
+    configurable : false,
+    writable : false,
+    value : &quot;kayor&quot;         
+});
+
+
+/* 测试 [[ Writable ]]，写入 name 属性 无效 */
+alert( person.name );       // &quot;kayor&quot;
+person.name= &quot;k&quot;;           
+alert( person.name );       // &quot;kayor&quot;
+
+
+/* 测试 [[ Configurable ]] ，无法修改 name 属性的特性 */
+// Uncaught TypeError: Cannot redefine property
+Object.defineProperty(person,&quot;name&quot;,{
+    configurable : true,    
+    value : &quot;kayor&quot; 
+
+});
 
 </code></pre>
 
+<h2 id="toc_1">访问器属性</h2>
+
+<p>访问器属性不包含数据值， 只有 getter 和 setter 函数。<br/>
+访问器属性不能直接定义，必须使用 <code>Object.defineProperty(){}</code> 定义</p>
+
+<pre><code class="language-js">var book = {
+    _year : 2004,       //下划线表示 只能通过对象方法访问的属性
+    edition: 1
+};
+
+
+Object.defineProperty(book, &quot;year&quot;, {
+    get : function() {
+        return this._year;
+    },
+    set : function(newValue) {
+    
+        if(newValue &gt; 2016 ) {
+            this._year= newValue;
+            this.edition += newValue - 2016;
+        }
+    }
+});
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[function 背后隐藏着什么秘密]]></title>
+    <link href="http://blog.kayorl.com/function.html"/>
+    <updated>2017-03-08T14:37:21+08:00</updated>
+    <id>http://blog.kayorl.com/function.html</id>
+    <content type="html"><![CDATA[
+<p><del>恩，对象肯定是按引用传递的</del></p>
+
+<span id="more"></span><!-- more -->
+
 <h2 id="toc_0">所有函数的参数都是按值传递的，包括对象</h2>
 
-<p>局部作用域中修改的 <strong>对象</strong> 会在全局作用域中体现出来, <u>无法说明参数是按引用传递的</u>;对此的解释是<br/>
-如果是按值传递的话，那么打印结果应该是 alien ,但实际结果是 cowboy，<br/>
-说明</p>
+<p>局部作用域中修改的 <strong>对象</strong> 会在全局作用域中体现出来, <u>并无法说明参数是按引用传递的</u>;</p>
 
-<blockquote>
-<p>对象不是按引用传递的</p>
-</blockquote>
+<p>做一番假设：如果是按值传递的话，那么下面代码打印结果应该是 alien </p>
 
 <pre><code class="language-js">function setName(obj){
     obj.name = &quot;cowboy&quot;; // 参数值被修改，原始引用不变
@@ -60,18 +142,13 @@ setName( person );
 alert( person.name );    // &quot;cowboy&quot;
 </code></pre>
 
-<h2 id="toc_1">用 instanceof 检测引用类型</h2>
+<p>但实际结果是 cowboy，说明</p>
 
 <blockquote>
-<p>typeof 只用于检测基本数据类型 （Boolean，String，Number，undefined，null 等）</p>
+<p>对象不是按引用传递的。</p>
 </blockquote>
 
-<pre><code class="language-js">alert( person instanceof Object);
-</code></pre>
-
-<h2 id="toc_2">函数内部的</h2>
-
-<h3 id="toc_3">对象</h3>
+<h2 id="toc_1">函数内部对象及函数方法</h2>
 
 <table>
 <thead>
@@ -84,22 +161,22 @@ alert( person.name );    // &quot;cowboy&quot;
 
 <tbody>
 <tr>
-<td style="text-align: center"> 内部属性</td>
+<td style="text-align: center"> 内部对象</td>
 <td style="text-align: center">  arguments</td>
-<td style="text-align: center">该对象有属性 callee 指向函数本身，~严格模式下调用 callee 会导致错误~</td>
+<td style="text-align: center">该对象有属性 callee 指向函数本身，<del>严格模式下调用 callee 会导致错误</del></td>
 </tr>
 <tr>
-<td style="text-align: center"> 内部属性</td>
+<td style="text-align: center"> 内部对象</td>
 <td style="text-align: center">this</td>
 <td style="text-align: center">指向环境对象</td>
 </tr>
 <tr>
-<td style="text-align: center">对象属性</td>
+<td style="text-align: center">属性</td>
 <td style="text-align: center">length</td>
 <td style="text-align: center"> 函数希望接收的命名参数的个数</td>
 </tr>
 <tr>
-<td style="text-align: center">对象属性</td>
+<td style="text-align: center">属性</td>
 <td style="text-align: center"> prototype</td>
 <td style="text-align: center">保存所有实例方法</td>
 </tr>
@@ -157,7 +234,7 @@ objectSayColor();       //blue
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[了解 JavaScript 数据类型的性格]]></title>
+    <title type="html"><![CDATA[JavaScript 数据类型 之 性格]]></title>
     <link href="http://blog.kayorl.com/datatype.html"/>
     <updated>2017-02-16T20:05:35+08:00</updated>
     <id>http://blog.kayorl.com/datatype.html</id>
@@ -341,10 +418,10 @@ if ( car ! = null ) {
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[html 的解析顺序，及 script 标签的位置选择]]></title>
-    <link href="http://blog.kayorl.com/script_position.html"/>
+    <title type="html"><![CDATA[html 文档的解析，及 script 标签位置的选择]]></title>
+    <link href="http://blog.kayorl.com/html-decode.html"/>
     <updated>2017-02-16T20:05:35+08:00</updated>
-    <id>http://blog.kayorl.com/script_position.html</id>
+    <id>http://blog.kayorl.com/html-decode.html</id>
     <content type="html"><![CDATA[
 <p>读 《JavaScript高级程序设计》时，对 html 的标签解析感到模糊，参考了博文，根据理解画了以下的解析流程图，有误请指教哈~</p>
 
@@ -355,20 +432,18 @@ if ( car ! = null ) {
 <p>浏览器对非延迟执行的脚本都是立即执行的，导致浏览器呈现内容的速度变慢（即页面空白的时间过久），造成不好的用户体验。</p>
 
 <blockquote>
-<p>因此把所有脚本放到<body>元素的最后面</p>
+<p>因此把所有脚本放到<code>&lt;body&gt;</code>元素的最后面</p>
 </blockquote>
 
-<p>有人说，全用 defer 脚本不就好了吗？ <br/>
-<strong><em>人无完人，defer 也有限制</em></strong></p>
+<p>有人说，全用 defer 脚本不就好了吗？  <strong><em>人无完人，defer 也有限制</em></strong></p>
 
 <blockquote>
-<p>延迟脚本直到 </html>解析完后加载;<br/>
-只有 ___一个__ defer 能按顺序执行;<br/>
-<strong>只适用于外部脚本文件</strong></p>
+<p>延迟脚本直到 <code>&lt;/html&gt;</code> 标签解析完后加载;<br/>
+<u>只有一个</u> 延迟脚本能按顺序执行;<br/>
+只适用于外部脚本文件</p>
 </blockquote>
 
-<p>async 异步呢？其存在的目的是 <br/>
-<strong><em>不让页面等待两个脚本下载和执行</em></strong></p>
+<p>async 异步呢？其存在的目的是 <strong><em>不让页面等待两个脚本下载和执行</em></strong></p>
 
 <blockquote>
 <p>不保证先后顺序<br/>
@@ -2495,53 +2570,6 @@ Promise.promisifyAll(require(&quot;mysql/lib/Pool&quot;).prototype);
 </code></pre>
 
 <p>参考<a href="http://bluebirdjs.com/docs/why-promises.html">bluebirkjs</a></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MySQL 术语]]></title>
-    <link href="http://blog.kayorl.com/14872294485144.html"/>
-    <updated>2017-02-16T15:17:28+08:00</updated>
-    <id>http://blog.kayorl.com/14872294485144.html</id>
-    <content type="html"><![CDATA[
-<p>MySQL？mysql？ 什么来的</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">结构术语</h2>
-
-<p>MySQL被划分为关系数据库管理系统(<code>RDBMS</code>)</p>
-
-<ul>
-<li>数据库(DataBase, <code>DB</code> ), 是以用来存储信息的仓库,他的结构简单,规则.</li>
-<li>管理系统(Manage System, <code>MS</code> ) , 是一个软件,可以通过它来 insert, retrieve, modify, 或者 delete 记录.</li>
-<li>关系(Relational, <code>R</code> ), 表示这是一种特殊的 DBMS, 可以将多个表通过联系链接起来.</li>
-</ul>
-
-<h2 id="toc_1">MySQL 的查询结构术语</h2>
-
-<p>使用 MySQL 的时候,实际上至少会用到两个程序,因为 MySQL 采用的是 <code>CS</code> 体系结构.</p>
-
-<ul>
-<li><code>mysqld</code> : MySQL 服务器,它运行在存放数据库的机器上,提供服务</li>
-<li><code>MySQL 客户端</code> : 它负责连接到数据库服务器,并发起请求</li>
-</ul>
-
-<p>这种结构有下面的好处:</p>
-
-<ul>
-<li>服务器强制执行<code>并发控制</code>,可以防止两个用户修改同一条数据库.所有请求都会经过服务器,由服务器安排先后顺序</li>
-</ul>
-
-<blockquote>
-<p>MySQL与 mysql 的差异:</p>
-</blockquote>
-
-<ul>
-<li>MySQL, 是 RDBMS </li>
-<li>mysql, 是 客户端程序(运行在命令行中的)</li>
-</ul>
 
 ]]></content>
   </entry>

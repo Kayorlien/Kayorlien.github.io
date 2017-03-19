@@ -4,13 +4,160 @@
   <title><![CDATA[几谷 博客]]></title>
   <link href="http://blog.kayorl.com/atom.xml" rel="self"/>
   <link href="http://blog.kayorl.com/"/>
-  <updated>2017-03-15T16:50:50+08:00</updated>
+  <updated>2017-03-18T23:55:23+08:00</updated>
   <id>http://blog.kayorl.com/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[移动开发要点]]></title>
+    <link href="http://blog.kayorl.com/14898895604273.html"/>
+    <updated>2017-03-19T10:12:40+08:00</updated>
+    <id>http://blog.kayorl.com/14898895604273.html</id>
+    <content type="html"><![CDATA[
+<p>参考<br/><br/>
+<code>Alloyteam</code>  团队的<a href="http://alloyteam.github.io/Spirit/modules/Standard/">移动开发规范概述</a><br/>
+<code>贤心博客</code>的<a href="http://sentsin.com/web/54.html">手机/移动前端开发需要注意的20个要点</a></p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">meta 标签设置</h2>
+
+<pre><code>&lt;meta content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0&quot; name=&quot;viewport&quot;&gt;
+&lt;meta content=&quot;yes&quot; name=&quot;apple-mobile-web-app-capable&quot;&gt;
+&lt;meta content=&quot;black&quot; name=&quot;apple-mobile-web-app-status-bar-style&quot;&gt;
+&lt;meta content=&quot;telephone=no&quot; name=&quot;format-detection&quot;&gt;
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>description</th>
+<th>值</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>viewpoint</td>
+<td>是否可以缩放Web页面</td>
+<td>强制文档与设备的宽度保持1：1； 文档最大的宽度比列是1.0； user-scalable定义是否可缩放</td>
+</tr>
+<tr>
+<td>apple-mobile-web-app-capable</td>
+<td>iphone私有， 允许全屏模式浏览， 还可以添加至桌面</td>
+<td> yes</td>
+</tr>
+<tr>
+<td>apple-mobile-web-app-status-bar-style</td>
+<td>iphone私有， safari顶端的状态条的样式</td>
+<td>默认值为default（白色）， 可以设为black，black-translucent</td>
+</tr>
+<tr>
+<td>format-detection</td>
+<td>格式检测</td>
+<td>默认全开启， telephone=yes email=yes address=yes(跳转到地图)</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_1">字体设置</h2>
+
+<p>使用无衬线体<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. <br/>
+表单元素会被浏览器代理样式所覆盖，因此需让表单元素继承字体属性<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup></p>
+
+<pre><code>body {
+    font-family: &quot;Helvetica Neue&quot;, Helvetica, STHeiTi, sans-serif;
+}
+input, label, select, option, textarea, button, fieldset, legend {
+    font-family: inherit;
+}
+</code></pre>
+
+<p>各操作系统所用字体如下</p>
+
+<table>
+<thead>
+<tr>
+<th>OS 版本</th>
+<th style="text-align: center">语言</th>
+<th style="text-align: center">字体</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>&gt; iOS 4.0</td>
+<td style="text-align: center">英文</td>
+<td style="text-align: center">Helvetica Neue</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align: center">中文</td>
+<td style="text-align: center">STHeiTi<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup></td>
+</tr>
+<tr>
+<td>&gt; Android 4.0</td>
+<td style="text-align: center">中文/英文</td>
+<td style="text-align: center">Roboto</td>
+</tr>
+<tr>
+<td>&lt; iOS 4.0</td>
+<td style="text-align: center">英文</td>
+<td style="text-align: center">Helvetica</td>
+</tr>
+<tr>
+<td>&lt; Android 4.0</td>
+<td style="text-align: center">英文</td>
+<td style="text-align: center">Droid Sans</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align: center">中文</td>
+<td style="text-align: center">Droid Sans Fallback</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_2">基础交互</h2>
+
+<p>设置全局的CSS样式，<br/>
+避免图中的长按 <em>弹出菜单与选中文本</em> 的行为</p>
+
+<pre><code>a, img {
+    -webkit-touch-callout: none; /* 禁止长按链接与图片弹出菜单 */
+}
+html, body {
+    -webkit-user-select: none;   /* 禁止选中文本（如无文本选中需求，此为必选项） */
+    user-select: none;
+}
+</code></pre>
+
+<div class="footnotes">
+<hr/>
+<ol>
+
+<li id="fn1">
+<p>无衬线体（Sans-serif）专指西文中没有衬线的字体，与汉字字体中的黑体相对应。与衬线字体相反，该类字体通常是机械的和统一线条的，它们往往拥有相同的曲率，笔直的线条，锐利的转角。&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p><img src="media/14898895604273/table-style-hover.png" alt="table-style-hove set-up" style="width:300px;"/>&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p>华文黑体并不存在iOS的字体库中(<a href="http://support.apple.com/kb/HT5878)%EF%BC%8C">http://support.apple.com/kb/HT5878)，</a> 但系统会自动将华文黑体 <code>STHeiTi</code> 兼容命中系统默认中文字体<code>黑体-简</code>或<code>黑体-繁</code>&nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[对象属性的特征值]]></title>
@@ -111,6 +258,160 @@ Object.defineProperty(book, &quot;year&quot;, {
     }
 });
 </code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[标签属性]]></title>
+    <link href="http://blog.kayorl.com/14892446837739.html"/>
+    <updated>2017-03-11T23:04:43+08:00</updated>
+    <id>http://blog.kayorl.com/14892446837739.html</id>
+    <content type="html"><![CDATA[
+<ul>
+<li>
+<a href="#toc_0">border-box,减去边框与内边距后的盒模型</a>
+</li>
+<li>
+<a href="#toc_1">list-style, 表项之项头标记</a>
+</li>
+<li>
+<a href="#toc_2">background，多行太烦不如一行</a>
+</li>
+</ul>
+
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">border-box,减去边框与内边距后的盒模型</h2>
+
+<p>为元素指定的任何内边距和边框都将在 <u>已设定的宽度和高度</u> 内进行绘制;<br/>
+已设定的宽度和高度分别 <u>减去边框和内边距</u> 得到内容的宽度和高度。</p>
+
+<pre><code>box-sizing: border-box;
+</code></pre>
+
+<h2 id="toc_1">list-style, 表项之项头标记</h2>
+
+<p>设置列表样式</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">值</th>
+<th style="text-align: left">描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center"> list-style-type</td>
+<td style="text-align: left">标记类型，如三角形，方形等</td>
+</tr>
+<tr>
+<td style="text-align: center">list-style-position</td>
+<td style="text-align: left">标记位置，有 inside，outside. <br>inside 将标记当成普通内容; outside 在标记之后 <u><strong>再</strong></u> 缩进</td>
+</tr>
+<tr>
+<td style="text-align: center"> list-style-image</td>
+<td style="text-align: left">标记图片</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>ul{
+    list-style:square inside url(&#39;/i/arrow.gif&#39;);
+}
+</code></pre>
+
+<h2 id="toc_2">background，多行太烦不如一行</h2>
+
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td> scroll</td>
+<td>default，页面其余部分滚动，背景图像也移动</td>
+</tr>
+<tr>
+<td> fixed</td>
+<td>背景图像不动</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>body{ 
+    background: #ff0000 url(/i/bg.gif) no-repeat fixed center; 
+}
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left">描述</th>
+<th style="text-align: left">background-</th>
+<th style="text-align: left">取值</th>
+<th style="text-align: left">注意</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: left">颜色</td>
+<td style="text-align: left">color</td>
+<td style="text-align: left">...</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">位置</td>
+<td style="text-align: left">position</td>
+<td style="text-align: left">x% y%  top left</td>
+<td style="text-align: left">设置为 fix 才能在 Firefox 与 Opera 中工作</td>
+</tr>
+<tr>
+<td style="text-align: left">尺寸</td>
+<td style="text-align: left">size</td>
+<td style="text-align: left">x,y , cover, contain</td>
+<td style="text-align: left">cover: 把背景图像扩展至完全覆盖背景区域,只显示 <u><strong>部分</strong></u> contain:把图像图像扩展至完全适应内容区域。</td>
+</tr>
+<tr>
+<td style="text-align: left">重复</td>
+<td style="text-align: left">repeat</td>
+<td style="text-align: left">no-repeat repeat-x repeat</td>
+<td style="text-align: left">默认 xy 轴都重复</td>
+</tr>
+<tr>
+<td style="text-align: left">定位区域</td>
+<td style="text-align: left">origin</td>
+<td style="text-align: left">padding-box border-box content-box</td>
+<td style="text-align: left">默认 padding-box 规定 <u>position 的原点</u></td>
+</tr>
+<tr>
+<td style="text-align: left">绘制区域</td>
+<td style="text-align: left">clip</td>
+<td style="text-align: left">同上</td>
+<td style="text-align: left">默认 border-box 规定 <u>绘制的区域</u></td>
+</tr>
+<tr>
+<td style="text-align: left">固定或滚动</td>
+<td style="text-align: left">attachment</td>
+<td style="text-align: left">scroll fixed</td>
+<td style="text-align: left">默认 scroll scroll: 背景图像随页面滚动而移动</td>
+</tr>
+<tr>
+<td style="text-align: left">背景图</td>
+<td style="text-align: left">image</td>
+<td style="text-align: left">none url</td>
+<td style="text-align: left"></td>
+</tr>
+</tbody>
+</table>
 
 ]]></content>
   </entry>
@@ -228,6 +529,182 @@ sayColor.call(o);       //blue
 
 var objectSayColor = sayColor.bind(o);
 objectSayColor();       //blue
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[布局]]></title>
+    <link href="http://blog.kayorl.com/14885921690264.html"/>
+    <updated>2017-03-04T09:49:29+08:00</updated>
+    <id>http://blog.kayorl.com/14885921690264.html</id>
+    <content type="html"><![CDATA[
+<ul>
+<li>
+<a href="#toc_0">flexbox</a>
+</li>
+<li>
+<a href="#toc_1">column</a>
+</li>
+<li>
+<a href="#toc_2">inline-block</a>
+</li>
+<li>
+<a href="#toc_3">float</a>
+<ul>
+<li>
+<a href="#toc_4">overflow 技巧</a>
+</li>
+<li>
+<a href="#toc_5">clearfix 技巧</a>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0"><a href="http://www.w3cplus.com/css3/flexbox-basics.html">flexbox</a></h2>
+
+<p>flex 的容器属性</p>
+
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>[flex-flow]</td>
+<td>[flex-direction],[flex-wrap]</td>
+<td>方向与换行</td>
+</tr>
+<tr>
+<td>[flex-direction]</td>
+<td>row / row-reverse<br>column / column-reverse</td>
+<td>方向</td>
+</tr>
+<tr>
+<td>[flex-wrap]</td>
+<td>no-wrap / wrap <br> wrap-reverse</td>
+<td>换行</td>
+</tr>
+<tr>
+<td>[align-items]</td>
+<td>flex-start/baseline <br> flex-end<br> center <br>stretch</td>
+<td>侧轴对齐方式</td>
+</tr>
+<tr>
+<td>[justify-content]</td>
+<td>flex-start / flex-end <br>center <br>space-between <br>space-around</td>
+<td>伸缩项分布方式</td>
+</tr>
+<tr>
+<td>[align-content]</td>
+<td>flex-start / flex-end <br>center<br> space-between<br> space-around <br>stretch</td>
+<td>伸缩项对齐方式</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>.container {
+  display: -webkit-flex;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+/* 最大200px，最小100px */
+.initial {
+  -webkit-flex: initial;
+          flex: initial;
+  width: 200px;
+  min-width: 100px;
+}
+
+/*  固定200px */
+.none {
+  -webkit-flex: none;
+          flex: none;
+  width: 200px;
+}
+
+/* 占据剩余宽度的 1/flex(n) */
+.flex1 {
+  -webkit-flex: 1;
+          flex: 1;
+}
+
+/* 占据剩余宽度的 2/flex(n) */
+.flex2 {
+  -webkit-flex: 2;
+          flex: 2;
+}
+</code></pre>
+
+<h2 id="toc_1">column</h2>
+
+<p>内容多列显示</p>
+
+<pre><code>.three-column {
+  padding: 1em;
+  -moz-column-count: 3;
+  -moz-column-gap: 1em;
+  -webkit-column-count: 3;
+  -webkit-column-gap: 1em;
+  column-count: 3;
+  column-gap: 1em;
+}
+</code></pre>
+
+<h2 id="toc_2"><a href="http://zh.learnlayout.com/inline-block-layout.html">inline-block</a></h2>
+
+<p>可以用 inline-block 来布局，但需要记住<br/>
+* <code>vertical-align</code>  会影响 <code>inline-block</code> 元素, 可能会设置为<code>top</code><br/>
+* 需要设置每一列的宽度<br/>
+* 如果元素之间有空格，列之间会产生空隙</p>
+
+<blockquote>
+<p>the default vertical-align value on inline or inline-block element is <u>baseline</u> , which means the element’s baseline will be aligned with its parent’s baseline.</p>
+</blockquote>
+
+<p><img src="media/14885921690264/baseline-inline-block.jpg" alt="baseline-inline-block"/></p>
+
+<h2 id="toc_3">float</h2>
+
+<h3 id="toc_4">overflow 技巧</h3>
+
+<p>在包含浮动元素的父容器中设置“overflow”的属性值为“auto”，这样父容器就会有一个高度存在。</p>
+
+<pre><code>.box {
+    overflow : auto;
+    zoom: 1;    /* 支持 ie 6 */
+}
+</code></pre>
+
+<ol>
+<li>元素想移动到父容器外面会被截断，如 盒子阴影和下拉菜单</li>
+<li>不同的浏览器对“overflow”属性解析不一样，在浏览器的显示风格也不一样</li>
+</ol>
+
+<h3 id="toc_5">clearfix 技巧</h3>
+
+<p>使用<code>&quot;display : tabel&quot;</code>创建一个匿名的<code>&quot;tabel-cell&quot;</code>元素<br/>
+在父元素上使用 <code>&quot;:before&quot;</code>伪类，使得父容器顶部创建了一个隐藏元素，防止子元素的顶部外边距塌陷。<br/>
+在父元素上使用<code>&quot;:after&quot;</code>伪类,可以在父容器底部创建隐藏元素，防止子元素的底部外边距塌陷与清除元素浮动。</p>
+
+<pre><code class="language-css">/*-- our cleafix hack -- */ 
+.row:before, 
+.row:after {
+    content: &quot;&quot; ;
+    display: table ;
+    clear: both ;
+}
 </code></pre>
 
 ]]></content>
@@ -2109,467 +2586,6 @@ f92
 </tr>
 </tbody>
 </table>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[[译] Sequelize(1)  让Node操作MySQL更方便]]></title>
-    <link href="http://blog.kayorl.com/14872314142143.html"/>
-    <updated>2017-02-16T15:50:14+08:00</updated>
-    <id>http://blog.kayorl.com/14872314142143.html</id>
-    <content type="html"><![CDATA[
-<p>Sequelize是一种为 Node.js 和 io.js  提供 promise-based 的 的<code>对象关系映射</code>（ORM），支持  PostgreSQL, <code>MySQL</code>, MariaDB, SQLite 和 MSSQL 等数据库管理系统 ，同时提供 <code>事务支持</code>，<code>关系</code>，<code>复制</code>还有其他等特性. </p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">ORM</h2>
-
-<p><a href="https://zh.wikipedia.org/wiki/%E5%AF%B9%E8%B1%A1%E5%85%B3%E7%B3%BB%E6%98%A0%E5%B0%84">对象关系映射</a>（英语：Object Relational Mapping，简称ORM），是一种程序设计技术，用于实现面向对象编程语言里不同类型系统的数据之间的转换。从效果上说，它其实是创建了一个可在编程语言里使用的“虚拟对象数据库”。</p>
-
-<h2 id="toc_1">例子（ mysql 为例 ）</h2>
-
-<pre><code class="language-js">var Sequelize = require(&#39;sequelize&#39;);
-var sequelize = new Sequelize(&#39;database&#39;, &#39;username&#39;, &#39;password&#39;);
-
-var User = sequelize.define(&#39;user&#39;, {
-  username: Sequelize.STRING,
-  birthday: Sequelize.DATE
-});
-
-sequelize.sync().then(function() {
-  return User.create({
-    username: &#39;janedoe&#39;,
-    birthday: new Date(1980, 6, 20)
-  });
-}).then(function(jane) {
-  console.log(jane.get({
-    plain: true
-  }));
-});
-</code></pre>
-
-<p></br></p>
-
-<h2 id="toc_2">安装</h2>
-
-<pre><code>$ npm install --save sequelize
-$ npm install --save mysql
-</code></pre>
-
-<p></br></p>
-
-<h2 id="toc_3">建立连接</h2>
-
-<pre><code class="language-js">var sequelize = new Sequelize(&#39;database&#39;, &#39;username&#39;, &#39;password&#39;, {
-  host: &#39;localhost&#39;,
-  /* 数据库类型 */
-  dialect: &#39;mysql&#39; 
-});
-</code></pre>
-
-<p></br></p>
-
-<h2 id="toc_4">第一个模型</h2>
-
-<p>定义模型： <code>sequelize.define(&#39;name&#39;, {attributes}, {options})</code></p>
-
-<pre><code class="language-js">var User = sequelize.define(&#39;user&#39;, {
-  firstName: {
-    type: Sequelize.STRING,
-    /* User模型拥有firstName属性，在数据库中相应的属性为first_name  */
-    field: &#39;first_name&#39;   
-    },
-  lastName: {
-    type: Sequelize.STRING
-  }
-}, {
-  /* 数据库表名与模型名字一致 */
-  freezeTableName: true 
-});
-
-User.sync({force: true}).then(function () {
-  // Table created
-  return User.create({
-    firstName: &#39;kayor&#39;,
-    lastName: &#39;lien&#39;
-  });
-});
-</code></pre>
-
-<p>按照以前的习惯,我们可能会通过下面这种方式来获取<code>user</code>.</p>
-
-<pre><code class="language-js">// DON&#39;T DO THIS !!!
-
-user = User.findOne()
-
-console.log(user.get(&#39;firstName&#39;));
-</code></pre>
-
-<p></br></p>
-
-<p>然而这行不通(不信去试试😝)</p>
-
-<p>为什么呢? 接下来引入一个概念</p>
-
-<h2 id="toc_5">Promises</h2>
-
-<p>Sequelize 使用 Promises 控制异步流。 可以看看 <a href="14872467449529.html">Promises 解决Node无限回调</a></p>
-
-<blockquote>
-<p><a href="https://www.promisejs.org/">Promises</a>的核心是:</p>
-
-<p>一个 promise 代表了<strong>异步运算的结果</strong>，它有三种状态：</p>
-</blockquote>
-
-<ul>
-<li>pending - promise 的初始状态（即将发生）</li>
-<li>fulfilled  - 一次成功运算后 promise 的状态</li>
-<li>rejected - 一次失败运算后 promise 的状态</li>
-</ul>
-
-<pre><code class="language-js">function readFile(filename, enc){
-  /*  
-   *使用 new promise 构建一个新的 promise  */
-  return new Promise(function (fulfill, reject){
-    fs.readFile(filename, enc, function (err, res){
-      if (err) reject(err);         //失败运算
-      else fulfill(res);            //成功运算
-    });
-  });
-}
-</code></pre>
-
-<p><code>user</code>是一个 promise 对象， 不是数据库的对象，正确的打开姿势是，在获取到<code>user</code>的状态（如 fulfilled, rejected ）后，对其进行操作：</p>
-
-<pre><code class="language-js">User.findOne().then(function (user) {
-    console.log(user.get(&#39;firstName&#39;));
-});
-</code></pre>
-
-<hr/>
-
-<p>本文参考: <a href="http://docs.sequelizejs.com/en/v3/">Sequelize</a></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MySQL 数据类型]]></title>
-    <link href="http://blog.kayorl.com/14872295002814.html"/>
-    <updated>2017-02-16T15:18:20+08:00</updated>
-    <id>http://blog.kayorl.com/14872295002814.html</id>
-    <content type="html"><![CDATA[
-<p>blob ？显示宽度？</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">属性</h2>
-
-<table>
-<thead>
-<tr>
-<th style="text-align: left">类型</th>
-<th style="text-align: center">简写</th>
-<th style="text-align: center">作用</th>
-<th style="text-align: right">适用范围</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td style="text-align: left">UNSIGNED</td>
-<td style="text-align: center">UN</td>
-<td style="text-align: center">防止出现负值</td>
-<td style="text-align: right">除 BIT 以外</td>
-</tr>
-<tr>
-<td style="text-align: left">ZEROFILL</td>
-<td style="text-align: center">ZF</td>
-<td style="text-align: center">在列里的显示值前填充若干个0 (与显示宽度相关)</td>
-<td style="text-align: right">除 BIT 以外</td>
-</tr>
-<tr>
-<td style="text-align: left">AUTO_INCREMENT</td>
-<td style="text-align: center">AI</td>
-<td style="text-align: center">表示该列存放的是序号( ID ).如果没为 ID 列提供值,那 MySQL 会<code>自动生成</code>下一个编号.删除某几行后,删除的序号可能会被再使用,得看使用的引擎</td>
-<td style="text-align: right">一般用于整数 且有 <code>NOT NULL</code>(自动隐式添加) 和 <code>UNSIGNED</code> 属性</td>
-</tr>
-<tr>
-<td style="text-align: left">NULL/NOT NULL</td>
-<td style="text-align: center">NN</td>
-<td style="text-align: center">指定列能否为 NULL</td>
-<td style="text-align: right">除了 有 <code>AI</code> 的列</td>
-</tr>
-</tbody>
-</table>
-
-<h2 id="toc_1">数字</h2>
-
-<table>
-<thead>
-<tr>
-<th style="text-align: left">类型</th>
-<th style="text-align: center">范围  ( 无符号 , 0~ )</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td style="text-align: left">TINYINT (M)</td>
-<td style="text-align: center">255</td>
-</tr>
-<tr>
-<td style="text-align: left">SMALLINT (M)</td>
-<td style="text-align: center">65535</td>
-</tr>
-<tr>
-<td style="text-align: left">MEDIUMINT (M)</td>
-<td style="text-align: center">16777215</td>
-</tr>
-<tr>
-<td style="text-align: left">INT (M)</td>
-<td style="text-align: center">2ˆ32-1</td>
-</tr>
-<tr>
-<td style="text-align: left">BIGINT  (M)</td>
-<td style="text-align: center">2ˆ64-1</td>
-</tr>
-<tr>
-<td style="text-align: left">DECIMAL ( [ M [ ,D ] ] )</td>
-<td style="text-align: center">由 M 和 D 的值决定</td>
-</tr>
-<tr>
-<td style="text-align: left">FLOAT  ( [ M [ ,D ] ] )</td>
-<td style="text-align: center">最大非零: ±3.402823466E+38</td>
-</tr>
-<tr>
-<td style="text-align: left">DOUBLE  ( [ M [ ,D ] ] )</td>
-<td style="text-align: center">最大非零: ± 1.7976931348623157E+308</td>
-</tr>
-<tr>
-<td style="text-align: left">BIT  ([M])</td>
-<td style="text-align: center">2ˆM-1,  1&lt;= M &lt;= 64</td>
-</tr>
-</tbody>
-</table>
-
-<p><code>D</code> : 数学精确度,即小数点后的数字个数<br/>
-<code>M</code> : 显示宽度,为1~255 的整数.决定 MySQL 用多少个字符<code>显示</code>该列的值,与<code>存储该值所需的字节存储空间无关</code>,默认为最长值的长度 . 一般结合 <code>ZEROFILL</code> 使用</p>
-
-<p><strong>举例</strong> <br/>
-INT(2)的列,每个值仍占用<code>4个字节</code> (32bit) 的空间,假设有一个值取为2,那么将会显示 02 </p>
-
-<hr/>
-
-<h2 id="toc_2">字符串</h2>
-
-<p>MySQL字符串可以表示任何值, 它实际上是一种 &quot;泛型&quot; 类型.例如,可以用二进制串存储二进制数据,如图像,声音,压缩后的gzip 输出.</p>
-
-<ul>
-<li><code>二进制串</code>: 01010101010</li>
-<li>非二进制串: ......</li>
-</ul>
-
-<table>
-<thead>
-<tr>
-<th style="text-align: center">类型</th>
-<th style="text-align: center">存储二进制串</th>
-<th style="text-align: center">最大长度 (字节)</th>
-<th style="text-align: center">存储空间要求 (字节)</th>
-<th style="text-align: center">说明</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td style="text-align: center"><code>BINARY[(M)]</code></td>
-<td style="text-align: center">√</td>
-<td style="text-align: center">M</td>
-<td style="text-align: center">M</td>
-<td style="text-align: center">M : 表示该列值的最大长度 (二进制串以字节为长度,非二进制串以字符单位)</td>
-</tr>
-<tr>
-<td style="text-align: center">CHAR[(M)]</td>
-<td style="text-align: center"></td>
-<td style="text-align: center">M</td>
-<td style="text-align: center">M  x  w</td>
-<td style="text-align: center">w : 表示列字符集里<code>最&quot;宽&quot;</code>字符占用的字节数(定长补足用)</td>
-</tr>
-<tr>
-<td style="text-align: center"><code>VARBINARY(M)</code></td>
-<td style="text-align: center">√</td>
-<td style="text-align: center">M</td>
-<td style="text-align: center">L+1 or L+2</td>
-<td style="text-align: center">L : 表示某个<code>给定值</code>的字节长度</td>
-</tr>
-<tr>
-<td style="text-align: center">VARCHAR(M)</td>
-<td style="text-align: center"></td>
-<td style="text-align: center">M</td>
-<td style="text-align: center">L+1 or L+2</td>
-<td style="text-align: center"></td>
-</tr>
-<tr>
-<td style="text-align: center"><code>BLOB(binary large object)</code></td>
-<td style="text-align: center">√</td>
-<td style="text-align: center">2ˆ16-1</td>
-<td style="text-align: center">L+2</td>
-<td style="text-align: center">可以存储大对象(4 GB),字节为单位</td>
-</tr>
-<tr>
-<td style="text-align: center">TEXT</td>
-<td style="text-align: center"></td>
-<td style="text-align: center">2ˆ16-1</td>
-<td style="text-align: center">L+2</td>
-<td style="text-align: center">字符为单位</td>
-</tr>
-<tr>
-<td style="text-align: center">ENUM(&#39;value1&#39;,&#39;value2&#39;,...)</td>
-<td style="text-align: center"></td>
-<td style="text-align: center">65535个成员</td>
-<td style="text-align: center">1 or 2</td>
-<td style="text-align: center">定义的值顺序就是排序所用的顺序</td>
-</tr>
-<tr>
-<td style="text-align: center">SET(&#39;value1&#39;,&#39;value2&#39;,...)</td>
-<td style="text-align: center"></td>
-<td style="text-align: center">64个成员</td>
-<td style="text-align: center">1,2,3,4,8</td>
-<td style="text-align: center"></td>
-</tr>
-</tbody>
-</table>
-
-<ul>
-<li>BLOB 和 TEXT 列能否被索引取决于存储引擎,如果用 InnoDB 和 MyISAM, 必须制定一个前缀长度,方便索引.可以避免创建出可能过大的索引,那样会抵消索引带来的好处. 比较特殊的是 TEXT 列的 <code>FULLTEXT</code> 索引以索引列的完整内容为基础,自动忽略指定的前缀长度</li>
-<li>BLOB,TEXT 在多次操作之后会产生大量碎片,如果用 MyISAM 来存储 BLOB 或 TEXT, 那么定期运行 <code>OPTIMIZE TABLE</code> 可以减少碎片,改善系统性能</li>
-</ul>
-
-<hr/>
-
-<h2 id="toc_3">时态</h2>
-
-<ul>
-<li>fsp: 小数秒精度</li>
-<li>时态列的定义可以包含通用属性 NULL 或 NOT NULL. 如果都不指定, 则默认为 NULL. </li>
-<li>TIMESTAMP 和 DATETIME 有自动初始化属性和自动更新属性</li>
-<li>TIMESTAMP 的<code>默认值</code>为 NOT NULL, 如果设置为 NULL, 那么它的值会被设置为当前时间戳</li>
-<li>TIMESTAMP 不能设置为 <code>DEFAULT 0</code>,严格模式下会报错</li>
-</ul>
-
-<table>
-<thead>
-<tr>
-<th style="text-align: center">类型</th>
-<th style="text-align: center">范围</th>
-<th style="text-align: center">存储要求(字节)(5.6.4以后)</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td style="text-align: center">DATE</td>
-<td style="text-align: center">1000-01-01 ~ 9999-12-31</td>
-<td style="text-align: center">3</td>
-</tr>
-<tr>
-<td style="text-align: center">TIME</td>
-<td style="text-align: center">-838:59:59[.000000] ~ 838:59:59[.000000]</td>
-<td style="text-align: center">3 + fsp</td>
-</tr>
-<tr>
-<td style="text-align: center">DATETIME</td>
-<td style="text-align: center">1000-01-01 00:00:00[.000000] ~ 9999-12-31 23.59.59[.999999]</td>
-<td style="text-align: center">3 + fsp</td>
-</tr>
-<tr>
-<td style="text-align: center">TIMESTAMP</td>
-<td style="text-align: center">1970-01-01 00:00:00[.000000] ~ 2038-01-19 03:14:07[.999999]</td>
-<td style="text-align: center">4 + fsp</td>
-</tr>
-<tr>
-<td style="text-align: center">YEAR</td>
-<td style="text-align: center">1901~2155</td>
-<td style="text-align: center">1</td>
-</tr>
-</tbody>
-</table>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Promises 解决Node无限回调]]></title>
-    <link href="http://blog.kayorl.com/14872467449529.html"/>
-    <updated>2017-02-16T20:05:44+08:00</updated>
-    <id>http://blog.kayorl.com/14872467449529.html</id>
-    <content type="html"><![CDATA[
-<p>Promises 是异步代码（如 Node.js） 实现控制流的方式， 可以让代码更干净，可读。</p>
-
-<span id="more"></span><!-- more -->
-
-<p>利用 Promises 可以将</p>
-
-<pre><code class="language-js">fs.readFile(&quot;file.json&quot;, function (err, val) {
-    if (err) {
-        console.error(&quot;unable to read file&quot;);
-    }
-    else {
-        try {
-            val = JSON.parse(val);
-            console.log(val.success);
-        }
-        catch (e) {
-            console.error(&quot;invalid json in file&quot;);
-        }
-    }
-});
-</code></pre>
-
-<p>转化成</p>
-
-<pre><code class="language-js">fs.readFileAsync(&quot;file.json&quot;).then(JSON.parse).then(function (val) {
-    console.log(val.success);
-})
-.catch(SyntaxError, function (e) {
-    console.error(&quot;invalid json in file&quot;);
-})
-.catch(function (e) {
-    console.error(&quot;unable to read file&quot;);
-});
-</code></pre>
-
-<p></br><br/>
-然而 核心模块 <code>fs</code> 并没有 <code>readFileAsync</code> 方法, 可以使用 <a href="http://bluebirdjs.com/docs/api/promisification.html">promisfication</a> 大法.</p>
-
-<h2 id="toc_0">Promisfication</h2>
-
-<p>Promisfication 可以转化已存在的 promise-unaware API  为 promise-returning API</p>
-
-<p>通常 Node 使用 promises 的办法是去 <code>Promise.promisifyAll</code> 一些 API</p>
-
-<pre><code class="language-js">var fs = require(&quot;fs&quot;);
-Promise.promisifyAll(fs);
-
-fs.readFileAsync(&quot;file.js&quot;, &quot;utf8&quot;).then(...)
-</code></pre>
-
-<p>要注意到这是特殊状况, 因为 <code>fs</code> 是一个单例.  大多数库能够通过 <code>require</code> 一些库里的类(构造函数)和在 <code>.prototype</code>上调用 promisify 对该实例 promise 化.</p>
-
-<p>每个实例的 promise 化在应用的生命周期内只需被调用一次,此后依据该实例原来的文档进行操作, <code>除了在方法后面增加Async 和用 promise 接口替代原来的 callback 接口</code>.</p>
-
-<pre><code class="language-js">// Mysql 模块
-var Promise = require(&quot;bluebird&quot;);
-//
-// 库里面的类并不是模块直接导出,所以需要手动的require
-//
-Promise.promisifyAll(require(&quot;mysql/lib/Connection&quot;).prototype);
-Promise.promisifyAll(require(&quot;mysql/lib/Pool&quot;).prototype);
-</code></pre>
-
-<p>参考<a href="http://bluebirdjs.com/docs/why-promises.html">bluebirkjs</a></p>
 
 ]]></content>
   </entry>

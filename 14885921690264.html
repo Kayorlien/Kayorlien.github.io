@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  MySQL 术语 - 几谷 博客
+  布局 - 几谷 博客
   
   </title>
-  <meta name="keywords" content="MySQL mysql rdbms" />
+  
   
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
@@ -107,23 +107,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>MySQL 术语</h1>
+          <h1>布局</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/9/12 11:25 上午</span>
+          <span class="date">2017/3/4 9:49 上午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='database.html'>数据库系统</a></span>
+              <span class="posted-in"><a href='web.html'>web</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872294485144.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/14885921690264.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872294485144.html" data-count-type="comments" href="14872294485144.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="14885921690264.html" data-count-type="comments" href="14885921690264.html#ds-thread"></a>
             
           </span>
 
@@ -131,43 +131,172 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>MySQL？mysql？ 什么来的</p>
+      <ul>
+<li>
+<a href="#toc_0">flexbox</a>
+</li>
+<li>
+<a href="#toc_1">column</a>
+</li>
+<li>
+<a href="#toc_2">inline-block</a>
+</li>
+<li>
+<a href="#toc_3">float</a>
+<ul>
+<li>
+<a href="#toc_4">overflow 技巧</a>
+</li>
+<li>
+<a href="#toc_5">clearfix 技巧</a>
+</li>
+</ul>
+</li>
+</ul>
+
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">结构术语</h2>
+<h2 id="toc_0"><a href="http://www.w3cplus.com/css3/flexbox-basics.html">flexbox</a></h2>
 
-<p>MySQL被划分为关系数据库管理系统(<code>RDBMS</code>)</p>
+<p>flex 的容器属性</p>
 
-<ul>
-<li>数据库(DataBase, <code>DB</code> ), 是以用来存储信息的仓库,他的结构简单,规则.</li>
-<li>管理系统(Manage System, <code>MS</code> ) , 是一个软件,可以通过它来 insert, retrieve, modify, 或者 delete 记录.</li>
-<li>关系(Relational, <code>R</code> ), 表示这是一种特殊的 DBMS, 可以将多个表通过联系链接起来.</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
 
-<h2 id="toc_1">MySQL 的查询结构术语</h2>
+<tbody>
+<tr>
+<td>[flex-flow]</td>
+<td>[flex-direction],[flex-wrap]</td>
+<td>方向与换行</td>
+</tr>
+<tr>
+<td>[flex-direction]</td>
+<td>row / row-reverse<br>column / column-reverse</td>
+<td>方向</td>
+</tr>
+<tr>
+<td>[flex-wrap]</td>
+<td>no-wrap / wrap <br> wrap-reverse</td>
+<td>换行</td>
+</tr>
+<tr>
+<td>[align-items]</td>
+<td>flex-start/baseline <br> flex-end<br> center <br>stretch</td>
+<td>侧轴对齐方式</td>
+</tr>
+<tr>
+<td>[justify-content]</td>
+<td>flex-start / flex-end <br>center <br>space-between <br>space-around</td>
+<td>伸缩项分布方式</td>
+</tr>
+<tr>
+<td>[align-content]</td>
+<td>flex-start / flex-end <br>center<br> space-between<br> space-around <br>stretch</td>
+<td>伸缩项对齐方式</td>
+</tr>
+</tbody>
+</table>
 
-<p>使用 MySQL 的时候,实际上至少会用到两个程序,因为 MySQL 采用的是 <code>CS</code> 体系结构.</p>
+<pre><code>.container {
+  display: -webkit-flex;
+  display: flex;
+  flex-flow: row wrap;
+}
 
-<ul>
-<li><code>mysqld</code> : MySQL 服务器,它运行在存放数据库的机器上,提供服务</li>
-<li><code>MySQL 客户端</code> : 它负责连接到数据库服务器,并发起请求</li>
-</ul>
+/* 最大200px，最小100px */
+.initial {
+  -webkit-flex: initial;
+          flex: initial;
+  width: 200px;
+  min-width: 100px;
+}
 
-<p>这种结构有下面的好处:</p>
+/*  固定200px */
+.none {
+  -webkit-flex: none;
+          flex: none;
+  width: 200px;
+}
 
-<ul>
-<li>服务器强制执行<code>并发控制</code>,可以防止两个用户修改同一条数据库.所有请求都会经过服务器,由服务器安排先后顺序</li>
-</ul>
+/* 占据剩余宽度的 1/flex(n) */
+.flex1 {
+  -webkit-flex: 1;
+          flex: 1;
+}
+
+/* 占据剩余宽度的 2/flex(n) */
+.flex2 {
+  -webkit-flex: 2;
+          flex: 2;
+}
+</code></pre>
+
+<h2 id="toc_1">column</h2>
+
+<p>内容多列显示</p>
+
+<pre><code>.three-column {
+  padding: 1em;
+  -moz-column-count: 3;
+  -moz-column-gap: 1em;
+  -webkit-column-count: 3;
+  -webkit-column-gap: 1em;
+  column-count: 3;
+  column-gap: 1em;
+}
+</code></pre>
+
+<h2 id="toc_2"><a href="http://zh.learnlayout.com/inline-block-layout.html">inline-block</a></h2>
+
+<p>可以用 inline-block 来布局，但需要记住<br/>
+* <code>vertical-align</code>  会影响 <code>inline-block</code> 元素, 可能会设置为<code>top</code><br/>
+* 需要设置每一列的宽度<br/>
+* 如果元素之间有空格，列之间会产生空隙</p>
 
 <blockquote>
-<p>MySQL与 mysql 的差异:</p>
+<p>the default vertical-align value on inline or inline-block element is <u>baseline</u> , which means the element’s baseline will be aligned with its parent’s baseline.</p>
 </blockquote>
 
-<ul>
-<li>MySQL, 是 RDBMS </li>
-<li>mysql, 是 客户端程序(运行在命令行中的)</li>
-</ul>
+<p><img src="media/14885921690264/baseline-inline-block.jpg" alt="baseline-inline-block"/></p>
+
+<h2 id="toc_3">float</h2>
+
+<h3 id="toc_4">overflow 技巧</h3>
+
+<p>在包含浮动元素的父容器中设置“overflow”的属性值为“auto”，这样父容器就会有一个高度存在。</p>
+
+<pre><code>.box {
+    overflow : auto;
+    zoom: 1;    /* 支持 ie 6 */
+}
+</code></pre>
+
+<ol>
+<li>元素想移动到父容器外面会被截断，如 盒子阴影和下拉菜单</li>
+<li>不同的浏览器对“overflow”属性解析不一样，在浏览器的显示风格也不一样</li>
+</ol>
+
+<h3 id="toc_5">clearfix 技巧</h3>
+
+<p>使用<code>&quot;display : tabel&quot;</code>创建一个匿名的<code>&quot;tabel-cell&quot;</code>元素<br/>
+在父元素上使用 <code>&quot;:before&quot;</code>伪类，使得父容器顶部创建了一个隐藏元素，防止子元素的顶部外边距塌陷。<br/>
+在父元素上使用<code>&quot;:after&quot;</code>伪类,可以在父容器底部创建隐藏元素，防止子元素的底部外边距塌陷与清除元素浮动。</p>
+
+<pre><code class="language-css">/*-- our cleafix hack -- */ 
+.row:before, 
+.row:after {
+    content: &quot;&quot; ;
+    display: table ;
+    clear: both ;
+}
+</code></pre>
 
 
     
@@ -178,13 +307,16 @@
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872467449529.html" 
-          title="Previous Post: Promises 解决Node无限回调">&laquo; Promises 解决Node无限回调</a>
+          <a href="function.html" 
+          title="Previous Post: function 背后隐藏着什么秘密">&laquo; function 背后隐藏着什么秘密</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="datatype.html" 
+          title="Next Post: JavaScript 数据类型 之 性格">JavaScript 数据类型 之 性格 &raquo;</a>
       
       </p>
         </div>
@@ -198,7 +330,7 @@
           
 
           
-              <div class="ds-thread" data-thread-key="14872294485144.html" data-url="http://blog.kayorl.com/14872294485144.html" data-title="MySQL 术语"></div>
+              <div class="ds-thread" data-thread-key="14885921690264.html" data-url="http://blog.kayorl.com/14885921690264.html" data-title="布局"></div>
           
         </div>
       </div>

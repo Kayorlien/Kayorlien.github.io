@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  MySQL 术语 - 几谷 博客
+  移动开发要点 - 几谷 博客
   
   </title>
-  <meta name="keywords" content="MySQL mysql rdbms" />
+  
   
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
@@ -107,23 +107,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>MySQL 术语</h1>
+          <h1>移动开发要点</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/9/12 11:25 上午</span>
+          <span class="date">2017/3/19 10:12 上午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='database.html'>数据库系统</a></span>
+              <span class="posted-in"><a href='web.html'>web</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872294485144.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/14898895604273.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872294485144.html" data-count-type="comments" href="14872294485144.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="14898895604273.html" data-count-type="comments" href="14898895604273.html#ds-thread"></a>
             
           </span>
 
@@ -131,43 +131,143 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>MySQL？mysql？ 什么来的</p>
+      <p>参考<br/><br/>
+<code>Alloyteam</code>  团队的<a href="http://alloyteam.github.io/Spirit/modules/Standard/">移动开发规范概述</a><br/>
+<code>贤心博客</code>的<a href="http://sentsin.com/web/54.html">手机/移动前端开发需要注意的20个要点</a></p>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">结构术语</h2>
+<h2 id="toc_0">meta 标签设置</h2>
 
-<p>MySQL被划分为关系数据库管理系统(<code>RDBMS</code>)</p>
+<pre><code>&lt;meta content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0&quot; name=&quot;viewport&quot;&gt;
+&lt;meta content=&quot;yes&quot; name=&quot;apple-mobile-web-app-capable&quot;&gt;
+&lt;meta content=&quot;black&quot; name=&quot;apple-mobile-web-app-status-bar-style&quot;&gt;
+&lt;meta content=&quot;telephone=no&quot; name=&quot;format-detection&quot;&gt;
+</code></pre>
 
-<ul>
-<li>数据库(DataBase, <code>DB</code> ), 是以用来存储信息的仓库,他的结构简单,规则.</li>
-<li>管理系统(Manage System, <code>MS</code> ) , 是一个软件,可以通过它来 insert, retrieve, modify, 或者 delete 记录.</li>
-<li>关系(Relational, <code>R</code> ), 表示这是一种特殊的 DBMS, 可以将多个表通过联系链接起来.</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>description</th>
+<th>值</th>
+</tr>
+</thead>
 
-<h2 id="toc_1">MySQL 的查询结构术语</h2>
+<tbody>
+<tr>
+<td>viewpoint</td>
+<td>是否可以缩放Web页面</td>
+<td>强制文档与设备的宽度保持1：1； 文档最大的宽度比列是1.0； user-scalable定义是否可缩放</td>
+</tr>
+<tr>
+<td>apple-mobile-web-app-capable</td>
+<td>iphone私有， 允许全屏模式浏览， 还可以添加至桌面</td>
+<td> yes</td>
+</tr>
+<tr>
+<td>apple-mobile-web-app-status-bar-style</td>
+<td>iphone私有， safari顶端的状态条的样式</td>
+<td>默认值为default（白色）， 可以设为black，black-translucent</td>
+</tr>
+<tr>
+<td>format-detection</td>
+<td>格式检测</td>
+<td>默认全开启， telephone=yes email=yes address=yes(跳转到地图)</td>
+</tr>
+</tbody>
+</table>
 
-<p>使用 MySQL 的时候,实际上至少会用到两个程序,因为 MySQL 采用的是 <code>CS</code> 体系结构.</p>
+<h2 id="toc_1">字体设置</h2>
 
-<ul>
-<li><code>mysqld</code> : MySQL 服务器,它运行在存放数据库的机器上,提供服务</li>
-<li><code>MySQL 客户端</code> : 它负责连接到数据库服务器,并发起请求</li>
-</ul>
+<p>使用无衬线体<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. <br/>
+表单元素会被浏览器代理样式所覆盖，因此需让表单元素继承字体属性<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup></p>
 
-<p>这种结构有下面的好处:</p>
+<pre><code>body {
+    font-family: &quot;Helvetica Neue&quot;, Helvetica, STHeiTi, sans-serif;
+}
+input, label, select, option, textarea, button, fieldset, legend {
+    font-family: inherit;
+}
+</code></pre>
 
-<ul>
-<li>服务器强制执行<code>并发控制</code>,可以防止两个用户修改同一条数据库.所有请求都会经过服务器,由服务器安排先后顺序</li>
-</ul>
+<p>各操作系统所用字体如下</p>
 
-<blockquote>
-<p>MySQL与 mysql 的差异:</p>
-</blockquote>
+<table>
+<thead>
+<tr>
+<th>OS 版本</th>
+<th style="text-align: center">语言</th>
+<th style="text-align: center">字体</th>
+</tr>
+</thead>
 
-<ul>
-<li>MySQL, 是 RDBMS </li>
-<li>mysql, 是 客户端程序(运行在命令行中的)</li>
-</ul>
+<tbody>
+<tr>
+<td>&gt; iOS 4.0</td>
+<td style="text-align: center">英文</td>
+<td style="text-align: center">Helvetica Neue</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align: center">中文</td>
+<td style="text-align: center">STHeiTi<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup></td>
+</tr>
+<tr>
+<td>&gt; Android 4.0</td>
+<td style="text-align: center">中文/英文</td>
+<td style="text-align: center">Roboto</td>
+</tr>
+<tr>
+<td>&lt; iOS 4.0</td>
+<td style="text-align: center">英文</td>
+<td style="text-align: center">Helvetica</td>
+</tr>
+<tr>
+<td>&lt; Android 4.0</td>
+<td style="text-align: center">英文</td>
+<td style="text-align: center">Droid Sans</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align: center">中文</td>
+<td style="text-align: center">Droid Sans Fallback</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_2">基础交互</h2>
+
+<p>设置全局的CSS样式，<br/>
+避免图中的长按 <em>弹出菜单与选中文本</em> 的行为</p>
+
+<pre><code>a, img {
+    -webkit-touch-callout: none; /* 禁止长按链接与图片弹出菜单 */
+}
+html, body {
+    -webkit-user-select: none;   /* 禁止选中文本（如无文本选中需求，此为必选项） */
+    user-select: none;
+}
+</code></pre>
+
+<div class="footnotes">
+<hr/>
+<ol>
+
+<li id="fn1">
+<p>无衬线体（Sans-serif）专指西文中没有衬线的字体，与汉字字体中的黑体相对应。与衬线字体相反，该类字体通常是机械的和统一线条的，它们往往拥有相同的曲率，笔直的线条，锐利的转角。&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p><img src="media/14898895604273/table-style-hover.png" alt="table-style-hove set-up" style="width:300px;"/>&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p>华文黑体并不存在iOS的字体库中(<a href="http://support.apple.com/kb/HT5878)%EF%BC%8C">http://support.apple.com/kb/HT5878)，</a> 但系统会自动将华文黑体 <code>STHeiTi</code> 兼容命中系统默认中文字体<code>黑体-简</code>或<code>黑体-繁</code>&nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
 
 
     
@@ -178,13 +278,13 @@
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872467449529.html" 
-          title="Previous Post: Promises 解决Node无限回调">&laquo; Promises 解决Node无限回调</a>
-      
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="character.html" 
+          title="Next Post: 对象属性的特征值">对象属性的特征值 &raquo;</a>
       
       </p>
         </div>
@@ -198,7 +298,7 @@
           
 
           
-              <div class="ds-thread" data-thread-key="14872294485144.html" data-url="http://blog.kayorl.com/14872294485144.html" data-title="MySQL 术语"></div>
+              <div class="ds-thread" data-thread-key="14898895604273.html" data-url="http://blog.kayorl.com/14898895604273.html" data-title="移动开发要点"></div>
           
         </div>
       </div>

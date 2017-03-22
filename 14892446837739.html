@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  标签属性 - 几谷 博客
+  css 标签一行化 - 几谷 博客
   
   </title>
   
@@ -107,7 +107,7 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>标签属性</h1>
+          <h1>css 标签一行化</h1>
      
         <div class="read-more clearfix">
           <span class="date">2017/3/11 23:4 下午</span>
@@ -133,20 +133,100 @@
       <div class="article-content">
       <ul>
 <li>
-<a href="#toc_0">border-box,减去边框与内边距后的盒模型</a>
+<a href="#toc_0">box-shadow</a>
 </li>
 <li>
-<a href="#toc_1">list-style, 表项之项头标记</a>
+<a href="#toc_1">font</a>
 </li>
 <li>
-<a href="#toc_2">background，多行太烦不如一行</a>
+<a href="#toc_2">border-box,减去边框与内边距后的盒模型</a>
+</li>
+<li>
+<a href="#toc_3">list-style, 表项之项头标记</a>
+</li>
+<li>
+<a href="#toc_4">background，多行太烦不如一行</a>
 </li>
 </ul>
 
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">border-box,减去边框与内边距后的盒模型</h2>
+<h2 id="toc_0">box-shadow</h2>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>属性</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>h-shadow</td>
+<td>水平阴影的位置。允许负值。</td>
+</tr>
+<tr>
+<td>v-shadow</td>
+<td>垂直阴影的位置。允许负值。</td>
+</tr>
+<tr>
+<td>blur</td>
+<td>模糊距离。</td>
+</tr>
+<tr>
+<td>spread</td>
+<td>阴影的尺寸。</td>
+</tr>
+<tr>
+<td>color</td>
+<td>阴影的颜色。</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_1">font</h2>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>属性</th>
+<th>取值</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>样式</td>
+<td>font-style</td>
+<td>normal<br>italic,斜体<br>oblique，倾斜</td>
+</tr>
+<tr>
+<td>异体</td>
+<td>font-variant</td>
+<td>normal <br>small-caps,小型大写字母</td>
+</tr>
+<tr>
+<td>粗细</td>
+<td>font-weight</td>
+<td>normal(400) <br>bold(700),bolder<br>lighter<br>100,200...</td>
+</tr>
+<tr>
+<td>尺寸</td>
+<td>font-size/line-height</td>
+<td>medium<br>small,x-small,<br>xx-small<br>large,x-large,xx-large</td>
+</tr>
+<tr>
+<td>系列</td>
+<td>font-family</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_2">border-box,减去边框与内边距后的盒模型</h2>
 
 <p>为元素指定的任何内边距和边框都将在 <u>已设定的宽度和高度</u> 内进行绘制;<br/>
 已设定的宽度和高度分别 <u>减去边框和内边距</u> 得到内容的宽度和高度。</p>
@@ -154,7 +234,7 @@
 <pre><code>box-sizing: border-box;
 </code></pre>
 
-<h2 id="toc_1">list-style, 表项之项头标记</h2>
+<h2 id="toc_3">list-style, 表项之项头标记</h2>
 
 <p>设置列表样式</p>
 
@@ -187,7 +267,7 @@
 }
 </code></pre>
 
-<h2 id="toc_2">background，多行太烦不如一行</h2>
+<h2 id="toc_4">background，多行太烦不如一行</h2>
 
 <table>
 <thead>
@@ -235,7 +315,7 @@
 <td style="text-align: left">位置</td>
 <td style="text-align: left">position</td>
 <td style="text-align: left">x% y%  top left</td>
-<td style="text-align: left">设置为 fix 才能在 Firefox 与 Opera 中工作</td>
+<td style="text-align: left"></td>
 </tr>
 <tr>
 <td style="text-align: left">尺寸</td>
@@ -265,7 +345,7 @@
 <td style="text-align: left">固定或滚动</td>
 <td style="text-align: left">attachment</td>
 <td style="text-align: left">scroll fixed</td>
-<td style="text-align: left">默认 scroll scroll: 背景图像随页面滚动而移动</td>
+<td style="text-align: left">默认 scroll <br>scroll: 背景图像随页面滚动而移动<br>设置为 fixed 才能在 Firefox 与 Opera 中工作</td>
 </tr>
 <tr>
 <td style="text-align: left">背景图</td>
@@ -308,7 +388,7 @@
           
 
           
-              <div class="ds-thread" data-thread-key="14892446837739.html" data-url="http://blog.kayorl.com/14892446837739.html" data-title="标签属性"></div>
+              <div class="ds-thread" data-thread-key="14892446837739.html" data-url="http://blog.kayorl.com/14892446837739.html" data-title="css 标签一行化"></div>
           
         </div>
       </div>
@@ -377,7 +457,19 @@
 	      
 		      
 			      <li class="post">
-			        <a href="14898895604273.html">移动开发要点</a>
+			        <a href="css-centering.html">css 元素垂直、水平居中</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="css-style.html">css 命名约定</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="mobile-notice.html">移动开发要点</a>
 			      </li>
 		     
 		  
@@ -389,19 +481,7 @@
 		  
 		      
 			      <li class="post">
-			        <a href="14892446837739.html">标签属性</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="function.html">function 背后隐藏着什么秘密</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14885921690264.html">布局</a>
+			        <a href="14892446837739.html">css 标签一行化</a>
 			      </li>
 		     
 		  

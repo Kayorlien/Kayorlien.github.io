@@ -8,7 +8,7 @@
   几谷 博客
   
   </title>
-  
+  <meta name="keywords" content="sequelize" />
   
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
@@ -107,7 +107,152 @@
 		<div class="markdown-body home-categories">
 		
 			<div class="article">
-                <a class="clearlink" href="14898895604273.html">
+                <a class="clearlink" href="css-centering.html">
+                
+                  <h1>css 元素垂直、水平居中</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="css-centering.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2017/3/22 20:42 下午</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='web.html'>web</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+                        <a href="http://blog.kayorl.com/css-centering.html#disqus_thread">comments</a>
+                      
+
+                      
+                        &nbsp;<a  class="ds-thread-count" data-thread-key="css-centering.html" data-count-type="comments" href="css-centering.html#ds-thread"></a>
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="css-style.html">
+                
+                  <h1>css 命名约定</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<h2 id="toc_0">Object Oriented CSS (OOCSS)</h2>
+
+<p>分离容器与内容</p>
+
+<blockquote>
+<p>别这么做啊！！！！</p>
+</blockquote>
+
+<pre><code>ul li.list-item {
+    ...
+}
+</code></pre>
+
+<blockquote>
+<p>直接跳到元素</p>
+</blockquote>
+
+<pre><code>.list-item {
+    ...
+}
+</code></pre>
+
+<h2 id="toc_1"><del>Atomic CSS (ACSS)</del></h2>
+
+<p>将每个元素拆分成原子</p>
+
+<pre><code>.mt-20 {
+    margin-top : 20px;
+}
+
+.fl {
+    float : left;
+</code></pre>
+
+<h2 id="toc_2">Block, Element, Modifier (BEM)</h2>
+
+<p>根据严规写出的，易于理解的 css 风格</p>
+
+<pre><code>/* 块 */
+.block {}
+
+/* 块中元素，双下划线 */
+.block__element {}
+
+/* 元素或块的修改器，双连字符 */
+.block--modifier {}
+</code></pre>
+
+<p>一个例子</p>
+
+<pre><code>&lt;header class=&quot;col-header&quot;&gt;
+
+    &lt;!-- 块元素 --&gt;
+    &lt;h1 class=&quot;col-header__heading&quot;&gt;
+        &lt;a class=&quot;col-header__link&quot; href=&quot;/&quot;&gt;clubmate.fi&lt;/a&gt;
+    &lt;/h1&gt;
+
+    &lt;!-- 块元素 --&gt;
+    &lt;nav class=&quot;nav&quot;&gt;
+
+        &lt;!-- 块元素 --&gt;
+        &lt;a class=&quot;nav__item&quot; href=&quot;/&quot;&gt;Home&lt;/a&gt;
+
+        &lt;!-- 元素与修改器 --&gt;
+        &lt;a class=&quot;nav__item nav__item--uplink&quot; href=&quot;#header&quot;&gt;&amp;uarr;&lt;/a&gt;
+
+    &lt;/nav&gt;
+&lt;/header&gt;
+</code></pre>
+
+<hr/>
+
+<p>BEM 是 OOCSS 的加强版，而且利于理解分辨，以后就采用这个啦~</p>
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2017/3/22 14:24 下午</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='web.html'>web</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+                        <a href="http://blog.kayorl.com/css-style.html#disqus_thread">comments</a>
+                      
+
+                      
+                        &nbsp;<a  class="ds-thread-count" data-thread-key="css-style.html" data-count-type="comments" href="css-style.html#ds-thread"></a>
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="mobile-notice.html">
                 
                   <h1>移动开发要点</h1>
                   <div class="a-content">
@@ -125,7 +270,7 @@
                 </a>
                 <div class="read-more clearfix">
                   <div class="more-left left">
-                   <a href="14898895604273.html">Read more</a>&nbsp;&nbsp; 
+                   <a href="mobile-notice.html">Read more</a>&nbsp;&nbsp; 
                     <span class="date">2017/3/19 10:12 上午</span>
                     <span>posted in&nbsp;</span> 
           				  
@@ -135,11 +280,11 @@
                   <div class="more-right right">
                   <span class="comments">
                       
-                        <a href="http://blog.kayorl.com/14898895604273.html#disqus_thread">comments</a>
+                        <a href="http://blog.kayorl.com/mobile-notice.html#disqus_thread">comments</a>
                       
 
                       
-                        &nbsp;<a  class="ds-thread-count" data-thread-key="14898895604273.html" data-count-type="comments" href="14898895604273.html#ds-thread"></a>
+                        &nbsp;<a  class="ds-thread-count" data-thread-key="mobile-notice.html" data-count-type="comments" href="mobile-notice.html#ds-thread"></a>
                        
                   </span>
                   </div>
@@ -190,20 +335,26 @@
 			<div class="article">
                 <a class="clearlink" href="14892446837739.html">
                 
-                  <h1>标签属性</h1>
+                  <h1>css 标签一行化</h1>
                   <div class="a-content">
                       
                       <div class="a-content-text">
                         
                         	<ul>
 <li>
-<a href="#toc_0">border-box,减去边框与内边距后的盒模型</a>
+<a href="#toc_0">box-shadow</a>
 </li>
 <li>
-<a href="#toc_1">list-style, 表项之项头标记</a>
+<a href="#toc_1">font</a>
 </li>
 <li>
-<a href="#toc_2">background，多行太烦不如一行</a>
+<a href="#toc_2">border-box,减去边框与内边距后的盒模型</a>
+</li>
+<li>
+<a href="#toc_3">list-style, 表项之项头标记</a>
+</li>
+<li>
+<a href="#toc_4">background，多行太烦不如一行</a>
 </li>
 </ul>
 
@@ -275,31 +426,34 @@
               </div><!-- article -->
         
 			<div class="article">
-                <a class="clearlink" href="14885921690264.html">
+                <a class="clearlink" href="css-layout.html">
                 
-                  <h1>布局</h1>
+                  <h1>css 布局系统</h1>
                   <div class="a-content">
                       
                       <div class="a-content-text">
                         
                         	<ul>
 <li>
-<a href="#toc_0">flexbox</a>
+<a href="#toc_0">grid</a>
 </li>
 <li>
-<a href="#toc_1">column</a>
+<a href="#toc_1">flexbox</a>
 </li>
 <li>
-<a href="#toc_2">inline-block</a>
+<a href="#toc_2">column</a>
 </li>
 <li>
-<a href="#toc_3">float</a>
+<a href="#toc_3">inline-block</a>
+</li>
+<li>
+<a href="#toc_4">float</a>
 <ul>
 <li>
-<a href="#toc_4">overflow 技巧</a>
+<a href="#toc_5">overflow 技巧</a>
 </li>
 <li>
-<a href="#toc_5">clearfix 技巧</a>
+<a href="#toc_6">clearfix 技巧</a>
 </li>
 </ul>
 </li>
@@ -313,7 +467,7 @@
                 </a>
                 <div class="read-more clearfix">
                   <div class="more-left left">
-                   <a href="14885921690264.html">Read more</a>&nbsp;&nbsp; 
+                   <a href="css-layout.html">Read more</a>&nbsp;&nbsp; 
                     <span class="date">2017/3/4 9:49 上午</span>
                     <span>posted in&nbsp;</span> 
           				  
@@ -323,11 +477,11 @@
                   <div class="more-right right">
                   <span class="comments">
                       
-                        <a href="http://blog.kayorl.com/14885921690264.html#disqus_thread">comments</a>
+                        <a href="http://blog.kayorl.com/css-layout.html#disqus_thread">comments</a>
                       
 
                       
-                        &nbsp;<a  class="ds-thread-count" data-thread-key="14885921690264.html" data-count-type="comments" href="14885921690264.html#ds-thread"></a>
+                        &nbsp;<a  class="ds-thread-count" data-thread-key="css-layout.html" data-count-type="comments" href="css-layout.html#ds-thread"></a>
                        
                   </span>
                   </div>
@@ -642,80 +796,6 @@
                 </div>
               </div><!-- article -->
         
-			<div class="article">
-                <a class="clearlink" href="14872314142502.html">
-                
-                  <h1>[译] Sequelize(3)  CRUD</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="14872314142502.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2016/11/26 23:22 下午</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='sequelize.html'>Sequelize</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-                        <a href="http://blog.kayorl.com/14872314142502.html#disqus_thread">comments</a>
-                      
-
-                      
-                        &nbsp;<a  class="ds-thread-count" data-thread-key="14872314142502.html" data-count-type="comments" href="14872314142502.html#ds-thread"></a>
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="14872476184764.html">
-                
-                  <h1>supertest 模拟客户端</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>模拟一个客户端，可用于爬虫、API 测试等</p>
-
-
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="14872476184764.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2016/11/25 14:30 下午</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='nodejs.html'>nodejs</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-                        <a href="http://blog.kayorl.com/14872476184764.html#disqus_thread">comments</a>
-                      
-
-                      
-                        &nbsp;<a  class="ds-thread-count" data-thread-key="14872476184764.html" data-count-type="comments" href="14872476184764.html#ds-thread"></a>
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
               
 
 
@@ -793,7 +873,19 @@
 	      
 		      
 			      <li class="post">
-			        <a href="14898895604273.html">移动开发要点</a>
+			        <a href="css-centering.html">css 元素垂直、水平居中</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="css-style.html">css 命名约定</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="mobile-notice.html">移动开发要点</a>
 			      </li>
 		     
 		  
@@ -805,19 +897,7 @@
 		  
 		      
 			      <li class="post">
-			        <a href="14892446837739.html">标签属性</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="function.html">function 背后隐藏着什么秘密</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14885921690264.html">布局</a>
+			        <a href="14892446837739.html">css 标签一行化</a>
 			      </li>
 		     
 		  

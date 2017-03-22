@@ -135,21 +135,25 @@
 
 <span id="more"></span><!-- more -->
 
+<p>文档类型中会出现的元素限制。</p>
+
 <h2 id="toc_0">DOCTYPE 声明对页面进行有效性验证</h2>
 
 <blockquote>
-<p>DTD (文档定义类型)定义 XML 或 HTML 的特定版本允许有什么，不允许有什么。</p>
+<p>DTD (Document Type Definition, 文档定义类型)定义 XML 或 HTML 的特定版本允许有什么，不允许有什么。</p>
 
-<p>SGML (标准通用标记语言) 是一种定义电子文档结构和描述其内容的国际标准语言</p>
+<p>SGML (Standard Generalized Markup language, 标准通用标记语言) 是一种定义电子文档结构和描述其内容的国际标准语言</p>
 </blockquote>
 
-<p>有助于找到代码中的 bug</p>
+<p>利用 <a href="http://validator.w3.org/">w3c 认证器</a>, 有助于找到代码中的 bug 。<br/>
+它是通过与标准HTML规则进行比较的方式，分析HTML文档、标记出错误和非标准代码的处理过程。<br/>
+Web页面使用HTML进行渲染，而HTML本身采用了HTML规范作为其规则和标准。</p>
 
 <h2 id="toc_1">DOCTYPE 声明让浏览器有不同的呈现形式</h2>
 
 <blockquote>
 <p>标准模式(standard mode)：根据规范的一种呈现形式<br/>
-混杂模式(quirk mode)：模拟老式浏览器的一种呈现形式</p>
+混杂模式(quirk mode)：模拟老式浏览器的一种呈现形式，盒模型（border-box）</p>
 </blockquote>
 
 <table>
@@ -163,6 +167,12 @@
 </thead>
 
 <tbody>
+<tr>
+<td style="text-align: center">NO</td>
+<td style="text-align: center"></td>
+<td style="text-align: center"></td>
+<td style="text-align: center">yes</td>
+</tr>
 <tr>
 <td style="text-align: center"> HTML4.01</td>
 <td style="text-align: center">strict</td>
@@ -189,6 +199,22 @@
 </tr>
 </tbody>
 </table>
+
+<p>三、严格模式与混杂模式的语句解析不同点有哪些？</p>
+
+<ol>
+<li>盒模型的高宽包含内边距padding和边框border
+在W3C标准中，如果设置一个元素的宽度和高度，指的是元素内容的宽度和高度，而在IE5.5及以下的浏览器及其他版本的Quirks模式下，IE的宽度和高度还包含了padding和border。</li>
+<li>可以设置行内元素的高宽
+在Standards模式下，给span等行内元素设置width和height都不会生效，而在quirks模式下，则会生效。</li>
+<li>可设置百分比的高度
+在standards模式下，一个元素的高度是由其包含的内容来决定的，如果父元素没有设置高度，子元素设置一个百分比的高度是无效的。</li>
+<li>用margin:0 auto设置水平居中在IE下会失效
+使用margin:0 auto在standards模式下可以使元素水平居中，但在quirks模式下却会失效,quirk模式下的解决办法，用text-align属性:   <code>body{text-align :center};#content{text-align :left}</code></li>
+<li>quirk模式下设置图片的padding会失效</li>
+<li>quirk模式下Table中的字体属性不能继承上层的设置</li>
+<li>quirk模式下<code>white-space: pre</code>会失效</li>
+</ol>
 
 
     
@@ -291,7 +317,19 @@
 	      
 		      
 			      <li class="post">
-			        <a href="14898895604273.html">移动开发要点</a>
+			        <a href="css-centering.html">css 元素垂直、水平居中</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="css-style.html">css 命名约定</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="mobile-notice.html">移动开发要点</a>
 			      </li>
 		     
 		  
@@ -303,19 +341,7 @@
 		  
 		      
 			      <li class="post">
-			        <a href="14892446837739.html">标签属性</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="function.html">function 背后隐藏着什么秘密</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14885921690264.html">布局</a>
+			        <a href="14892446837739.html">css 标签一行化</a>
 			      </li>
 		     
 		  

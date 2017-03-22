@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  运维 - 几谷 博客
+  css 元素垂直、水平居中 - 几谷 博客
   
   </title>
   
@@ -98,170 +98,195 @@
        
 
  <script type="text/javascript">
-	$(function(){
-		$('#menu_item_index').addClass('is_active');
-	});
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
 </script>
 <div class="row">
-	<div class="large-8 medium-8 columns">
-		<div class="markdown-body home-categories">
-		
-			<div class="article">
-                <a class="clearlink" href="14872339187000.html">
-                
-                  <h1>MySQL5.7 从相见到👋</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>我的意中人是个盖世英雄<br/>
-有一天他会踩着七色云彩来娶我<br/>
-我猜中了前头,<br/>
-可是我猜不着这结局</p>
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>css 元素垂直、水平居中</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2017/3/22 20:42 下午</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='web.html'>web</a></span>
+           
+         
+          <span class="comments">
+            
+              <a href="http://blog.kayorl.com/css-centering.html#disqus_thread">comments</a>
+            
+
+            
+              &nbsp;<a  class="ds-thread-count" data-thread-key="css-centering.html" data-count-type="comments" href="css-centering.html#ds-thread"></a>
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <span id="more"></span><!-- more -->
+
+<h2 id="toc_0">水平居中</h2>
+
+<blockquote>
+<p>inline-*</p>
+</blockquote>
+
+<pre><code>inline-* {
+    text-align: center;
+}
+</code></pre>
+
+<blockquote>
+<p>已知高度的 block </p>
+</blockquote>
+
+<pre><code>block {
+    margin: 0 auto; 
+}
+</code></pre>
+
+<blockquote>
+<p>未知高度的 block</p>
+</blockquote>
+
+<pre><code>block {
+    display: inline-block;  
+    text-align: center; 
+}
+</code></pre>
+
+<h2 id="toc_1">垂直居中</h2>
+
+<blockquote>
+<p>inline 单行</p>
+</blockquote>
+
+<pre><code>inline-* {
+    padding-top: 30px;   
+    padding-bottom:30px; 
+}
+</code></pre>
+
+<pre><code>inline-* {
+    line-height: height;
+    /* height 为元素高度 */
+}
+</code></pre>
+
+<blockquote>
+<p>inline 多行</p>
+</blockquote>
+
+<p>第一种方法,利用 <code>table</code> 标签</p>
+
+<pre><code>table {
+    ...
+}
+table tr td {
+    /* the default value of vertical-align is middle */
+}
+</code></pre>
+
+<p>第二种方法，模拟 <code>table</code>标签，为居中元素添加 <code>vertical-align</code>标签</p>
+
+<pre><code>.parent { 
+    display: table;
+}
+
+.child {
+    display: table-cell;
+    vertical-align: middle;
+}
+</code></pre>
+
+<blockquote>
+<p>已知高度的 block</p>
+</blockquote>
+
+<pre><code>.parent {
+    position: relative;
+}
+
+.child {
+    position: absolute;
+    top:50%;
+    margin-top: - height/2;
+    /* 偏移是以块的左上角为锚的，以此需减去 block 高度的一半 */
+}
+</code></pre>
+
+<blockquote>
+<p>未知高度的 block</p>
+</blockquote>
+
+<pre><code>.parent {
+    position: relative;
+}
+
+.child {
+    position: absolute;
+    top:50%;
+    transform: translateY(50%);
+}
+</code></pre>
+
+<blockquote>
+<p>大招，flex</p>
+</blockquote>
+
+<pre><code>.parent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+</code></pre>
 
 
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="14872339187000.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2016/12/3 13:31 下午</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='database.html'>数据库系统</a></span>
-          				  
-          					    <span class="posted-in"><a href='O&M.html'>运维</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-                        <a href="http://blog.kayorl.com/14872339187000.html#disqus_thread">comments</a>
-                      
+    
 
-                      
-                        &nbsp;<a  class="ds-thread-count" data-thread-key="14872339187000.html" data-count-type="comments" href="14872339187000.html#ds-thread"></a>
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="14872295003080.html">
-                
-                  <h1>nginx 从安装到卸载</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>在<code>ubuntu16.04</code>下，对 nginx 进行</p>
+      </div>
 
-<ul>
-<li>
-<a href="#toc_0">源安装</a>
-</li>
-<li>
-<a href="#toc_1">配置防火墙允许 nginx 通过 80 端口</a>
-</li>
-<li>
-<a href="#toc_2">查看 nginx 状态</a>
-</li>
-<li>
-<a href="#toc_3">内核参数优化</a>
-</li>
-<li>
-<a href="#toc_4">使配置生效</a>
-</li>
-<li>
-<a href="#toc_5">nginx 配置</a>
-</li>
-</ul>
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="css-style.html" 
+          title="Next Post: css 命名约定">css 命名约定 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+            <div id="disqus_thread"></div>
+          
+
+          
+              <div class="ds-thread" data-thread-key="css-centering.html" data-url="http://blog.kayorl.com/css-centering.html" data-title="css 元素垂直、水平居中"></div>
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
 
 
 
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="14872295003080.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2016/10/25 17:20 下午</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='O&M.html'>运维</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-                        <a href="http://blog.kayorl.com/14872295003080.html#disqus_thread">comments</a>
-                      
-
-                      
-                        &nbsp;<a  class="ds-thread-count" data-thread-key="14872295003080.html" data-count-type="comments" href="14872295003080.html#ds-thread"></a>
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="14872477973050.html">
-                
-                  <h1>杂</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="14872477973050.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2016/10/6 17:12 下午</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='O&M.html'>运维</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-                        <a href="http://blog.kayorl.com/14872477973050.html#disqus_thread">comments</a>
-                      
-
-                      
-                        &nbsp;<a  class="ds-thread-count" data-thread-key="14872477973050.html" data-count-type="comments" href="14872477973050.html#ds-thread"></a>
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-              
-
-
-			<div class="row">
-			  <div class="large-6 columns">
-			  <p class="text-left" style="padding-top:25px;">
-			   
-			  </p>
-			  </div>
-			  <div class="large-6 columns">
-			<p class="text-right" style="padding-top:25px;">
-			
-			</p>
-			  </div>
-			</div>
-		</div>
-	</div><!-- large 8 -->
 
  <div class="large-4 medium-4 columns">
   <div class="hide-for-small">

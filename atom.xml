@@ -4,13 +4,213 @@
   <title><![CDATA[几谷 博客]]></title>
   <link href="http://blog.kayorl.com/atom.xml" rel="self"/>
   <link href="http://blog.kayorl.com/"/>
-  <updated>2017-03-22T23:42:34+08:00</updated>
+  <updated>2017-03-22T23:42:38+08:00</updated>
   <id>http://blog.kayorl.com/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[事件处理 之 跨浏览器]]></title>
+    <link href="http://blog.kayorl.com/14905364754279.html"/>
+    <updated>2017-03-26T21:54:35+08:00</updated>
+    <id>http://blog.kayorl.com/14905364754279.html</id>
+    <content type="html"><![CDATA[
+<p>由于各浏览器的事件对象存在差异,利用下面的 <code>EventUtil</code> 对象可以跨浏览器处理事件</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">增减监听器</a>
+</li>
+<li>
+<a href="#toc_1">获取 target 属性</a>
+</li>
+<li>
+<a href="#toc_2">阻止系统默认行为</a>
+</li>
+<li>
+<a href="#toc_3">获取事件</a>
+</li>
+<li>
+<a href="#toc_4">停止事件在 DOM 层次中的传播</a>
+</li>
+<li>
+<a href="#toc_5">修正鼠标按钮问题</a>
+</li>
+<li>
+<a href="#toc_6">修正任意情况下滚轮的取值</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">增减监听器</h2>
+
+<pre><code>var EventUtil = {
+    addHandler: function(element, type, handler) {
+        if (element.addEventListener) {
+            element.addEventListener(type, handler, false);
+        } else if (element.attachEvent) {
+            element.attachEvent(type, handler);
+        } else {
+            element[&quot;on&quot; + type] = handler;
+        }
+    },
+    removeHandler: function(element, type, handler) {
+        if (element.removeEventListener) {
+            element.removeEventListener(type, handler, false);
+        } else if (element.detachEvent) {
+            element.detachEvent(type, handler);
+        } else {
+            element[&quot;on&quot; + type] = null;
+        }
+    }
+}
+</code></pre>
+
+<h2 id="toc_1">获取 target 属性</h2>
+
+<pre><code>var EventUtil = {
+    
+    ...
+    /**
+     * 使用 DOM0 级方法处理时, 事件处理的作用域是根据指定的方式确定的, 
+                            this 不会始终等于事件目标,因而用 srcElement
+     */  
+    getTarget: function(event) {
+        return event.target ? event.target : event.srcElement;
+    }
+}
+</code></pre>
+
+<h2 id="toc_2">阻止系统默认行为</h2>
+
+<pre><code>var EventUtil = {
+    
+    ...
+    
+    /**
+     * 阻止默认行为,如点击链接时自动跳转
+     * 使用 DOM0 级方法处理时, returnValue 属性相当于 preventDefault 方法
+     */
+    preventDefault: function(event) {
+        if (even.preventDefault) {
+            event.preventDefault();
+        } else {
+            event.returnValue = false;
+        }
+    }
+}
+</code></pre>
+
+<h2 id="toc_3">获取事件</h2>
+
+<pre><code>var EventUtil = {
+    
+    ...
+    
+    /**
+     * 使用 DOM0 级方法处理时, event 对象作为 window 对象的一个属性存在
+     */
+    getEvent: function(event) {
+        return event ? event : window.event;
+    },
+  
+}
+
+</code></pre>
+
+<h2 id="toc_4">停止事件在 DOM 层次中的传播</h2>
+
+<pre><code>var EventUtil = {
+    
+    ...
+    
+    /**
+     * 立即停止事件在 DOM 层次中的传播
+     * 使用 DOM0 级方法处理时, cancelBubble 属性相当于 stopPropagation 方法
+     */
+    stopPropagation: function(event) {
+        if (event.stopPropagation) {
+            event.stopPropagation();
+        } else {
+            event.cancelBubble = true;
+        }
+    }
+}
+
+</code></pre>
+
+<h2 id="toc_5">修正鼠标按钮问题</h2>
+
+<pre><code>var EventUtil= {
+    
+    ...
+    
+    /**
+     * IE8 的问题........
+     * 0 : 主按钮, 1 : 滚轮 , 2 : 次按钮
+     */
+    getButton: function(event) {
+        if (document.implementation.hasFeature(&quot;MouseEvents&quot;, &quot;2.0&quot;)) {
+            return event.button;
+        } else {
+            switch (event.button) {
+                case 0:
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                    return 0;
+                case 2:
+                case 6:
+                    return 2;
+                case 4:
+                    return 1;
+            }
+        }
+    }
+};
+</code></pre>
+
+<h2 id="toc_6">修正任意情况下滚轮的取值</h2>
+
+<pre><code>var EventUtil = {
+
+    ...
+    
+    /**
+     * 向前为加
+     * opera 9.5 之前的版本中, wheelDelta 值正负号是颠倒的
+     * FireFox 的滚轮信息保存在 detail 中,且值为 正常 wheelDelta 的 1 /40 
+     */
+    getWheelDelta: function(event) {
+        if (event.wheelDelta) {
+            return (client.engine.opera &amp;&amp; client.engine.opera &lt; 9.5 ? -event.wheelDelta : event.wheelDelta);
+        } else {
+            return -event.detail * 40;
+        }
+    }
+};
+
+/**
+ * 修正任意情况下滚轮的取值
+ */
+(function() {
+    function handleMouseWheel(event) {
+        event.EventUtil.getEvent(event);
+        var delta = EventUtil.getWheelDelta(event);
+    }
+    EventUtil.addHandler(document, &quot;mousewheel&quot;, handleMouseWheel);
+    EventUtil.addHandler(document, &quot;DOMMouseScroll&quot;, handleMouseWheel);
+})();
+</code></pre>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[css 元素垂直、水平居中]]></title>
@@ -145,6 +345,8 @@ table tr td {
     <updated>2017-03-22T14:24:54+08:00</updated>
     <id>http://blog.kayorl.com/css-style.html</id>
     <content type="html"><![CDATA[
+<span id="more"></span><!-- more --> 
+
 <h2 id="toc_0">Object Oriented CSS (OOCSS)</h2>
 
 <p>分离容器与内容</p>
@@ -177,6 +379,7 @@ table tr td {
 
 .fl {
     float : left;
+}
 </code></pre>
 
 <h2 id="toc_2">Block, Element, Modifier (BEM)</h2>
@@ -223,7 +426,7 @@ table tr td {
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[移动开发要点]]></title>
+    <title type="html"><![CDATA[移动端适配开发要点]]></title>
     <link href="http://blog.kayorl.com/mobile-notice.html"/>
     <updated>2017-03-19T10:12:40+08:00</updated>
     <id>http://blog.kayorl.com/mobile-notice.html</id>
@@ -2338,34 +2541,6 @@ http {
 <pre><code>sudo apt-get remove nginx nginx-common # Removes all but config files.
 sudo apt-get purge nginx nginx-common # Removes everything.
 sudo apt-get autoremove # After using any of the above commands, use this in order to remove dependencies used by nginx which are no longer required.
-</code></pre>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[杂]]></title>
-    <link href="http://blog.kayorl.com/14872477973050.html"/>
-    <updated>2017-02-16T20:23:17+08:00</updated>
-    <id>http://blog.kayorl.com/14872477973050.html</id>
-    <content type="html"><![CDATA[
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">Nodejs <a href="node-production">生产模式</a></h2>
-
-<h2 id="toc_1">配置 openssl 密码开关</h2>
-
-<pre><code>$ vi /etc/ssh/sshd_config
-$ sudo systemctl reload sshd
-</code></pre>
-
-<h2 id="toc_2">Redis</h2>
-
-<p><a href="http://www.linuxdiyf.com/linux/22527.html">http://www.linuxdiyf.com/linux/22527.html</a></p>
-
-<h2 id="toc_3">Mac 启动 redis</h2>
-
-<pre><code>$ sudo ../bin/redis-server ./redis.conf
 </code></pre>
 
 ]]></content>

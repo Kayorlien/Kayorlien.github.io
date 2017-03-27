@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  pm2 - 几谷 博客
+  事件处理 之 跨浏览器 - 几谷 博客
   
   </title>
   
@@ -107,23 +107,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>pm2</h1>
+          <h1>事件处理 之 跨浏览器</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/11/6 9:30 上午</span>
+          <span class="date">2017/3/26 21:54 下午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='nodejs.html'>nodejs</a></span>
+              <span class="posted-in"><a href='web.html'>web</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872295003201.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/14905364754279.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872295003201.html" data-count-type="comments" href="14872295003201.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="14905364754279.html" data-count-type="comments" href="14905364754279.html#ds-thread"></a>
             
           </span>
 
@@ -131,63 +131,196 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>nodejs 的进程管理器，自带<code>负载均衡</code>以及热重载</p>
+      <p>由于各浏览器的事件对象存在差异,利用下面的 <code>EventUtil</code> 对象可以跨浏览器处理事件</p>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">全局安装</h2>
+<ul>
+<li>
+<a href="#toc_0">增减监听器</a>
+</li>
+<li>
+<a href="#toc_1">获取 target 属性</a>
+</li>
+<li>
+<a href="#toc_2">阻止系统默认行为</a>
+</li>
+<li>
+<a href="#toc_3">获取事件</a>
+</li>
+<li>
+<a href="#toc_4">停止事件在 DOM 层次中的传播</a>
+</li>
+<li>
+<a href="#toc_5">修正鼠标按钮问题</a>
+</li>
+<li>
+<a href="#toc_6">修正任意情况下滚轮的取值</a>
+</li>
+</ul>
 
-<pre><code>$ npm install pm2 -g
+
+<h2 id="toc_0">增减监听器</h2>
+
+<pre><code>var EventUtil = {
+    addHandler: function(element, type, handler) {
+        if (element.addEventListener) {
+            element.addEventListener(type, handler, false);
+        } else if (element.attachEvent) {
+            element.attachEvent(type, handler);
+        } else {
+            element[&quot;on&quot; + type] = handler;
+        }
+    },
+    removeHandler: function(element, type, handler) {
+        if (element.removeEventListener) {
+            element.removeEventListener(type, handler, false);
+        } else if (element.detachEvent) {
+            element.detachEvent(type, handler);
+        } else {
+            element[&quot;on&quot; + type] = null;
+        }
+    }
+}
 </code></pre>
 
-<h2 id="toc_1">开机启动</h2>
+<h2 id="toc_1">获取 target 属性</h2>
 
-<p>pm2 save 保存当前进程列表，下次启动时自动恢复列表内进程</p>
-
-<pre><code>$ pm2 startup &amp;&amp; pm2 save
+<pre><code>var EventUtil = {
+    
+    ...
+    /**
+     * 使用 DOM0 级方法处理时, 事件处理的作用域是根据指定的方式确定的, 
+                            this 不会始终等于事件目标,因而用 srcElement
+     */  
+    getTarget: function(event) {
+        return event.target ? event.target : event.srcElement;
+    }
+}
 </code></pre>
 
-<h2 id="toc_2">启动</h2>
+<h2 id="toc_2">阻止系统默认行为</h2>
 
-<blockquote>
-<p>[ app_name ] : 应用名<br/>
-[ 4 ] :进程数目,为0时进程数目与 CPU 数相等</p>
-</blockquote>
-
-<pre><code>$ pm2 start app.js --name=[app_name] -i 4
+<pre><code>var EventUtil = {
+    
+    ...
+    
+    /**
+     * 阻止默认行为,如点击链接时自动跳转
+     * 使用 DOM0 级方法处理时, returnValue 属性相当于 preventDefault 方法
+     */
+    preventDefault: function(event) {
+        if (even.preventDefault) {
+            event.preventDefault();
+        } else {
+            event.returnValue = false;
+        }
+    }
+}
 </code></pre>
 
-<h2 id="toc_3">暂停 | 删除</h2>
+<h2 id="toc_3">获取事件</h2>
 
-<blockquote>
-<p>[ id ] : 进程 id</p>
-</blockquote>
+<pre><code>var EventUtil = {
+    
+    ...
+    
+    /**
+     * 使用 DOM0 级方法处理时, event 对象作为 window 对象的一个属性存在
+     */
+    getEvent: function(event) {
+        return event ? event : window.event;
+    },
+  
+}
 
-<pre><code>$ pm2 stop [id]
-$ pm2 delete [id]
 </code></pre>
 
-<p>进程数变为2</p>
+<h2 id="toc_4">停止事件在 DOM 层次中的传播</h2>
 
-<blockquote>
-<p>[ app_name ] : 应用名</p>
-</blockquote>
+<pre><code>var EventUtil = {
+    
+    ...
+    
+    /**
+     * 立即停止事件在 DOM 层次中的传播
+     * 使用 DOM0 级方法处理时, cancelBubble 属性相当于 stopPropagation 方法
+     */
+    stopPropagation: function(event) {
+        if (event.stopPropagation) {
+            event.stopPropagation();
+        } else {
+            event.cancelBubble = true;
+        }
+    }
+}
 
-<pre><code>$ pm2 sacle [app_name] 2
 </code></pre>
 
-<h2 id="toc_4">监控</h2>
+<h2 id="toc_5">修正鼠标按钮问题</h2>
 
-<pre><code>$ pm2 list
-$ pm2 monit
-$ pm2 show [app_name]
-$ pm2 logs
-$ pm2 logs [app_name]
+<pre><code>var EventUtil= {
+    
+    ...
+    
+    /**
+     * IE8 的问题........
+     * 0 : 主按钮, 1 : 滚轮 , 2 : 次按钮
+     */
+    getButton: function(event) {
+        if (document.implementation.hasFeature(&quot;MouseEvents&quot;, &quot;2.0&quot;)) {
+            return event.button;
+        } else {
+            switch (event.button) {
+                case 0:
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                    return 0;
+                case 2:
+                case 6:
+                    return 2;
+                case 4:
+                    return 1;
+            }
+        }
+    }
+};
 </code></pre>
 
-<hr/>
+<h2 id="toc_6">修正任意情况下滚轮的取值</h2>
 
-<p>此外，还可以通过 <a href="https://app.keymetrics.io">keymetrics</a>  实现网页监控，不过免费版只能支持一台机器的状态监控</p>
+<pre><code>var EventUtil = {
+
+    ...
+    
+    /**
+     * 向前为加
+     * opera 9.5 之前的版本中, wheelDelta 值正负号是颠倒的
+     * FireFox 的滚轮信息保存在 detail 中,且值为 正常 wheelDelta 的 1 /40 
+     */
+    getWheelDelta: function(event) {
+        if (event.wheelDelta) {
+            return (client.engine.opera &amp;&amp; client.engine.opera &lt; 9.5 ? -event.wheelDelta : event.wheelDelta);
+        } else {
+            return -event.detail * 40;
+        }
+    }
+};
+
+/**
+ * 修正任意情况下滚轮的取值
+ */
+(function() {
+    function handleMouseWheel(event) {
+        event.EventUtil.getEvent(event);
+        var delta = EventUtil.getWheelDelta(event);
+    }
+    EventUtil.addHandler(document, &quot;mousewheel&quot;, handleMouseWheel);
+    EventUtil.addHandler(document, &quot;DOMMouseScroll&quot;, handleMouseWheel);
+})();
+</code></pre>
 
 
     
@@ -198,16 +331,13 @@ $ pm2 logs [app_name]
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872476184764.html" 
-          title="Previous Post: supertest 模拟客户端">&laquo; supertest 模拟客户端</a>
-      
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872295003080.html" 
-          title="Next Post: nginx 从安装到卸载">nginx 从安装到卸载 &raquo;</a>
+          <a  href="css-centering.html" 
+          title="Next Post: css 元素垂直、水平居中">css 元素垂直、水平居中 &raquo;</a>
       
       </p>
         </div>
@@ -221,7 +351,7 @@ $ pm2 logs [app_name]
           
 
           
-              <div class="ds-thread" data-thread-key="14872295003201.html" data-url="http://blog.kayorl.com/14872295003201.html" data-title="pm2"></div>
+              <div class="ds-thread" data-thread-key="14905364754279.html" data-url="http://blog.kayorl.com/14905364754279.html" data-title="事件处理 之 跨浏览器"></div>
           
         </div>
       </div>

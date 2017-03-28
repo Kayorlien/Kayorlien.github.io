@@ -157,12 +157,15 @@
 <li>
 <a href="#toc_6">修正任意情况下滚轮的取值</a>
 </li>
+<li>
+<a href="#toc_7">获取按键事件的字符编码</a>
+</li>
 </ul>
 
 
 <h2 id="toc_0">增减监听器</h2>
 
-<pre><code>var EventUtil = {
+<pre><code class="language-js">var EventUtil = {
     addHandler: function(element, type, handler) {
         if (element.addEventListener) {
             element.addEventListener(type, handler, false);
@@ -186,7 +189,7 @@
 
 <h2 id="toc_1">获取 target 属性</h2>
 
-<pre><code>var EventUtil = {
+<pre><code class="language-js">var EventUtil = {
     
     ...
     /**
@@ -201,7 +204,7 @@
 
 <h2 id="toc_2">阻止系统默认行为</h2>
 
-<pre><code>var EventUtil = {
+<pre><code class="language-js">var EventUtil = {
     
     ...
     
@@ -221,7 +224,7 @@
 
 <h2 id="toc_3">获取事件</h2>
 
-<pre><code>var EventUtil = {
+<pre><code class="language-js">var EventUtil = {
     
     ...
     
@@ -238,7 +241,7 @@
 
 <h2 id="toc_4">停止事件在 DOM 层次中的传播</h2>
 
-<pre><code>var EventUtil = {
+<pre><code class="language-js">var EventUtil = {
     
     ...
     
@@ -259,7 +262,7 @@
 
 <h2 id="toc_5">修正鼠标按钮问题</h2>
 
-<pre><code>var EventUtil= {
+<pre><code class="language-js">var EventUtil= {
     
     ...
     
@@ -291,7 +294,7 @@
 
 <h2 id="toc_6">修正任意情况下滚轮的取值</h2>
 
-<pre><code>var EventUtil = {
+<pre><code class="language-js">var EventUtil = {
 
     ...
     
@@ -322,6 +325,26 @@
 })();
 </code></pre>
 
+<h2 id="toc_7">获取按键事件的字符编码</h2>
+
+<pre><code class="language-js">var EventUtil = {
+    
+    ...
+    
+    /**
+     * &lt;=IE8 及 opera 在 keyCode 中保存字符的 ASCII 编码
+     */
+    getCharCode: function(event) {
+        if (typeof event.charCode == &quot;number&quot;) {
+            return event.charCode;
+        } else {
+            return event.keyCode;
+        }
+    }
+}
+
+</code></pre>
+
 
     
 
@@ -336,8 +359,8 @@
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="css-centering.html" 
-          title="Next Post: css 元素垂直、水平居中">css 元素垂直、水平居中 &raquo;</a>
+          <a  href="margin-collapse.html" 
+          title="Next Post: 外边距折叠">外边距折叠 &raquo;</a>
       
       </p>
         </div>
@@ -426,6 +449,12 @@
 		  
 		      
 			      <li class="post">
+			        <a href="margin-collapse.html">外边距折叠</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="css-centering.html">css 元素垂直、水平居中</a>
 			      </li>
 		     
@@ -439,12 +468,6 @@
 		      
 			      <li class="post">
 			        <a href="mobile-notice.html">移动端适配开发要点</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="character.html">对象属性的特征值</a>
 			      </li>
 		     
 		  

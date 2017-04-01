@@ -200,20 +200,16 @@ Web页面使用HTML进行渲染，而HTML本身采用了HTML规范作为其规�
 </tbody>
 </table>
 
-<p>三、严格模式与混杂模式的语句解析不同点有哪些？</p>
+<h2 id="toc_2">混杂模式特点</h2>
 
 <ol>
-<li>盒模型的高宽包含内边距padding和边框border
-在W3C标准中，如果设置一个元素的宽度和高度，指的是元素内容的宽度和高度，而在IE5.5及以下的浏览器及其他版本的Quirks模式下，IE的宽度和高度还包含了padding和border。</li>
-<li>可以设置行内元素的高宽
-在Standards模式下，给span等行内元素设置width和height都不会生效，而在quirks模式下，则会生效。</li>
-<li>可设置百分比的高度
-在standards模式下，一个元素的高度是由其包含的内容来决定的，如果父元素没有设置高度，子元素设置一个百分比的高度是无效的。</li>
-<li>用margin:0 auto设置水平居中在IE下会失效
-使用margin:0 auto在standards模式下可以使元素水平居中，但在quirks模式下却会失效,quirk模式下的解决办法，用text-align属性:   <code>body{text-align :center};#content{text-align :left}</code></li>
-<li>quirk模式下设置图片的padding会失效</li>
-<li>quirk模式下Table中的字体属性不能继承上层的设置</li>
-<li>quirk模式下<code>white-space: pre</code>会失效</li>
+<li>盒模型的高宽包含内边距padding和边框border</li>
+<li>可以设置行内元素的高宽</li>
+<li>可设置百分比的高度</li>
+<li>用<code>margin:0 auto</code>设置水平居中在IE下会失效</li>
+<li>设置图片的padding会失效</li>
+<li>Table中的字体属性不能继承上层的设置</li>
+<li><code>white-space: pre</code>会失效</li>
 </ol>
 
 

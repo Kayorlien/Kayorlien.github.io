@@ -2,7 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
   <loc>http://blog.kayorl.com/</loc>
-  <lastmod>2017-04-09T14:18:37+08:00</lastmod>
+  <lastmod>2017-04-10T22:11:50+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://blog.kayorl.com/14917448523131.html</loc>
+  <lastmod>2017-04-09T21:34:12+08:00</lastmod>
 </url>
 
 <url>
@@ -150,11 +155,11 @@
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/C&C++.html</loc>
+  <loc>http://blog.kayorl.com/C-C++.html</loc>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/O&M.html</loc>
+  <loc>http://blog.kayorl.com/om.html</loc>
 </url>
 
 <url>

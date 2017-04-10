@@ -4,13 +4,147 @@
   <title><![CDATA[几谷 博客]]></title>
   <link href="http://blog.kayorl.com/atom.xml" rel="self"/>
   <link href="http://blog.kayorl.com/"/>
-  <updated>2017-04-01T19:35:11+08:00</updated>
+  <updated>2017-04-10T09:52:52+08:00</updated>
   <id>http://blog.kayorl.com/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[同源政策]]></title>
+    <link href="http://blog.kayorl.com/14917448523131.html"/>
+    <updated>2017-04-09T21:34:12+08:00</updated>
+    <id>http://blog.kayorl.com/14917448523131.html</id>
+    <content type="html"><![CDATA[
+<ul>
+<li>
+<a href="#toc_0">CORS , 跨源 AJAX 请求的根本解决方法, 较新</a>
+</li>
+<li>
+<a href="#toc_1">jsonp, 兼顾老式浏览器</a>
+</li>
+<li>
+<a href="#toc_2">WebSocket</a>
+</li>
+<li>
+<a href="#toc_3">window.postMessage</a>
+</li>
+<li>
+<a href="#toc_4">window.name, 窗口载入的所有页面共享</a>
+</li>
+<li>
+<a href="#toc_5">子域设置 document.domain ,通过内置 iframe 通信</a>
+</li>
+</ul>
+
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">CORS , 跨源 AJAX 请求的根本解决方法, 较新</h2>
+
+<p>请移步<a href="http://blog.csdn.net/u014344668/article/details/54948546">CORS</a></p>
+
+<ul>
+<li>IE8 引入 XDR(XDomainRequest) 类型实现 CORS</li>
+<li>实现跨浏览器的CORS, 先检查 XHR 是否支持 CORS 的最简单形式, 即检查<code>withCredentials</code>,</li>
+<li>再检查 XDomainRequest 对象是否存在</li>
+</ul>
+
+<h2 id="toc_1">jsonp, 兼顾老式浏览器</h2>
+
+<blockquote>
+<p>其他域加载代码,存在安全风险<br/>
+知道请求是否失败不容易</p>
+</blockquote>
+
+<pre><code class="language-js">//我是 a 域
+function dealJson(data) {
+    //deal with json data
+}
+
+var script = document.createElement(&#39;script&#39;);
+// 请求提供 json 数据的 b 域
+script.src = &quot;http://www.b.com/jsonp?callback=dealJson&quot;;
+document.body.insertBefore(script, document.body.firstChild);
+</code></pre>
+
+<pre><code class="language-js">// Match jsonp
+var json = { &quot;success&quot;: true, &quot;data&quot;: &quot;secret&quot;};
+return json;
+</code></pre>
+
+<h2 id="toc_2">WebSocket</h2>
+
+<p>首先,同源政策对 WebSocket 不适用<br/>
+再移步 <a href="http://blog.csdn.net/frank_good/article/details/50856585">websocket 解释</a></p>
+
+<h2 id="toc_3">window.postMessage</h2>
+
+<blockquote>
+<p>H5 引入,允许跨窗口通信</p>
+</blockquote>
+
+<pre><code class="language-js">// 大家好, 我是 A 域
+var popup = window.open(&#39;http://b.com&#39;, &#39;title&#39;);
+popup.postMessage(&#39;Hello World!&#39;, &#39;http://b.com&#39;);
+</code></pre>
+
+<pre><code class="language-js">// 大家好, 我是 B 域, A 域是我的打开者
+window.opener.postMessage(&#39;Nice to see you&#39;, &#39;http://aaa.com&#39;);
+</code></pre>
+
+<h2 id="toc_4">window.name, 窗口载入的所有页面共享</h2>
+
+<blockquote>
+<p>每个页面对window.name都有读写的权限，不会因新页面的载入而进行重置。<br/>
+简言之,这是窗口载入页面们的<code>window.name</code><br/>
+小于 2M</p>
+</blockquote>
+
+<pre><code class="language-js">// 大家好,我是 a 域
+var ifr = document.createElement(&#39;iframe&#39;);
+ifr.display = none;
+document.appendChild(ifr);
+
+ifr.onload = function() {
+    //这就是我想要的 字符串!!!
+    var data= ifr.contentWindow.name;    
+};
+ifr.src = &#39;about:black&#39;;
+</code></pre>
+
+<pre><code class="language-js">// 大家好,我是 b 域
+window.name = &quot;我是 a 梦寐以求的字符串&quot;
+</code></pre>
+
+<h2 id="toc_5">子域设置 document.domain ,通过内置 iframe 通信</h2>
+
+<blockquote>
+<p>只能将 domain 设置为更高一级,不能更低.</p>
+</blockquote>
+
+<pre><code class="language-js">// 我是 a 域, 我的域名被设置成一样的了
+doucment.domain = &quot;kayorl.com&quot;;
+
+var ifr = document.createElement(&#39;iframe&#39;);
+ifr.display = none;
+ifr.src = &#39;http://www.b.com&#39;;
+document.appendChild(ifr);
+ifr.onload = function() {
+    var doc = ifr.concentDocument || ifr.contentWindow.document;
+    // 操作 doc
+    ifr.onload = null;
+};
+</code></pre>
+
+<pre><code class="language-js">// 我是 b 域, 我的域名被设置成一样的了
+document.domain = &quot;kayorl.com&quot;;
+</code></pre>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[事件处理 之 跨浏览器]]></title>
@@ -2209,6 +2343,7 @@ net.ipv4.ip_local_port_range = 1024  65535
 <h2 id="toc_4">使配置生效</h2>
 
 <pre><code># sysctl -p
+# /etc/init.d/nginx reload
 </code></pre>
 
 <h2 id="toc_5">nginx 配置</h2>
@@ -2328,34 +2463,6 @@ http {
 <pre><code>sudo apt-get remove nginx nginx-common # Removes all but config files.
 sudo apt-get purge nginx nginx-common # Removes everything.
 sudo apt-get autoremove # After using any of the above commands, use this in order to remove dependencies used by nginx which are no longer required.
-</code></pre>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[杂]]></title>
-    <link href="http://blog.kayorl.com/14872477973050.html"/>
-    <updated>2017-02-16T20:23:17+08:00</updated>
-    <id>http://blog.kayorl.com/14872477973050.html</id>
-    <content type="html"><![CDATA[
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">Nodejs <a href="node-production">生产模式</a></h2>
-
-<h2 id="toc_1">配置 openssl 密码开关</h2>
-
-<pre><code>$ vi /etc/ssh/sshd_config
-$ sudo systemctl reload sshd
-</code></pre>
-
-<h2 id="toc_2">Redis</h2>
-
-<p><a href="http://www.linuxdiyf.com/linux/22527.html">http://www.linuxdiyf.com/linux/22527.html</a></p>
-
-<h2 id="toc_3">Mac 启动 redis</h2>
-
-<pre><code>$ sudo ../bin/redis-server ./redis.conf
 </code></pre>
 
 ]]></content>

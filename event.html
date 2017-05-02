@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  [译] Sequelize(6) sequelize-cli，出门必备良品 - 几谷 博客
+  事件处理 之 跨浏览器 - 几谷 博客
   
   </title>
-  <meta name="keywords" content="sequelize" />
+  <meta name="keywords" content="cross-browser event " />
   
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
@@ -85,6 +85,8 @@
             <li><a href="om.html">运维</a></li>
         
             <li><a href="C-C++.html">C/C++</a></li>
+        
+            <li><a href="security.html">security</a></li>
          
 
       </ul>
@@ -107,23 +109,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>[译] Sequelize(6) sequelize-cli，出门必备良品</h1>
+          <h1>事件处理 之 跨浏览器</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/11/27 16:29 下午</span>
+          <span class="date">2017/3/26 21:54 下午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='sequelize.html'>Sequelize</a></span>
+              <span class="posted-in"><a href='web.html'>web</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872470138156.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/event.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872470138156.html" data-count-type="comments" href="14872470138156.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="event.html" data-count-type="comments" href="event.html#ds-thread"></a>
             
           </span>
 
@@ -131,119 +133,218 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>让数据库转移到那些年的状态<br/>
-通过<strong>迁移文件</strong>存储数据库不同时期的状态，每个迁移文件描述了对数据库的操作</p>
+      <p>由于各浏览器的事件对象存在差异,利用下面的 <code>EventUtil</code> 对象可以跨浏览器处理事件</p>
 
 <span id="more"></span><!-- more -->
 
-<p><strong>CLI</strong>:  <code>command-line interface</code> , 命令行界面</p>
+<ul>
+<li>
+<a href="#toc_0">增减监听器</a>
+</li>
+<li>
+<a href="#toc_1">获取 target 属性</a>
+</li>
+<li>
+<a href="#toc_2">阻止系统默认行为</a>
+</li>
+<li>
+<a href="#toc_3">获取事件</a>
+</li>
+<li>
+<a href="#toc_4">停止事件在 DOM 层次中的传播</a>
+</li>
+<li>
+<a href="#toc_5">修正鼠标按钮问题</a>
+</li>
+<li>
+<a href="#toc_6">修正任意情况下滚轮的取值</a>
+</li>
+<li>
+<a href="#toc_7">获取按键事件的字符编码</a>
+</li>
+</ul>
 
-<h2 id="toc_0">全局安装</h2>
 
-<pre><code>$ npm install -g sequelize-cli
-</code></pre>
+<h2 id="toc_0">增减监听器</h2>
 
-<h3 id="toc_1">使用</h3>
-
-<pre><code>$ sequelize
-</code></pre>
-
-<p>迁移文件一般长这样</p>
-
-<blockquote>
-<p>queryInterface : 修改数据库</p>
-
-<p>Sequelize : 提供多种类型</p>
-</blockquote>
-
-<pre><code class="language-js">module.exports = {
-  up: function(queryInterface, Sequelize) {
-    // logic for transforming into the new state
-  },
- 
-  down: function(queryInterface, Sequelize) {
-    // logic for reverting the changes
-  }
+<pre><code class="language-js">var EventUtil = {
+    addHandler: function(element, type, handler) {
+        if (element.addEventListener) {
+            element.addEventListener(type, handler, false);
+        } else if (element.attachEvent) {
+            element.attachEvent(type, handler);
+        } else {
+            element[&quot;on&quot; + type] = handler;
+        }
+    },
+    removeHandler: function(element, type, handler) {
+        if (element.removeEventListener) {
+            element.removeEventListener(type, handler, false);
+        } else if (element.detachEvent) {
+            element.detachEvent(type, handler);
+        } else {
+            element[&quot;on&quot; + type] = null;
+        }
+    }
 }
 </code></pre>
 
-<p>queryInterface有一下几个函数（常用）：</p>
+<h2 id="toc_1">获取 target 属性</h2>
 
-<ul>
-<li>createTable(tableName, attributes, options)</li>
-<li>addIndex(tableName, attributes, options)</li>
-<li>dropTable(tableName, options)</li>
-</ul>
-
-<h2 id="toc_2">createTable(tableName, attributes, options)</h2>
-
-<pre><code>queryInterface.createTable(
-  &#39;nameOfTheNewTable&#39;,
-  {
-    id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
-    },
-    createdAt: {
-      type: Sequelize.DATE
-    },
-    updatedAt: {
-      type: Sequelize.DATE
-    },
-    attr1: Sequelize.STRING,
-    attr2: Sequelize.INTEGER,
-    attr3: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false,
-      allowNull: false
-    },
-    //foreign key usage
-    attr4: {
-        type: Sequelize.INTEGER,
-        references: {
-            model: &#39;another_table_name&#39;,
-            key: &#39;id&#39;
-        },
-        onUpdate: &#39;cascade&#39;,
-        onDelete: &#39;cascade&#39;
+<pre><code class="language-js">var EventUtil = {
+    
+    ...
+    /**
+     * 使用 DOM0 级方法处理时, 事件处理的作用域是根据指定的方式确定的, 
+                            this 不会始终等于事件目标,因而用 srcElement
+     */  
+    getTarget: function(event) {
+        return event.target ? event.target : event.srcElement;
     }
-  },
-  {
-    engine: &#39;MYISAM&#39;,                     // default: &#39;InnoDB&#39;
-    charset: &#39;utf8&#39;,                    // default: null
-    schema: &#39;public&#39;                      // default: public, PostgreSQL only.
-  }
-)
+}
 </code></pre>
 
-<h2 id="toc_3">addIndex(tableName, attributes, options)</h2>
+<h2 id="toc_2">阻止系统默认行为</h2>
 
-<pre><code class="language-js">// This example will create the index person_firstname_lastname
-queryInterface.addIndex(&#39;Person&#39;, [&#39;firstname&#39;, &#39;lastname&#39;])
-
-
-
-// This example will create a unique index with the name SuperDuperIndex using the optional &#39;options&#39; field.
-// Possible options:
-// - indicesType: UNIQUE|FULLTEXT|SPATIAL
-// - indexName: The name of the index. Default is __
-// - parser: For FULLTEXT columns set your parser
-// - indexType: Set a type for the index, e.g. BTREE. See the documentation of the used dialect
-// - logging: A function that receives the sql query, e.g. console.log
-queryInterface.addIndex(
-  &#39;Person&#39;,
-  [&#39;firstname&#39;, &#39;lastname&#39;],
-  {
-    indexName: &#39;SuperDuperIndex&#39;,
-    indicesType: &#39;UNIQUE&#39;
-  }
-)
+<pre><code class="language-js">var EventUtil = {
+    
+    ...
+    
+    /**
+     * 阻止默认行为,如点击链接时自动跳转
+     * 使用 DOM0 级方法处理时, returnValue 属性相当于 preventDefault 方法
+     */
+    preventDefault: function(event) {
+        if (event.preventDefault) {
+            event.preventDefault();
+        } else {
+            event.returnValue = false;
+        }
+    }
+}
 </code></pre>
 
-<h2 id="toc_4">dropTable(tableName, options)</h2>
+<h2 id="toc_3">获取事件</h2>
 
-<pre><code>queryInterface.dropTable(&#39;nameOfTheExistingTable&#39;)
+<pre><code class="language-js">var EventUtil = {
+    
+    ...
+    
+    /**
+     * 使用 DOM0 级方法处理时, event 对象作为 window 对象的一个属性存在
+     */
+    getEvent: function(event) {
+        return event ? event : window.event;
+    },
+  
+}
+
+</code></pre>
+
+<h2 id="toc_4">停止事件在 DOM 层次中的传播</h2>
+
+<pre><code class="language-js">var EventUtil = {
+    
+    ...
+    
+    /**
+     * 立即停止事件在 DOM 层次中的传播
+     * 使用 DOM0 级方法处理时, cancelBubble 属性相当于 stopPropagation 方法
+     */
+    stopPropagation: function(event) {
+        if (event.stopPropagation) {
+            event.stopPropagation();
+        } else {
+            event.cancelBubble = true;
+        }
+    }
+}
+
+</code></pre>
+
+<h2 id="toc_5">修正鼠标按钮问题</h2>
+
+<pre><code class="language-js">var EventUtil= {
+    
+    ...
+    
+    /**
+     * IE8 的问题........
+     * 0 : 主按钮, 1 : 滚轮 , 2 : 次按钮
+     */
+    getButton: function(event) {
+        if (document.implementation.hasFeature(&quot;MouseEvents&quot;, &quot;2.0&quot;)) {
+            return event.button;
+        } else {
+            switch (event.button) {
+                case 0:
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                    return 0;
+                case 2:
+                case 6:
+                    return 2;
+                case 4:
+                    return 1;
+            }
+        }
+    }
+};
+</code></pre>
+
+<h2 id="toc_6">修正任意情况下滚轮的取值</h2>
+
+<pre><code class="language-js">var EventUtil = {
+
+    ...
+    
+    /**
+     * 向前为加
+     * opera 9.5 之前的版本中, wheelDelta 值正负号是颠倒的
+     * FireFox 的滚轮信息保存在 detail 中,且值为 正常 wheelDelta 的 1 /40 
+     */
+    getWheelDelta: function(event) {
+        if (event.wheelDelta) {
+            return (client.engine.opera &amp;&amp; client.engine.opera &lt; 9.5 ? -event.wheelDelta : event.wheelDelta);
+        } else {
+            return -event.detail * 40;
+        }
+    }
+};
+
+/**
+ * 修正任意情况下滚轮的取值
+ */
+(function() {
+    function handleMouseWheel(event) {
+        event.EventUtil.getEvent(event);
+        var delta = EventUtil.getWheelDelta(event);
+    }
+    EventUtil.addHandler(document, &quot;mousewheel&quot;, handleMouseWheel);
+    EventUtil.addHandler(document, &quot;DOMMouseScroll&quot;, handleMouseWheel);
+})();
+</code></pre>
+
+<h2 id="toc_7">获取按键事件的字符编码</h2>
+
+<pre><code class="language-js">var EventUtil = {
+    
+    ...
+    
+    /**
+     * &lt;=IE8 及 opera 在 keyCode 中保存字符的 ASCII 编码
+     */
+    getCharCode: function(event) {
+        if (typeof event.charCode == &quot;number&quot;) {
+            return event.charCode;
+        } else {
+            return event.keyCode;
+        }
+    }
+}
+
 </code></pre>
 
 
@@ -255,16 +356,16 @@ queryInterface.addIndex(
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872339187000.html" 
-          title="Previous Post: MySQL5.7 从相见到👋">&laquo; MySQL5.7 从相见到👋</a>
+          <a href="same-origin-policy.html" 
+          title="Previous Post: 同源政策">&laquo; 同源政策</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872314142796.html" 
-          title="Next Post: [译] Sequelize(5) 几对几">[译] Sequelize(5) 几对几 &raquo;</a>
+          <a  href="margin-collapse.html" 
+          title="Next Post: 外边距折叠">外边距折叠 &raquo;</a>
       
       </p>
         </div>
@@ -278,7 +379,7 @@ queryInterface.addIndex(
           
 
           
-              <div class="ds-thread" data-thread-key="14872470138156.html" data-url="http://blog.kayorl.com/14872470138156.html" data-title="[译] Sequelize(6) sequelize-cli，出门必备良品"></div>
+              <div class="ds-thread" data-thread-key="event.html" data-url="http://blog.kayorl.com/event.html" data-title="事件处理 之 跨浏览器"></div>
           
         </div>
       </div>
@@ -331,6 +432,8 @@ queryInterface.addIndex(
             <a href="om.html"><strong>运维</strong></a>
         
             <a href="C-C++.html"><strong>C/C++</strong></a>
+        
+            <a href="security.html"><strong>security</strong></a>
          
         </p>
 
@@ -347,31 +450,31 @@ queryInterface.addIndex(
 	      
 		      
 			      <li class="post">
-			        <a href="14917448523131.html">同源政策</a>
+			        <a href="security-principle.html">安全的原则 - 读『白帽子讲 Web 安全』总结</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14905364754279.html">事件处理 之 跨浏览器</a>
+			        <a href="security-world.html">安全的世界观 - 读『白帽子讲 Web 安全』总结</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="same-origin-policy.html">同源政策</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="event.html">事件处理 之 跨浏览器</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
 			        <a href="margin-collapse.html">外边距折叠</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-centering.html">css 元素垂直、水平居中</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-style.html">css 命名约定</a>
 			      </li>
 		     
 		  

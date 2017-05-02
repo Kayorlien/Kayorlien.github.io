@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  Promises 解决Node无限回调 - 几谷 博客
+  [译] Sequelize(3)  CRUD - 几谷 博客
   
   </title>
-  
+  <meta name="keywords" content="sequelize" />
   
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
@@ -85,6 +85,8 @@
             <li><a href="om.html">运维</a></li>
         
             <li><a href="C-C++.html">C/C++</a></li>
+        
+            <li><a href="security.html">security</a></li>
          
 
       </ul>
@@ -107,23 +109,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>Promises 解决Node无限回调</h1>
+          <h1>[译] Sequelize(3)  CRUD</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/9/14 10:25 上午</span>
+          <span class="date">2016/11/26 23:22 下午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='nodejs.html'>nodejs</a></span>
+              <span class="posted-in"><a href='sequelize.html'>Sequelize</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/probile.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/sequelize-crud.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="probile.html" data-count-type="comments" href="probile.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="sequelize-crud.html" data-count-type="comments" href="sequelize-crud.html#ds-thread"></a>
             
           </span>
 
@@ -131,70 +133,166 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>Promises 是异步代码（如 Node.js） 实现控制流的方式， 可以让代码更干净，可读。</p>
+      <span id="more"></span><!-- more -->
 
-<span id="more"></span><!-- more -->
+<h2 id="toc_0">模型定义</h2>
 
-<p>利用 Promises 可以将</p>
+<pre><code class="language-js">var Task = sequelize.define( &#39;task&#39;, {
+    title: Sequelize.STRING,
+    rank: { type: Sequelize.STRING, defaultValue: 3 }
+} );
+</code></pre>
 
-<pre><code class="language-js">fs.readFile(&quot;file.json&quot;, function (err, val) {
-    if (err) {
-        console.error(&quot;unable to read file&quot;);
-    }
-    else {
-        try {
-            val = JSON.parse(val);
-            console.log(val.success);
+<h2 id="toc_1">Create</h2>
+
+<pre><code class="language-js">// 创建数据库中对象
+Task.create( { title: &#39;foo&#39; } );
+
+// 创建临时变量
+var task = Task.build( { title: &#39;very important task&#39; } );
+
+// 将临时变量存入数据库内, 只保存 title 属性
+task.save( { fields: [ &#39;title&#39; ] } );
+</code></pre>
+
+<h2 id="toc_2">Update</h2>
+
+<pre><code class="language-js">// 在数据库中更新 task 的 title
+task.update( { title: &#39;a very different title now&#39; } );
+
+
+// 更新 排名小于1000或者无排名的 post 的 updateAt 为 null
+Post.update( {
+    updatedAt: null,
+}, {
+    where: {
+        rank: {
+            $or: {
+                $lt: 100,
+                $eq: null
+            }
         }
-        catch (e) {
-            console.error(&quot;invalid json in file&quot;);
-        }
     }
-});
+    //// rank &lt; 1000 OR rank IS NULL
+} );
 </code></pre>
 
-<p>转化成</p>
+<h2 id="toc_3">Delete</h2>
 
-<pre><code class="language-js">fs.readFileAsync(&quot;file.json&quot;).then(JSON.parse).then(function (val) {
-    console.log(val.success);
-})
-.catch(SyntaxError, function (e) {
-    console.error(&quot;invalid json in file&quot;);
-})
-.catch(function (e) {
-    console.error(&quot;unable to read file&quot;);
-});
+<pre><code class="language-js">// 删除 不活跃的 post
+Post.destroy( {
+    where: {
+        status: &#39;inactive&#39;
+    }
+} );
 </code></pre>
 
-<p></br><br/>
-然而 核心模块 <code>fs</code> 并没有 <code>readFileAsync</code> 方法, 可以使用 <a href="http://bluebirdjs.com/docs/api/promisification.html">promisfication</a> 大法.</p>
+<h2 id="toc_4">Retrieve</h2>
 
-<h2 id="toc_0">Promisfication</h2>
+<pre><code class="language-js">// 只选择相应属性
+Model.findAll( {
+    attributes: [ &#39;foo&#39;, &#39;bar&#39; ]
+} );
+// 做聚类
+Model.findAll( {
+    attributes: { include: [ [ sequelize.fn( &#39;COUNT&#39;, sequelize.col( &#39;hats&#39; ) ), &#39;no_hats&#39; ] ] }
+} );
+// 除开某些属性
+Model.findAll( {
+    attributes: { exclude: [ &#39;baz&#39; ] }
+} );
 
-<p>Promisfication 可以转化已存在的 promise-unaware API  为 promise-returning API</p>
+// id 查找
+Project.findById( 123 ).then();
 
-<p>通常 Node 使用 promises 的办法是去 <code>Promise.promisifyAll</code> 一些 API</p>
+// 属性查找
+Project.findOne( { where: { title: &#39;aProject&#39; } } ).then();
+// ？
+Project.findOne( { where: { title: &#39;aProject&#39; }, attributes: [ &#39;id&#39;, [ &#39;name&#39;, &#39;title&#39; ] ] } ).then();
 
-<pre><code class="language-js">var fs = require(&quot;fs&quot;);
-Promise.promisifyAll(fs);
+// 找，无则创建， created 为 boolean
+User.findOrCreate( { where: { username: &#39;kayor&#39; } } ).spread( function ( user, created ) {} );
 
-fs.readFileAsync(&quot;file.js&quot;, &quot;utf8&quot;).then(...)
+// 找并且计数 count 为计数， rows 为对象数组
+Project.findAndCountAll( {
+    where: { title: { $like: &#39;foo%&#39; } },
+    offset: 10,
+    limit: 2
+} ).then( function ( result ) {
+    console.log( result.count );
+    console.log( result.rows );
+} );
+
+// 找出拥有 active profile 的用户
+User.findAndCountAll( {
+    include: [
+        { model: Profile, where: { active: true } }
+  ],
+    limit: 3
+} );
+
+
+Project.findAll();
+Project.all();
+Project.findAll( { where: { name: &quot;a Project&quot; } } );
+Project.findAll( { where: [ &quot;id&gt;?&quot;, 25 ] } );
+Project.findAll( { where: { id: [ 1, 2, 3 ] } } );
+Project.findAll( {
+    where: {
+        id: {
+            $and: { a: 5 },
+            $or: [ { a: 5 }, { a: 6 } ],
+            $gt: 6,
+            $gte: 6,
+            $lt: 10,
+            $lte: 10,
+            $ne: 20,
+            $between: [ 6, 10 ],
+            $notBetween: [ 6, 10 ],
+            $in: [ 1, 2 ],
+            $notIn: [ 1, 2 ],
+            $like: &#39;%hat&#39;
+        },
+        status: { $not: false }
+    }
+} );
+
+//只找十个
+Project.findAll( { limit: 10 } );
+// 跳过前10个
+Project.findAll( { offset: 10 } );
+// 跳过前10，取两个
+Project.findAll( { offset: 10, limit: 2 } );
+
+// 递减
+Project.findAll( { order: &#39;title DESC&#39; } );
+// 分组
+Project.findAll( { group: &#39;name&#39; } );
+// 计数
+Project.count( { where: [ &quot;id&gt;?&quot;, 25 ] } );
+// 找最大
+Project.max( &#39;age&#39; );
+
+// 内连接找到拥有符合条件工具的用户
+Post.findAll( {
+    include: [ {
+        model: Comment,
+        as: &#39;comment_my&#39;,
+        where: { name: { $like: &#39;%ooth%&#39; } }
+    } ]
+} );
+
+// 获得原数据
+Post.findOne( { where: { title: &#39;scut&#39; } } ).then( function ( post ) {
+    post.title = &#39;south china university of tecknology&#39;;
+    console.log( post.title ); // &#39;south china university of tecknology&#39;
+
+    post.reload().then( function () {
+        console.log( post.title ); // &#39;scut&#39;
+    } );
+} );
+
 </code></pre>
-
-<p>要注意到这是特殊状况, 因为 <code>fs</code> 是一个单例.  大多数库能够通过 <code>require</code> 一些库里的类(构造函数)和在 <code>.prototype</code>上调用 promisify 对该实例 promise 化.</p>
-
-<p>每个实例的 promise 化在应用的生命周期内只需被调用一次,此后依据该实例原来的文档进行操作, <code>除了在方法后面增加Async 和用 promise 接口替代原来的 callback 接口</code>.</p>
-
-<pre><code class="language-js">// Mysql 模块
-var Promise = require(&quot;bluebird&quot;);
-//
-// 库里面的类并不是模块直接导出,所以需要手动的require
-//
-Promise.promisifyAll(require(&quot;mysql/lib/Connection&quot;).prototype);
-Promise.promisifyAll(require(&quot;mysql/lib/Pool&quot;).prototype);
-</code></pre>
-
-<p>参考<a href="http://bluebirdjs.com/docs/why-promises.html">bluebirkjs</a></p>
 
 
     
@@ -205,16 +303,16 @@ Promise.promisifyAll(require(&quot;mysql/lib/Pool&quot;).prototype);
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872295002814.html" 
-          title="Previous Post: MySQL 数据类型">&laquo; MySQL 数据类型</a>
+          <a href="sequelize-range.html" 
+          title="Previous Post: [译] Sequelize(4) 范围">&laquo; [译] Sequelize(4) 范围</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872294485144.html" 
-          title="Next Post: MySQL 术语">MySQL 术语 &raquo;</a>
+          <a  href="supertest.html" 
+          title="Next Post: supertest 模拟客户端">supertest 模拟客户端 &raquo;</a>
       
       </p>
         </div>
@@ -228,7 +326,7 @@ Promise.promisifyAll(require(&quot;mysql/lib/Pool&quot;).prototype);
           
 
           
-              <div class="ds-thread" data-thread-key="probile.html" data-url="http://blog.kayorl.com/probile.html" data-title="Promises 解决Node无限回调"></div>
+              <div class="ds-thread" data-thread-key="sequelize-crud.html" data-url="http://blog.kayorl.com/sequelize-crud.html" data-title="[译] Sequelize(3)  CRUD"></div>
           
         </div>
       </div>
@@ -281,6 +379,8 @@ Promise.promisifyAll(require(&quot;mysql/lib/Pool&quot;).prototype);
             <a href="om.html"><strong>运维</strong></a>
         
             <a href="C-C++.html"><strong>C/C++</strong></a>
+        
+            <a href="security.html"><strong>security</strong></a>
          
         </p>
 
@@ -297,31 +397,31 @@ Promise.promisifyAll(require(&quot;mysql/lib/Pool&quot;).prototype);
 	      
 		      
 			      <li class="post">
-			        <a href="14917448523131.html">同源政策</a>
+			        <a href="security-principle.html">安全的原则 - 读『白帽子讲 Web 安全』总结</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14905364754279.html">事件处理 之 跨浏览器</a>
+			        <a href="security-world.html">安全的世界观 - 读『白帽子讲 Web 安全』总结</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="same-origin-policy.html">同源政策</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="event.html">事件处理 之 跨浏览器</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
 			        <a href="margin-collapse.html">外边距折叠</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-centering.html">css 元素垂直、水平居中</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-style.html">css 命名约定</a>
 			      </li>
 		     
 		  

@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  杂 - 几谷 博客
+  [译] Sequelize(5) 几对几 - 几谷 博客
   
   </title>
-  
+  <meta name="keywords" content="sequelize" />
   
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
@@ -85,6 +85,8 @@
             <li><a href="om.html">运维</a></li>
         
             <li><a href="C-C++.html">C/C++</a></li>
+        
+            <li><a href="security.html">security</a></li>
          
 
       </ul>
@@ -107,23 +109,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>杂</h1>
+          <h1>[译] Sequelize(5) 几对几</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/10/6 17:12 下午</span>
+          <span class="date">2016/11/27 15:57 下午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='om.html'>运维</a></span>
+              <span class="posted-in"><a href='sequelize.html'>Sequelize</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872477973050.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/sequelize-?-?.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872477973050.html" data-count-type="comments" href="14872477973050.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="sequelize-?-?.html" data-count-type="comments" href="sequelize-?-?.html#ds-thread"></a>
             
           </span>
 
@@ -131,24 +133,104 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <span id="more"></span><!-- more -->
+      <p>一对一，一对多，多对多</p>
 
-<h2 id="toc_0">Nodejs <a href="node-production">生产模式</a></h2>
+<span id="more"></span><!-- more -->
 
-<h2 id="toc_1">配置 openssl 密码开关</h2>
+<h2 id="toc_0">一对一</h2>
 
-<pre><code>$ vi /etc/ssh/sshd_config
-$ sudo systemctl reload sshd
+<h3 id="toc_1">hasOne</h3>
+
+<h3 id="toc_2">belongsTo</h3>
+
+<blockquote>
+<p>区别: <code>联系键</code> 添加的地方不一样</p>
+</blockquote>
+
+<pre><code class="language-js">var Player = this.sequelize.define(&#39;player&#39;, {/* attributes */}), 
+    Coach  = this.sequelize.define(&#39;coach&#39;, {/* attributes */}), 
+    Team  = this.sequelize.define(&#39;team&#39;, {/* attributes */}),
+    Game =  this.sequelize.define(&#39;game&#39;, {/* attributes */});
+
+
+Player.belongsTo(Team);     // 添加 teamId 到 Player
+Coach.hasOne(Team);         //添加 coachId 到 Team
 </code></pre>
 
-<h2 id="toc_2">Redis</h2>
+<p>通过 hasOne 方法添加的模型</p>
 
-<p><a href="http://www.linuxdiyf.com/linux/22527.html">http://www.linuxdiyf.com/linux/22527.html</a></p>
+<blockquote>
+<p>对新添加模型的 setter 和 getter 会自动以模型名为后缀</p>
 
-<h2 id="toc_3">Mac 启动 redis</h2>
+<p>此外，也会以  <code>模型名+id</code> 的形式生成外码</p>
+</blockquote>
 
-<pre><code>$ sudo ../bin/redis-server ./redis.conf
+<p>可以通过以下代码修改</p>
+
+<pre><code class="language-js">// Person#getPerson, Person#setPerson
+
+Person.hasOne(Person);
+
+
+// 增加方法Person#getFather,Person#setFather
+// 修改外码为dadId
+
+Person.hasOne(Person, {as: &#39;Father&#39;, foreignKey: &#39;dad_id&#39;})
 </code></pre>
+
+<h2 id="toc_3">一对多</h2>
+
+<pre><code class="language-js">var User = sequelize.define(&#39;user&#39;, {/* ... */})
+var Project = sequelize.define(&#39;project&#39;, {/* ... */})
+ 
+// Project#getWorkers , Project#setWorkers
+
+Project.hasMany(User, {as: &#39;Workers&#39;})
+</code></pre>
+
+<h2 id="toc_4">多对多</h2>
+
+<blockquote>
+<p>使用belongToMany,为两个多对多的模型建立联系</p>
+
+<p>通过创建一个中间模型<code>(联系集)</code>实现</p>
+</blockquote>
+
+<pre><code class="language-js">User = sequelize.define(&#39;user&#39;, {})
+Project = sequelize.define(&#39;project&#39;, {})
+UserProjects = sequelize.define(&#39;userProjects&#39;, {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    status: DataTypes.STRING
+})
+ 
+User.belongsToMany(Project, {  as: &#39;Tasks&#39;, through: UserProjects, foreignKey: &#39;userId&#39; })
+Project.belongsToMany(User, {  as: &#39;Workers&#39;,through: UserProjects ,foreignKey: &#39;projectId&#39;})
+
+
+// 添加一个 project, 并且,设置其状态为 started
+
+user.addProject(project, { status: &#39;started&#39; })
+
+
+// 使用 through 可以选择特定属性
+
+User.findAll({
+  include: [{
+    model: Project,
+    through: {
+      attributes: [&#39;createdAt&#39;, &#39;startedAt&#39;, &#39;finishedAt&#39;],
+      where: {completed: true}
+    }
+  }]
+});
+</code></pre>
+
+<blockquote>
+</blockquote>
 
 
     
@@ -159,16 +241,16 @@ $ sudo systemctl reload sshd
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872295003080.html" 
-          title="Previous Post: nginx 从安装到卸载">&laquo; nginx 从安装到卸载</a>
+          <a href="sequelize-cli.html" 
+          title="Previous Post: [译] Sequelize(6) sequelize-cli，出门必备良品">&laquo; [译] Sequelize(6) sequelize-cli，出门必备良品</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872314142360.html" 
-          title="Next Post: [译] Sequelize(2)  定义表格">[译] Sequelize(2)  定义表格 &raquo;</a>
+          <a  href="sequelize-range.html" 
+          title="Next Post: [译] Sequelize(4) 范围">[译] Sequelize(4) 范围 &raquo;</a>
       
       </p>
         </div>
@@ -182,7 +264,7 @@ $ sudo systemctl reload sshd
           
 
           
-              <div class="ds-thread" data-thread-key="14872477973050.html" data-url="http://blog.kayorl.com/14872477973050.html" data-title="杂"></div>
+              <div class="ds-thread" data-thread-key="sequelize-?-?.html" data-url="http://blog.kayorl.com/sequelize-?-?.html" data-title="[译] Sequelize(5) 几对几"></div>
           
         </div>
       </div>
@@ -235,6 +317,8 @@ $ sudo systemctl reload sshd
             <a href="om.html"><strong>运维</strong></a>
         
             <a href="C-C++.html"><strong>C/C++</strong></a>
+        
+            <a href="security.html"><strong>security</strong></a>
          
         </p>
 
@@ -251,31 +335,31 @@ $ sudo systemctl reload sshd
 	      
 		      
 			      <li class="post">
-			        <a href="14917448523131.html">同源政策</a>
+			        <a href="security-principle.html">安全的原则 - 读『白帽子讲 Web 安全』总结</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14905364754279.html">事件处理 之 跨浏览器</a>
+			        <a href="security-world.html">安全的世界观 - 读『白帽子讲 Web 安全』总结</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="same-origin-policy.html">同源政策</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="event.html">事件处理 之 跨浏览器</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
 			        <a href="margin-collapse.html">外边距折叠</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-centering.html">css 元素垂直、水平居中</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-style.html">css 命名约定</a>
 			      </li>
 		     
 		  

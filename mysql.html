@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  [译] Sequelize(1)  让Node操作MySQL更方便 - 几谷 博客
+  MySQL5.7 从相见到👋 - 几谷 博客
   
   </title>
-  <meta name="keywords" content="sequelize" />
+  <meta name="keywords" content="mysql 安装 连接 导入 修改时区 备份 卸载" />
   
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
@@ -85,6 +85,8 @@
             <li><a href="om.html">运维</a></li>
         
             <li><a href="C-C++.html">C/C++</a></li>
+        
+            <li><a href="security.html">security</a></li>
          
 
       </ul>
@@ -107,23 +109,25 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>[译] Sequelize(1)  让Node操作MySQL更方便</h1>
+          <h1>MySQL5.7 从相见到👋</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/9/14 13:10 下午</span>
+          <span class="date">2016/12/3 13:31 下午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='sequelize.html'>Sequelize</a></span>
+              <span class="posted-in"><a href='database.html'>数据库系统</a></span>
+          
+              <span class="posted-in"><a href='om.html'>运维</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872314142143.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/mysql.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872314142143.html" data-count-type="comments" href="14872314142143.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="mysql.html" data-count-type="comments" href="mysql.html#ds-thread"></a>
             
           </span>
 
@@ -131,137 +135,101 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>Sequelize是一种为 Node.js 和 io.js  提供 promise-based 的 的<code>对象关系映射</code>（ORM），支持  PostgreSQL, <code>MySQL</code>, MariaDB, SQLite 和 MSSQL 等数据库管理系统 ，同时提供 <code>事务支持</code>，<code>关系</code>，<code>复制</code>还有其他等特性. </p>
+      <p>我的意中人是个盖世英雄<br/>
+有一天他会踩着七色云彩来娶我<br/>
+我猜中了前头,<br/>
+可是我猜不着这结局</p>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">ORM</h2>
-
-<p><a href="https://zh.wikipedia.org/wiki/%E5%AF%B9%E8%B1%A1%E5%85%B3%E7%B3%BB%E6%98%A0%E5%B0%84">对象关系映射</a>（英语：Object Relational Mapping，简称ORM），是一种程序设计技术，用于实现面向对象编程语言里不同类型系统的数据之间的转换。从效果上说，它其实是创建了一个可在编程语言里使用的“虚拟对象数据库”。</p>
-
-<h2 id="toc_1">例子（ mysql 为例 ）</h2>
-
-<pre><code class="language-js">var Sequelize = require(&#39;sequelize&#39;);
-var sequelize = new Sequelize(&#39;database&#39;, &#39;username&#39;, &#39;password&#39;);
-
-var User = sequelize.define(&#39;user&#39;, {
-  username: Sequelize.STRING,
-  birthday: Sequelize.DATE
-});
-
-sequelize.sync().then(function() {
-  return User.create({
-    username: &#39;janedoe&#39;,
-    birthday: new Date(1980, 6, 20)
-  });
-}).then(function(jane) {
-  console.log(jane.get({
-    plain: true
-  }));
-});
-</code></pre>
-
-<p></br></p>
-
-<h2 id="toc_2">安装</h2>
-
-<pre><code>$ npm install --save sequelize
-$ npm install --save mysql
-</code></pre>
-
-<p></br></p>
-
-<h2 id="toc_3">建立连接</h2>
-
-<pre><code class="language-js">var sequelize = new Sequelize(&#39;database&#39;, &#39;username&#39;, &#39;password&#39;, {
-  host: &#39;localhost&#39;,
-  /* 数据库类型 */
-  dialect: &#39;mysql&#39; 
-});
-</code></pre>
-
-<p></br></p>
-
-<h2 id="toc_4">第一个模型</h2>
-
-<p>定义模型： <code>sequelize.define(&#39;name&#39;, {attributes}, {options})</code></p>
-
-<pre><code class="language-js">var User = sequelize.define(&#39;user&#39;, {
-  firstName: {
-    type: Sequelize.STRING,
-    /* User模型拥有firstName属性，在数据库中相应的属性为first_name  */
-    field: &#39;first_name&#39;   
-    },
-  lastName: {
-    type: Sequelize.STRING
-  }
-}, {
-  /* 数据库表名与模型名字一致 */
-  freezeTableName: true 
-});
-
-User.sync({force: true}).then(function () {
-  // Table created
-  return User.create({
-    firstName: &#39;kayor&#39;,
-    lastName: &#39;lien&#39;
-  });
-});
-</code></pre>
-
-<p>按照以前的习惯,我们可能会通过下面这种方式来获取<code>user</code>.</p>
-
-<pre><code class="language-js">// DON&#39;T DO THIS !!!
-
-user = User.findOne()
-
-console.log(user.get(&#39;firstName&#39;));
-</code></pre>
-
-<p></br></p>
-
-<p>然而这行不通(不信去试试😝)</p>
-
-<p>为什么呢? 接下来引入一个概念</p>
-
-<h2 id="toc_5">Promises</h2>
-
-<p>Sequelize 使用 Promises 控制异步流。 可以看看 <a href="probile.html">Promises 解决Node无限回调</a></p>
-
-<blockquote>
-<p><a href="https://www.promisejs.org/">Promises</a>的核心是:</p>
-
-<p>一个 promise 代表了<strong>异步运算的结果</strong>，它有三种状态：</p>
-</blockquote>
-
 <ul>
-<li>pending - promise 的初始状态（即将发生）</li>
-<li>fulfilled  - 一次成功运算后 promise 的状态</li>
-<li>rejected - 一次失败运算后 promise 的状态</li>
+<li>
+<a href="#toc_0">安装</a>
+</li>
+<li>
+<a href="#toc_1">建立与 MySQL 服务器的连接</a>
+</li>
+<li>
+<a href="#toc_2">导入 .sql 文件</a>
+</li>
+<li>
+<a href="#toc_3">修改时区</a>
+</li>
+<li>
+<a href="#toc_4">备份</a>
+</li>
+<li>
+<a href="#toc_5">卸载</a>
+</li>
 </ul>
 
-<pre><code class="language-js">function readFile(filename, enc){
-  /*  
-   *使用 new promise 构建一个新的 promise  */
-  return new Promise(function (fulfill, reject){
-    fs.readFile(filename, enc, function (err, res){
-      if (err) reject(err);         //失败运算
-      else fulfill(res);            //成功运算
-    });
-  });
-}
+
+<h2 id="toc_0">安装</h2>
+
+<p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-16-04">DO教程</a></p>
+
+<pre><code># 安装 
+$ sudo apt-get update
+$ sudo apt-get install mysql-server
+
+# 修改数据库的安全配置，如禁用远程 root 用户
+$ sudo mysql_secure_installation
+
+## 测试数据库状态
+$ systemctl status mysql.service
 </code></pre>
 
-<p><code>user</code>是一个 promise 对象， 不是数据库的对象，正确的打开姿势是，在获取到<code>user</code>的状态（如 fulfilled, rejected ）后，对其进行操作：</p>
+<h2 id="toc_1">建立与 MySQL 服务器的连接</h2>
 
-<pre><code class="language-js">User.findOne().then(function (user) {
-    console.log(user.get(&#39;firstName&#39;));
-});
+<p>为连接到 MySQL 服务器,在命令行中调用 mysql 程序</p>
+
+<pre><code>$ mysql -h host_name -p -u user_name -D database_name
 </code></pre>
 
-<hr/>
+<ul>
+<li><code>mysql</code> 是必须的, 其他可选</li>
+<li>-h  host_name　　　主机地址,默认为本地</li>
+<li>-u  user_name　　　MySQL 用户名</li>
+<li>-p　　　　　　　　回显 Enter password: ，如果相应用户名有密码而没加此项，会显示<code>拒绝访问</code></li>
+<li>-D  database_name 选择操作(默认)的数据库<br/></li>
+</ul>
 
-<p>本文参考: <a href="http://docs.sequelizejs.com/en/v3/">Sequelize</a></p>
+<h2 id="toc_2">导入 .sql 文件</h2>
+
+<p>可以将编写好的数据库语句写入到文件名后缀为 <code>.sql</code> 的文件中,并记住其路径,最简单的方法是在命令行中进入到.sql 文件所在的目录,然后在<code>命令行</code>执行以下命令(省略了主机名,用户,密码等参数)</p>
+
+<pre><code>$ mysql sampdb &lt; create_member.sql
+</code></pre>
+
+<p>如果已经进入 mysql 程序界面,则执行</p>
+
+<pre><code>mysql&gt; source create_member.sql;
+</code></pre>
+
+<h2 id="toc_3">修改时区</h2>
+
+<pre><code># /etc/my.cnf
+
+[mysqld]
+...
+default-time-zone = &#39;+8:00&#39;
+
+$ systemctl restart mysql
+</code></pre>
+
+<h2 id="toc_4">备份</h2>
+
+<pre><code>$ mysqldump -u -p -D exampleDB &gt;my.sql
+</code></pre>
+
+<h2 id="toc_5">卸载</h2>
+
+<p>purge,翻译过来是净化的意思</p>
+
+<pre><code>sudo apt-get remove --purge mysql*
+sudo apt-get autoremove
+sudo apt-get autoclean
+</code></pre>
 
 
     
@@ -272,16 +240,16 @@ console.log(user.get(&#39;firstName&#39;));
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872295002950.html" 
-          title="Previous Post: 字符数组 vs 字符串常量">&laquo; 字符数组 vs 字符串常量</a>
+          <a href="mysql-.html" 
+          title="Previous Post: MySQL 语句">&laquo; MySQL 语句</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872295002814.html" 
-          title="Next Post: MySQL 数据类型">MySQL 数据类型 &raquo;</a>
+          <a  href="sequelize-cli.html" 
+          title="Next Post: [译] Sequelize(6) sequelize-cli，出门必备良品">[译] Sequelize(6) sequelize-cli，出门必备良品 &raquo;</a>
       
       </p>
         </div>
@@ -295,7 +263,7 @@ console.log(user.get(&#39;firstName&#39;));
           
 
           
-              <div class="ds-thread" data-thread-key="14872314142143.html" data-url="http://blog.kayorl.com/14872314142143.html" data-title="[译] Sequelize(1)  让Node操作MySQL更方便"></div>
+              <div class="ds-thread" data-thread-key="mysql.html" data-url="http://blog.kayorl.com/mysql.html" data-title="MySQL5.7 从相见到👋"></div>
           
         </div>
       </div>
@@ -348,6 +316,8 @@ console.log(user.get(&#39;firstName&#39;));
             <a href="om.html"><strong>运维</strong></a>
         
             <a href="C-C++.html"><strong>C/C++</strong></a>
+        
+            <a href="security.html"><strong>security</strong></a>
          
         </p>
 
@@ -364,31 +334,31 @@ console.log(user.get(&#39;firstName&#39;));
 	      
 		      
 			      <li class="post">
-			        <a href="14917448523131.html">同源政策</a>
+			        <a href="security-principle.html">安全的原则 - 读『白帽子讲 Web 安全』总结</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14905364754279.html">事件处理 之 跨浏览器</a>
+			        <a href="security-world.html">安全的世界观 - 读『白帽子讲 Web 安全』总结</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="same-origin-policy.html">同源政策</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="event.html">事件处理 之 跨浏览器</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
 			        <a href="margin-collapse.html">外边距折叠</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-centering.html">css 元素垂直、水平居中</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-style.html">css 命名约定</a>
 			      </li>
 		     
 		  

@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  [译] Sequelize(3)  CRUD - 几谷 博客
+  安全的原则 - 读『白帽子讲 Web 安全』总结 - 几谷 博客
   
   </title>
-  <meta name="keywords" content="sequelize" />
+  
   
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
@@ -85,6 +85,8 @@
             <li><a href="om.html">运维</a></li>
         
             <li><a href="C-C++.html">C/C++</a></li>
+        
+            <li><a href="security.html">security</a></li>
          
 
       </ul>
@@ -107,23 +109,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>[译] Sequelize(3)  CRUD</h1>
+          <h1>安全的原则 - 读『白帽子讲 Web 安全』总结</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/11/26 23:22 下午</span>
+          <span class="date">2017/5/2 15:12 下午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='sequelize.html'>Sequelize</a></span>
+              <span class="posted-in"><a href='security.html'>security</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872314142502.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/security-principle.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872314142502.html" data-count-type="comments" href="14872314142502.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="security-principle.html" data-count-type="comments" href="security-principle.html#ds-thread"></a>
             
           </span>
 
@@ -131,166 +133,72 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <span id="more"></span><!-- more -->
+      <p>Secure By Default，<br/>
+纵深防御，<br/>
+数据与代码分离，<br/>
+不可预见性</p>
 
-<h2 id="toc_0">模型定义</h2>
+<span id="more"></span><!-- more -->
 
-<pre><code class="language-js">var Task = sequelize.define( &#39;task&#39;, {
-    title: Sequelize.STRING,
-    rank: { type: Sequelize.STRING, defaultValue: 3 }
-} );
-</code></pre>
+<h4 id="toc_0">Secure By Default，安全总则</h4>
 
-<h2 id="toc_1">Create</h2>
+<blockquote>
+<p>即白名单，黑名单的思想</p>
+</blockquote>
 
-<pre><code class="language-js">// 创建数据库中对象
-Task.create( { title: &#39;foo&#39; } );
+<ul>
+<li>网站服务器的 80 和 443 端口对外提供服务，其他端口屏蔽</li>
+<li>网站的生产环境服务器上，列出软件清单，此清单外的软件禁止使用</li>
+<li>用户提交富文本时，利用 XSS Filter 对用户的输入原文做 HTML parse，解析成标签对象后，再针对标签匹配 XSS 的规则</li>
+<li>【黑】禁用 <code>&lt;script&gt;</code> <code>&lt;iframe&gt;</code> 标签</li>
+</ul>
 
-// 创建临时变量
-var task = Task.build( { title: &#39;very important task&#39; } );
+<blockquote>
+<p>最小权限原则：不过度授权</p>
+</blockquote>
 
-// 将临时变量存入数据库内, 只保存 title 属性
-task.save( { fields: [ &#39;title&#39; ] } );
-</code></pre>
+<p>Linux 系统下， 使用普通账户登录，需要 root 权限操作时使用 sudo 完成</p>
 
-<h2 id="toc_2">Update</h2>
+<hr>
 
-<pre><code class="language-js">// 在数据库中更新 task 的 title
-task.update( { title: &#39;a very different title now&#39; } );
+<h4 id="toc_1">纵深防御原则，看待问题</h4>
 
+<blockquote>
+<p>不同层面、角度对系统做出整体方案<br/>
+在每个过程中设置有效的防御措施，都能导致入侵过程功亏一篑</p>
+</blockquote>
 
-// 更新 排名小于1000或者无排名的 post 的 updateAt 为 null
-Post.update( {
-    updatedAt: null,
-}, {
-    where: {
-        rank: {
-            $or: {
-                $lt: 100,
-                $eq: null
-            }
-        }
-    }
-    //// rank &lt; 1000 OR rank IS NULL
-} );
-</code></pre>
+<p>黑客：<br/>
+低权限 webshell ---&gt; 上传文件 ---&gt; 提升权限为 root ---&gt; 渗透内网</p>
 
-<h2 id="toc_3">Delete</h2>
+<blockquote>
+<p>在正确的地方做正确的事情,<br/>
+理解危险的本质，做出正确应对措施</p>
+</blockquote>
 
-<pre><code class="language-js">// 删除 不活跃的 post
-Post.destroy( {
-    where: {
-        status: &#39;inactive&#39;
-    }
-} );
-</code></pre>
+<p>XSS 的防御技术发展过程: <br/>
+过滤特殊符号 ---&gt; 区分富文本和非富文本 ---&gt; 对富文本做语法树分析 --&gt; 综合方案</p>
 
-<h2 id="toc_4">Retrieve</h2>
+<hr>
 
-<pre><code class="language-js">// 只选择相应属性
-Model.findAll( {
-    attributes: [ &#39;foo&#39;, &#39;bar&#39; ]
-} );
-// 做聚类
-Model.findAll( {
-    attributes: { include: [ [ sequelize.fn( &#39;COUNT&#39;, sequelize.col( &#39;hats&#39; ) ), &#39;no_hats&#39; ] ] }
-} );
-// 除开某些属性
-Model.findAll( {
-    attributes: { exclude: [ &#39;baz&#39; ] }
-} );
+<h4 id="toc_2">数据与代码分离原则, 漏洞成因</h4>
 
-// id 查找
-Project.findById( 123 ).then();
+<blockquote>
+<p>应用于因“注入”引发问题的场景</p>
+</blockquote>
 
-// 属性查找
-Project.findOne( { where: { title: &#39;aProject&#39; } } ).then();
-// ？
-Project.findOne( { where: { title: &#39;aProject&#39; }, attributes: [ &#39;id&#39;, [ &#39;name&#39;, &#39;title&#39; ] ] } ).then();
+<p>缓存区溢出、XSS、SQL Injection、CRLF Injection、X-Path Injection等都是由于注入的问题</p>
 
-// 找，无则创建， created 为 boolean
-User.findOrCreate( { where: { username: &#39;kayor&#39; } } ).spread( function ( user, created ) {} );
+<h4 id="toc_3">不可预见性原则，克服攻击方法</h4>
 
-// 找并且计数 count 为计数， rows 为对象数组
-Project.findAndCountAll( {
-    where: { title: { $like: &#39;foo%&#39; } },
-    offset: 10,
-    limit: 2
-} ).then( function ( result ) {
-    console.log( result.count );
-    console.log( result.rows );
-} );
+<blockquote>
+<p>让攻击方法无效，也算成功防御</p>
+</blockquote>
 
-// 找出拥有 active profile 的用户
-User.findAndCountAll( {
-    include: [
-        { model: Profile, where: { active: true } }
-  ],
-    limit: 3
-} );
-
-
-Project.findAll();
-Project.all();
-Project.findAll( { where: { name: &quot;a Project&quot; } } );
-Project.findAll( { where: [ &quot;id&gt;?&quot;, 25 ] } );
-Project.findAll( { where: { id: [ 1, 2, 3 ] } } );
-Project.findAll( {
-    where: {
-        id: {
-            $and: { a: 5 },
-            $or: [ { a: 5 }, { a: 6 } ],
-            $gt: 6,
-            $gte: 6,
-            $lt: 10,
-            $lte: 10,
-            $ne: 20,
-            $between: [ 6, 10 ],
-            $notBetween: [ 6, 10 ],
-            $in: [ 1, 2 ],
-            $notIn: [ 1, 2 ],
-            $like: &#39;%hat&#39;
-        },
-        status: { $not: false }
-    }
-} );
-
-//只找十个
-Project.findAll( { limit: 10 } );
-// 跳过前10个
-Project.findAll( { offset: 10 } );
-// 跳过前10，取两个
-Project.findAll( { offset: 10, limit: 2 } );
-
-// 递减
-Project.findAll( { order: &#39;title DESC&#39; } );
-// 分组
-Project.findAll( { group: &#39;name&#39; } );
-// 计数
-Project.count( { where: [ &quot;id&gt;?&quot;, 25 ] } );
-// 找最大
-Project.max( &#39;age&#39; );
-
-// 内连接找到拥有符合条件工具的用户
-Post.findAll( {
-    include: [ {
-        model: Comment,
-        as: &#39;comment_my&#39;,
-        where: { name: { $like: &#39;%ooth%&#39; } }
-    } ]
-} );
-
-// 获得原数据
-Post.findOne( { where: { title: &#39;scut&#39; } } ).then( function ( post ) {
-    post.title = &#39;south china university of tecknology&#39;;
-    console.log( post.title ); // &#39;south china university of tecknology&#39;
-
-    post.reload().then( function () {
-        console.log( post.title ); // &#39;scut&#39;
-    } );
-} );
-
-</code></pre>
+<ul>
+<li>混淆文章 id</li>
+<li>微软的 ASLR 技术，随机化进程的栈地址</li>
+</ul>
 
 
     
@@ -301,16 +209,13 @@ Post.findOne( { where: { title: &#39;scut&#39; } } ).then( function ( post ) {
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872314142644.html" 
-          title="Previous Post: [译] Sequelize(4) 范围">&laquo; [译] Sequelize(4) 范围</a>
-      
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872476184764.html" 
-          title="Next Post: supertest 模拟客户端">supertest 模拟客户端 &raquo;</a>
+          <a  href="security-world.html" 
+          title="Next Post: 安全的世界观 - 读『白帽子讲 Web 安全』总结">安全的世界观 - 读『白帽子讲 Web 安全』总结 &raquo;</a>
       
       </p>
         </div>
@@ -324,7 +229,7 @@ Post.findOne( { where: { title: &#39;scut&#39; } } ).then( function ( post ) {
           
 
           
-              <div class="ds-thread" data-thread-key="14872314142502.html" data-url="http://blog.kayorl.com/14872314142502.html" data-title="[译] Sequelize(3)  CRUD"></div>
+              <div class="ds-thread" data-thread-key="security-principle.html" data-url="http://blog.kayorl.com/security-principle.html" data-title="安全的原则 - 读『白帽子讲 Web 安全』总结"></div>
           
         </div>
       </div>
@@ -377,6 +282,8 @@ Post.findOne( { where: { title: &#39;scut&#39; } } ).then( function ( post ) {
             <a href="om.html"><strong>运维</strong></a>
         
             <a href="C-C++.html"><strong>C/C++</strong></a>
+        
+            <a href="security.html"><strong>security</strong></a>
          
         </p>
 
@@ -393,31 +300,31 @@ Post.findOne( { where: { title: &#39;scut&#39; } } ).then( function ( post ) {
 	      
 		      
 			      <li class="post">
-			        <a href="14917448523131.html">同源政策</a>
+			        <a href="security-principle.html">安全的原则 - 读『白帽子讲 Web 安全』总结</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14905364754279.html">事件处理 之 跨浏览器</a>
+			        <a href="security-world.html">安全的世界观 - 读『白帽子讲 Web 安全』总结</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="same-origin-policy.html">同源政策</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="event.html">事件处理 之 跨浏览器</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
 			        <a href="margin-collapse.html">外边距折叠</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-centering.html">css 元素垂直、水平居中</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-style.html">css 命名约定</a>
 			      </li>
 		     
 		  

@@ -85,6 +85,8 @@
             <li><a href="om.html">运维</a></li>
         
             <li><a href="C-C++.html">C/C++</a></li>
+        
+            <li><a href="security.html">security</a></li>
          
 
       </ul>
@@ -236,22 +238,21 @@ if ( car ! = null ) {
 <li>确定值不为 null 或 undefined 时直接用 <code>toString()</code> 方法</li>
 <li>null 与 undefined 无 <code>toString()</code> 方法</li>
 <li>调用 <code>String()</code> 方法,可以将任意值转换为字符串 (个人觉得为了安全还是不要的好)</li>
-<li>
-```js</li>
 </ol>
 
-<p>function String(obj){<br/>
-    if(typeof obj.toString() === &quot;function&quot;) {<br/>
-        return obj.toString();      // 方法<br/>
-    }<br/>
-    if(obj === null) {<br/>
-        return &quot;null&quot;;<br/>
-    }<br/>
-    if(typeof obj === undefined) {<br/>
-        return &quot;undefined&quot;;<br/>
-    }<br/>
-}<br/>
-```</p>
+<pre><code class="language-js">
+function String(obj){
+    if(typeof obj.toString() === &quot;function&quot;) {
+        return obj.toString();      // 方法
+    }
+    if(obj === null) {
+        return &quot;null&quot;;
+    }
+    if(typeof obj === undefined) {
+        return &quot;undefined&quot;;
+    }
+}
+</code></pre>
 
 <h2 id="toc_4">Object 类型</h2>
 
@@ -391,6 +392,8 @@ if ( car ! = null ) {
             <a href="om.html"><strong>运维</strong></a>
         
             <a href="C-C++.html"><strong>C/C++</strong></a>
+        
+            <a href="security.html"><strong>security</strong></a>
          
         </p>
 
@@ -407,31 +410,31 @@ if ( car ! = null ) {
 	      
 		      
 			      <li class="post">
-			        <a href="14917448523131.html">同源政策</a>
+			        <a href="security-principle.html">安全的原则 - 读『白帽子讲 Web 安全』总结</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14905364754279.html">事件处理 之 跨浏览器</a>
+			        <a href="security-world.html">安全的世界观 - 读『白帽子讲 Web 安全』总结</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="same-origin-policy.html">同源政策</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="event.html">事件处理 之 跨浏览器</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
 			        <a href="margin-collapse.html">外边距折叠</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-centering.html">css 元素垂直、水平居中</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-style.html">css 命名约定</a>
 			      </li>
 		     
 		  

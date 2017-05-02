@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  MySQL 数据类型 - 几谷 博客
+  字符数组 vs 字符串常量 - 几谷 博客
   
   </title>
-  <meta name="keywords" content="mysql 数据类型" />
+  
   
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
@@ -85,6 +85,8 @@
             <li><a href="om.html">运维</a></li>
         
             <li><a href="C-C++.html">C/C++</a></li>
+        
+            <li><a href="security.html">security</a></li>
          
 
       </ul>
@@ -107,23 +109,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>MySQL 数据类型</h1>
+          <h1>字符数组 vs 字符串常量</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/9/14 10:45 上午</span>
+          <span class="date">2016/9/23 16:10 下午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='database.html'>数据库系统</a></span>
+              <span class="posted-in"><a href='C-C++.html'>C/C++</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872295002814.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/diff-c-array-const.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872295002814.html" data-count-type="comments" href="14872295002814.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="diff-c-array-const.html" data-count-type="comments" href="diff-c-array-const.html#ds-thread"></a>
             
           </span>
 
@@ -131,239 +133,130 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>blob ？显示宽度？</p>
+      <p>两者区别在哪？</p>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">属性</h2>
+<p>在 C 语言中,有两种表示字符串的方法</p>
+
+<ol>
+<li>字符串数组 char str[6]=&quot;123456&quot;;</li>
+<li>字符串常量    char *str=&quot;123456&quot;;</li>
+</ol>
+
+<h2 id="toc_0">字符数组</h2>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(int argc, const char * argv[]) {
+    char str[6]=&quot;123456&quot;;
+    //%x ,十六进制
+    printf(&quot;%x\n&quot;,&amp;str);
+    printf(&quot;%x\n&quot;,str);
+    printf(&quot;%x\n&quot;,&amp;str[0]);
+    return 0;
+}
+</code></pre>
+
+<p>输出结果如下:</p>
+
+<pre><code>5fbff849    
+5fbff849
+5fbff849
+</code></pre>
 
 <table>
 <thead>
 <tr>
-<th style="text-align: left">类型</th>
-<th style="text-align: center">简写</th>
-<th style="text-align: center">作用</th>
-<th style="text-align: right">适用范围</th>
+<th style="text-align: center">表达</th>
+<th style="text-align: center">解释</th>
 </tr>
 </thead>
 
 <tbody>
 <tr>
-<td style="text-align: left">UNSIGNED</td>
-<td style="text-align: center">UN</td>
-<td style="text-align: center">防止出现负值</td>
-<td style="text-align: right">除 BIT 以外</td>
+<td style="text-align: center">&amp;str</td>
+<td style="text-align: center">str[6]=...时已为分配了6字节的内存地址给 str 数组,打印出的是首字符的内存地址</td>
 </tr>
 <tr>
-<td style="text-align: left">ZEROFILL</td>
-<td style="text-align: center">ZF</td>
-<td style="text-align: center">在列里的显示值前填充若干个0 (与显示宽度相关)</td>
-<td style="text-align: right">除 BIT 以外</td>
+<td style="text-align: center">str</td>
+<td style="text-align: center">可以理解成数组变量退化的指针，并且指向数组的开头</td>
 </tr>
 <tr>
-<td style="text-align: left">AUTO_INCREMENT</td>
-<td style="text-align: center">AI</td>
-<td style="text-align: center">表示该列存放的是序号( ID ).如果没为 ID 列提供值,那 MySQL 会<code>自动生成</code>下一个编号.删除某几行后,删除的序号可能会被再使用,得看使用的引擎</td>
-<td style="text-align: right">一般用于整数 且有 <code>NOT NULL</code>(自动隐式添加) 和 <code>UNSIGNED</code> 属性</td>
-</tr>
-<tr>
-<td style="text-align: left">NULL/NOT NULL</td>
-<td style="text-align: center">NN</td>
-<td style="text-align: center">指定列能否为 NULL</td>
-<td style="text-align: right">除了 有 <code>AI</code> 的列</td>
+<td style="text-align: center">&amp;str[0]</td>
+<td style="text-align: center">数组中第一个字符的内存地址</td>
 </tr>
 </tbody>
 </table>
 
-<h2 id="toc_1">数字</h2>
+<h2 id="toc_1">字符串常量</h2>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(int argc, const char * argv[]) {
+    char *str;
+    str=&quot;123456&quot;;
+    //
+    //等价
+    //char *str=&quot;123456&quot;;
+    //
+    printf(&quot;%x\n&quot;,&amp;str);
+    printf(&quot;%x\n&quot;,str);
+    printf(&quot;%x\n&quot;,&amp;str[0]);
+    return 0;
+}
+</code></pre>
+
+<p>输出结果如下</p>
+
+<pre><code>5fbff848
+f92
+f92
+</code></pre>
 
 <table>
 <thead>
 <tr>
-<th style="text-align: left">类型</th>
-<th style="text-align: center">范围  ( 无符号 , 0~ )</th>
+<th style="text-align: center">表达</th>
+<th style="text-align: center">解释</th>
 </tr>
 </thead>
 
 <tbody>
 <tr>
-<td style="text-align: left">TINYINT (M)</td>
-<td style="text-align: center">255</td>
+<td style="text-align: center">&amp;str</td>
+<td style="text-align: center">char *str=&quot;123456&quot; , 声明了一个 char 类型的指针变量,该指针指向存放&quot;123456&quot;内存地址,所以该指针变量的地址跟下面两个不一样</td>
 </tr>
 <tr>
-<td style="text-align: left">SMALLINT (M)</td>
-<td style="text-align: center">65535</td>
+<td style="text-align: center">str</td>
+<td style="text-align: center">指针变量所指地址空间的内存地址</td>
 </tr>
 <tr>
-<td style="text-align: left">MEDIUMINT (M)</td>
-<td style="text-align: center">16777215</td>
-</tr>
-<tr>
-<td style="text-align: left">INT (M)</td>
-<td style="text-align: center">2ˆ32-1</td>
-</tr>
-<tr>
-<td style="text-align: left">BIGINT  (M)</td>
-<td style="text-align: center">2ˆ64-1</td>
-</tr>
-<tr>
-<td style="text-align: left">DECIMAL ( [ M [ ,D ] ] )</td>
-<td style="text-align: center">由 M 和 D 的值决定</td>
-</tr>
-<tr>
-<td style="text-align: left">FLOAT  ( [ M [ ,D ] ] )</td>
-<td style="text-align: center">最大非零: ±3.402823466E+38</td>
-</tr>
-<tr>
-<td style="text-align: left">DOUBLE  ( [ M [ ,D ] ] )</td>
-<td style="text-align: center">最大非零: ± 1.7976931348623157E+308</td>
-</tr>
-<tr>
-<td style="text-align: left">BIT  ([M])</td>
-<td style="text-align: center">2ˆM-1,  1&lt;= M &lt;= 64</td>
+<td style="text-align: center">&amp;str[0]</td>
+<td style="text-align: center">数组中第一个字符的内存地址</td>
 </tr>
 </tbody>
 </table>
 
-<p><code>D</code> : 数学精确度,即小数点后的数字个数<br/>
-<code>M</code> : 显示宽度,为1~255 的整数.决定 MySQL 用多少个字符<code>显示</code>该列的值,与<code>存储该值所需的字节存储空间无关</code>,默认为最长值的长度 . 一般结合 <code>ZEROFILL</code> 使用</p>
-
-<p><strong>举例</strong> <br/>
-INT(2)的列,每个值仍占用<code>4个字节</code> (32bit) 的空间,假设有一个值取为2,那么将会显示 02 </p>
-
-<hr/>
-
-<h2 id="toc_2">字符串</h2>
-
-<p>MySQL字符串可以表示任何值, 它实际上是一种 &quot;泛型&quot; 类型.例如,可以用二进制串存储二进制数据,如图像,声音,压缩后的gzip 输出.</p>
-
-<ul>
-<li><code>二进制串</code>: 01010101010</li>
-<li>非二进制串: ......</li>
-</ul>
+<h2 id="toc_2">区别</h2>
 
 <table>
 <thead>
 <tr>
-<th style="text-align: center">类型</th>
-<th style="text-align: center">存储二进制串</th>
-<th style="text-align: center">最大长度 (字节)</th>
-<th style="text-align: center">存储空间要求 (字节)</th>
-<th style="text-align: center">说明</th>
+<th style="text-align: left">方式</th>
+<th style="text-align: center">存储位置</th>
+<th style="text-align: right">权限</th>
 </tr>
 </thead>
 
 <tbody>
 <tr>
-<td style="text-align: center"><code>BINARY[(M)]</code></td>
-<td style="text-align: center">√</td>
-<td style="text-align: center">M</td>
-<td style="text-align: center">M</td>
-<td style="text-align: center">M : 表示该列值的最大长度 (二进制串以字节为长度,非二进制串以字符单位)</td>
+<td style="text-align: left">字符数组</td>
+<td style="text-align: center">全局数据区或栈区</td>
+<td style="text-align: right">读取,写入</td>
 </tr>
 <tr>
-<td style="text-align: center">CHAR[(M)]</td>
-<td style="text-align: center"></td>
-<td style="text-align: center">M</td>
-<td style="text-align: center">M  x  w</td>
-<td style="text-align: center">w : 表示列字符集里<code>最&quot;宽&quot;</code>字符占用的字节数(定长补足用)</td>
-</tr>
-<tr>
-<td style="text-align: center"><code>VARBINARY(M)</code></td>
-<td style="text-align: center">√</td>
-<td style="text-align: center">M</td>
-<td style="text-align: center">L+1 or L+2</td>
-<td style="text-align: center">L : 表示某个<code>给定值</code>的字节长度</td>
-</tr>
-<tr>
-<td style="text-align: center">VARCHAR(M)</td>
-<td style="text-align: center"></td>
-<td style="text-align: center">M</td>
-<td style="text-align: center">L+1 or L+2</td>
-<td style="text-align: center"></td>
-</tr>
-<tr>
-<td style="text-align: center"><code>BLOB(binary large object)</code></td>
-<td style="text-align: center">√</td>
-<td style="text-align: center">2ˆ16-1</td>
-<td style="text-align: center">L+2</td>
-<td style="text-align: center">可以存储大对象(4 GB),字节为单位</td>
-</tr>
-<tr>
-<td style="text-align: center">TEXT</td>
-<td style="text-align: center"></td>
-<td style="text-align: center">2ˆ16-1</td>
-<td style="text-align: center">L+2</td>
-<td style="text-align: center">字符为单位</td>
-</tr>
-<tr>
-<td style="text-align: center">ENUM(&#39;value1&#39;,&#39;value2&#39;,...)</td>
-<td style="text-align: center"></td>
-<td style="text-align: center">65535个成员</td>
-<td style="text-align: center">1 or 2</td>
-<td style="text-align: center">定义的值顺序就是排序所用的顺序</td>
-</tr>
-<tr>
-<td style="text-align: center">SET(&#39;value1&#39;,&#39;value2&#39;,...)</td>
-<td style="text-align: center"></td>
-<td style="text-align: center">64个成员</td>
-<td style="text-align: center">1,2,3,4,8</td>
-<td style="text-align: center"></td>
-</tr>
-</tbody>
-</table>
-
-<ul>
-<li>BLOB 和 TEXT 列能否被索引取决于存储引擎,如果用 InnoDB 和 MyISAM, 必须制定一个前缀长度,方便索引.可以避免创建出可能过大的索引,那样会抵消索引带来的好处. 比较特殊的是 TEXT 列的 <code>FULLTEXT</code> 索引以索引列的完整内容为基础,自动忽略指定的前缀长度</li>
-<li>BLOB,TEXT 在多次操作之后会产生大量碎片,如果用 MyISAM 来存储 BLOB 或 TEXT, 那么定期运行 <code>OPTIMIZE TABLE</code> 可以减少碎片,改善系统性能</li>
-</ul>
-
-<hr/>
-
-<h2 id="toc_3">时态</h2>
-
-<ul>
-<li>fsp: 小数秒精度</li>
-<li>时态列的定义可以包含通用属性 NULL 或 NOT NULL. 如果都不指定, 则默认为 NULL. </li>
-<li>TIMESTAMP 和 DATETIME 有自动初始化属性和自动更新属性</li>
-<li>TIMESTAMP 的<code>默认值</code>为 NOT NULL, 如果设置为 NULL, 那么它的值会被设置为当前时间戳</li>
-<li>TIMESTAMP 不能设置为 <code>DEFAULT 0</code>,严格模式下会报错</li>
-</ul>
-
-<table>
-<thead>
-<tr>
-<th style="text-align: center">类型</th>
-<th style="text-align: center">范围</th>
-<th style="text-align: center">存储要求(字节)(5.6.4以后)</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td style="text-align: center">DATE</td>
-<td style="text-align: center">1000-01-01 ~ 9999-12-31</td>
-<td style="text-align: center">3</td>
-</tr>
-<tr>
-<td style="text-align: center">TIME</td>
-<td style="text-align: center">-838:59:59[.000000] ~ 838:59:59[.000000]</td>
-<td style="text-align: center">3 + fsp</td>
-</tr>
-<tr>
-<td style="text-align: center">DATETIME</td>
-<td style="text-align: center">1000-01-01 00:00:00[.000000] ~ 9999-12-31 23.59.59[.999999]</td>
-<td style="text-align: center">3 + fsp</td>
-</tr>
-<tr>
-<td style="text-align: center">TIMESTAMP</td>
-<td style="text-align: center">1970-01-01 00:00:00[.000000] ~ 2038-01-19 03:14:07[.999999]</td>
-<td style="text-align: center">4 + fsp</td>
-</tr>
-<tr>
-<td style="text-align: center">YEAR</td>
-<td style="text-align: center">1901~2155</td>
-<td style="text-align: center">1</td>
+<td style="text-align: left">字符串常量</td>
+<td style="text-align: center">常量</td>
+<td style="text-align: right">读取</td>
 </tr>
 </tbody>
 </table>
@@ -377,16 +270,16 @@ INT(2)的列,每个值仍占用<code>4个字节</code> (32bit) 的空间,假设�
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872314142143.html" 
-          title="Previous Post: [译] Sequelize(1)  让Node操作MySQL更方便">&laquo; [译] Sequelize(1)  让Node操作MySQL更方便</a>
+          <a href="sequelize-table-define.html" 
+          title="Previous Post: [译] Sequelize(2)  定义表格">&laquo; [译] Sequelize(2)  定义表格</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="probile.html" 
-          title="Next Post: Promises 解决Node无限回调">Promises 解决Node无限回调 &raquo;</a>
+          <a  href="sequelize-introduction.html" 
+          title="Next Post: [译] Sequelize(1)  让Node操作MySQL更方便">[译] Sequelize(1)  让Node操作MySQL更方便 &raquo;</a>
       
       </p>
         </div>
@@ -400,7 +293,7 @@ INT(2)的列,每个值仍占用<code>4个字节</code> (32bit) 的空间,假设�
           
 
           
-              <div class="ds-thread" data-thread-key="14872295002814.html" data-url="http://blog.kayorl.com/14872295002814.html" data-title="MySQL 数据类型"></div>
+              <div class="ds-thread" data-thread-key="diff-c-array-const.html" data-url="http://blog.kayorl.com/diff-c-array-const.html" data-title="字符数组 vs 字符串常量"></div>
           
         </div>
       </div>
@@ -453,6 +346,8 @@ INT(2)的列,每个值仍占用<code>4个字节</code> (32bit) 的空间,假设�
             <a href="om.html"><strong>运维</strong></a>
         
             <a href="C-C++.html"><strong>C/C++</strong></a>
+        
+            <a href="security.html"><strong>security</strong></a>
          
         </p>
 
@@ -469,31 +364,31 @@ INT(2)的列,每个值仍占用<code>4个字节</code> (32bit) 的空间,假设�
 	      
 		      
 			      <li class="post">
-			        <a href="14917448523131.html">同源政策</a>
+			        <a href="security-principle.html">安全的原则 - 读『白帽子讲 Web 安全』总结</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14905364754279.html">事件处理 之 跨浏览器</a>
+			        <a href="security-world.html">安全的世界观 - 读『白帽子讲 Web 安全』总结</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="same-origin-policy.html">同源政策</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="event.html">事件处理 之 跨浏览器</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
 			        <a href="margin-collapse.html">外边距折叠</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-centering.html">css 元素垂直、水平居中</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-style.html">css 命名约定</a>
 			      </li>
 		     
 		  

@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  [译] Sequelize(5) 几对几 - 几谷 博客
+  security - 几谷 博客
   
   </title>
-  <meta name="keywords" content="sequelize" />
+  
   
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
@@ -85,6 +85,8 @@
             <li><a href="om.html">运维</a></li>
         
             <li><a href="C-C++.html">C/C++</a></li>
+        
+            <li><a href="security.html">security</a></li>
          
 
       </ul>
@@ -98,179 +100,116 @@
        
 
  <script type="text/javascript">
-  $(function(){
-    $('#menu_item_index').addClass('is_active');
-  });
+	$(function(){
+		$('#menu_item_index').addClass('is_active');
+	});
 </script>
 <div class="row">
-  <div class="large-8 medium-8 columns">
-      <div class="markdown-body article-wrap">
-       <div class="article">
-          
-          <h1>[译] Sequelize(5) 几对几</h1>
-     
-        <div class="read-more clearfix">
-          <span class="date">2016/11/27 15:57 下午</span>
-
-          <span>posted in&nbsp;</span> 
-          
-              <span class="posted-in"><a href='sequelize.html'>Sequelize</a></span>
-           
-         
-          <span class="comments">
-            
-              <a href="http://blog.kayorl.com/14872314142796.html#disqus_thread">comments</a>
-            
-
-            
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872314142796.html" data-count-type="comments" href="14872314142796.html#ds-thread"></a>
-            
-          </span>
-
-        </div>
-      </div><!-- article -->
-
-      <div class="article-content">
-      <p>一对一，一对多，多对多</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">一对一</h2>
-
-<h3 id="toc_1">hasOne</h3>
-
-<h3 id="toc_2">belongsTo</h3>
-
-<blockquote>
-<p>区别: <code>联系键</code> 添加的地方不一样</p>
-</blockquote>
-
-<pre><code class="language-js">var Player = this.sequelize.define(&#39;player&#39;, {/* attributes */}), 
-    Coach  = this.sequelize.define(&#39;coach&#39;, {/* attributes */}), 
-    Team  = this.sequelize.define(&#39;team&#39;, {/* attributes */}),
-    Game =  this.sequelize.define(&#39;game&#39;, {/* attributes */});
+	<div class="large-8 medium-8 columns">
+		<div class="markdown-body home-categories">
+		
+			<div class="article">
+                <a class="clearlink" href="security-principle.html">
+                
+                  <h1>安全的原则 - 读『白帽子讲 Web 安全』总结</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>Secure By Default，<br/>
+纵深防御，<br/>
+数据与代码分离，<br/>
+不可预见性</p>
 
 
-Player.belongsTo(Team);     // 添加 teamId 到 Player
-Coach.hasOne(Team);         //添加 coachId 到 Team
-</code></pre>
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="security-principle.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2017/5/2 15:12 下午</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='security.html'>security</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+                        <a href="http://blog.kayorl.com/security-principle.html#disqus_thread">comments</a>
+                      
 
-<p>通过 hasOne 方法添加的模型</p>
-
-<blockquote>
-<p>对新添加模型的 setter 和 getter 会自动以模型名为后缀</p>
-
-<p>此外，也会以  <code>模型名+id</code> 的形式生成外码</p>
-</blockquote>
-
-<p>可以通过以下代码修改</p>
-
-<pre><code class="language-js">// Person#getPerson, Person#setPerson
-
-Person.hasOne(Person);
-
-
-// 增加方法Person#getFather,Person#setFather
-// 修改外码为dadId
-
-Person.hasOne(Person, {as: &#39;Father&#39;, foreignKey: &#39;dad_id&#39;})
-</code></pre>
-
-<h2 id="toc_3">一对多</h2>
-
-<pre><code class="language-js">var User = sequelize.define(&#39;user&#39;, {/* ... */})
-var Project = sequelize.define(&#39;project&#39;, {/* ... */})
- 
-// Project#getWorkers , Project#setWorkers
-
-Project.hasMany(User, {as: &#39;Workers&#39;})
-</code></pre>
-
-<h2 id="toc_4">多对多</h2>
+                      
+                        &nbsp;<a  class="ds-thread-count" data-thread-key="security-principle.html" data-count-type="comments" href="security-principle.html#ds-thread"></a>
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="security-world.html">
+                
+                  <h1>安全的世界观 - 读『白帽子讲 Web 安全』总结</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>这学期上了华仔的『信息安全』，学会了内存溢出攻击，实现DES加密，自签数字证书（CA，邮件签名），理解 https/SSL 协议的信任问题，还有VPN的搭建。</p>
 
 <blockquote>
-<p>使用belongToMany,为两个多对多的模型建立联系</p>
-
-<p>通过创建一个中间模型<code>(联系集)</code>实现</p>
+<p>获益匪浅，谢谢华仔啦。(๑•̀ㅂ•́)و✧</p>
 </blockquote>
 
-<pre><code class="language-js">User = sequelize.define(&#39;user&#39;, {})
-Project = sequelize.define(&#39;project&#39;, {})
-UserProjects = sequelize.define(&#39;userProjects&#39;, {
-    id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    status: DataTypes.STRING
-})
- 
-User.belongsToMany(Project, {  as: &#39;Tasks&#39;, through: UserProjects, foreignKey: &#39;userId&#39; })
-Project.belongsToMany(User, {  as: &#39;Workers&#39;,through: UserProjects ,foreignKey: &#39;projectId&#39;})
+<p>上周的阿里（投的前端岗）电话过来，被问及了关于浏览器安全方面的知识，以前对这方面印象模糊只知道大概，进不进得了阿里先不说，至少以后不要害人家公司嘛，因此，买书看书实战一番。</p>
 
 
-// 添加一个 project, 并且,设置其状态为 started
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="security-world.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2017/5/2 14:25 下午</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='security.html'>security</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+                        <a href="http://blog.kayorl.com/security-world.html#disqus_thread">comments</a>
+                      
 
-user.addProject(project, { status: &#39;started&#39; })
-
-
-// 使用 through 可以选择特定属性
-
-User.findAll({
-  include: [{
-    model: Project,
-    through: {
-      attributes: [&#39;createdAt&#39;, &#39;startedAt&#39;, &#39;finishedAt&#39;],
-      where: {completed: true}
-    }
-  }]
-});
-</code></pre>
-
-<blockquote>
-</blockquote>
-
-
-    
-
-      </div>
-
-      <div class="row">
-        <div class="large-6 columns">
-        <p class="text-left" style="padding:15px 0px;">
-      
-          <a href="14872470138156.html" 
-          title="Previous Post: [译] Sequelize(6) sequelize-cli，出门必备良品">&laquo; [译] Sequelize(6) sequelize-cli，出门必备良品</a>
-      
-        </p>
-        </div>
-        <div class="large-6 columns">
-      <p class="text-right" style="padding:15px 0px;">
-      
-          <a  href="14872314142644.html" 
-          title="Next Post: [译] Sequelize(4) 范围">[译] Sequelize(4) 范围 &raquo;</a>
-      
-      </p>
-        </div>
-      </div>
-      <div class="comments-wrap">
-        <div class="share-comments">
-          
-
-          
-            <div id="disqus_thread"></div>
-          
-
-          
-              <div class="ds-thread" data-thread-key="14872314142796.html" data-url="http://blog.kayorl.com/14872314142796.html" data-title="[译] Sequelize(5) 几对几"></div>
-          
-        </div>
-      </div>
-    </div><!-- article-wrap -->
-  </div><!-- large 8 -->
+                      
+                        &nbsp;<a  class="ds-thread-count" data-thread-key="security-world.html" data-count-type="comments" href="security-world.html#ds-thread"></a>
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+              
 
 
-
+			<div class="row">
+			  <div class="large-6 columns">
+			  <p class="text-left" style="padding-top:25px;">
+			   
+			  </p>
+			  </div>
+			  <div class="large-6 columns">
+			<p class="text-right" style="padding-top:25px;">
+			
+			</p>
+			  </div>
+			</div>
+		</div>
+	</div><!-- large 8 -->
 
  <div class="large-4 medium-4 columns">
   <div class="hide-for-small">
@@ -315,6 +254,8 @@ User.findAll({
             <a href="om.html"><strong>运维</strong></a>
         
             <a href="C-C++.html"><strong>C/C++</strong></a>
+        
+            <a href="security.html"><strong>security</strong></a>
          
         </p>
 
@@ -331,31 +272,31 @@ User.findAll({
 	      
 		      
 			      <li class="post">
-			        <a href="14917448523131.html">同源政策</a>
+			        <a href="security-principle.html">安全的原则 - 读『白帽子讲 Web 安全』总结</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14905364754279.html">事件处理 之 跨浏览器</a>
+			        <a href="security-world.html">安全的世界观 - 读『白帽子讲 Web 安全』总结</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="same-origin-policy.html">同源政策</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="event.html">事件处理 之 跨浏览器</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
 			        <a href="margin-collapse.html">外边距折叠</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-centering.html">css 元素垂直、水平居中</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-style.html">css 命名约定</a>
 			      </li>
 		     
 		  

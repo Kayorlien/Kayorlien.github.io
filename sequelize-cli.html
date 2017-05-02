@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  [译] Sequelize(4) 范围 - 几谷 博客
+  [译] Sequelize(6) sequelize-cli，出门必备良品 - 几谷 博客
   
   </title>
   <meta name="keywords" content="sequelize" />
@@ -85,6 +85,8 @@
             <li><a href="om.html">运维</a></li>
         
             <li><a href="C-C++.html">C/C++</a></li>
+        
+            <li><a href="security.html">security</a></li>
          
 
       </ul>
@@ -107,10 +109,10 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>[译] Sequelize(4) 范围</h1>
+          <h1>[译] Sequelize(6) sequelize-cli，出门必备良品</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/11/27 10:49 上午</span>
+          <span class="date">2016/11/27 16:29 下午</span>
 
           <span>posted in&nbsp;</span> 
           
@@ -119,11 +121,11 @@
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872314142644.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/sequelize-cli.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872314142644.html" data-count-type="comments" href="14872314142644.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="sequelize-cli.html" data-count-type="comments" href="sequelize-cli.html#ds-thread"></a>
             
           </span>
 
@@ -131,64 +133,119 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>范围（<code>scope</code>）: 定义好范围,在后续的操作中可以减少选择条件的重复，比如，只在<strong>未删除用户</strong>列表中进行操作。</p>
+      <p>让数据库转移到那些年的状态<br/>
+通过<strong>迁移文件</strong>存储数据库不同时期的状态，每个迁移文件描述了对数据库的操作</p>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">范围是对模型的一种分类</h2>
+<p><strong>CLI</strong>:  <code>command-line interface</code> , 命令行界面</p>
 
-<pre><code class="language-js">// 修改默认所有操作的范围 default Scope
-var Project = sequelize.define( &#39;project&#39;, {
-    // Attributes
-}, {
-    defaultScope: {
-        where: {
-            active: true
-        }
-    },
-    scopes: {
-        deleted: {
-            where: {
-                deleted: true
-            }
-        },
-        activeUsers: {
-            include: [
-                { model: User, where: { active: true } }
-      ]
-        }
-    }
-} );
+<h2 id="toc_0">全局安装</h2>
 
-
-
-// 移除默认范围，设置为 deleted 范围
-Project.scope( &#39;deleted&#39; ).findAll();
-
-// 与上面等价
-var DeletedProjects = Project.scope( &#39;deleted&#39; );
-DeletedProjects.findAll();
-
-var Post = sequelize.define( &#39;post&#39;, attributes, {
-    defaultScope: {
-        where: {
-            active: true
-        }
-    },
-    scopes: {
-        deleted: {
-            where: {
-                deleted: true
-            }
-        }
-    }
-} );
+<pre><code>$ npm install -g sequelize-cli
 </code></pre>
 
-<h2 id="toc_1">例子</h2>
+<h3 id="toc_1">使用</h3>
 
-<pre><code class="language-js">User.hasMany( Post ); // regular getPosts association
-User.hasMany( Post.scope( &#39;deleted&#39; ), { as: &#39;deletedPosts&#39; } );
+<pre><code>$ sequelize
+</code></pre>
+
+<p>迁移文件一般长这样</p>
+
+<blockquote>
+<p>queryInterface : 修改数据库</p>
+
+<p>Sequelize : 提供多种类型</p>
+</blockquote>
+
+<pre><code class="language-js">module.exports = {
+  up: function(queryInterface, Sequelize) {
+    // logic for transforming into the new state
+  },
+ 
+  down: function(queryInterface, Sequelize) {
+    // logic for reverting the changes
+  }
+}
+</code></pre>
+
+<p>queryInterface有一下几个函数（常用）：</p>
+
+<ul>
+<li>createTable(tableName, attributes, options)</li>
+<li>addIndex(tableName, attributes, options)</li>
+<li>dropTable(tableName, options)</li>
+</ul>
+
+<h2 id="toc_2">createTable(tableName, attributes, options)</h2>
+
+<pre><code>queryInterface.createTable(
+  &#39;nameOfTheNewTable&#39;,
+  {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    createdAt: {
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      type: Sequelize.DATE
+    },
+    attr1: Sequelize.STRING,
+    attr2: Sequelize.INTEGER,
+    attr3: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
+    },
+    //foreign key usage
+    attr4: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: &#39;another_table_name&#39;,
+            key: &#39;id&#39;
+        },
+        onUpdate: &#39;cascade&#39;,
+        onDelete: &#39;cascade&#39;
+    }
+  },
+  {
+    engine: &#39;MYISAM&#39;,                     // default: &#39;InnoDB&#39;
+    charset: &#39;utf8&#39;,                    // default: null
+    schema: &#39;public&#39;                      // default: public, PostgreSQL only.
+  }
+)
+</code></pre>
+
+<h2 id="toc_3">addIndex(tableName, attributes, options)</h2>
+
+<pre><code class="language-js">// This example will create the index person_firstname_lastname
+queryInterface.addIndex(&#39;Person&#39;, [&#39;firstname&#39;, &#39;lastname&#39;])
+
+
+
+// This example will create a unique index with the name SuperDuperIndex using the optional &#39;options&#39; field.
+// Possible options:
+// - indicesType: UNIQUE|FULLTEXT|SPATIAL
+// - indexName: The name of the index. Default is __
+// - parser: For FULLTEXT columns set your parser
+// - indexType: Set a type for the index, e.g. BTREE. See the documentation of the used dialect
+// - logging: A function that receives the sql query, e.g. console.log
+queryInterface.addIndex(
+  &#39;Person&#39;,
+  [&#39;firstname&#39;, &#39;lastname&#39;],
+  {
+    indexName: &#39;SuperDuperIndex&#39;,
+    indicesType: &#39;UNIQUE&#39;
+  }
+)
+</code></pre>
+
+<h2 id="toc_4">dropTable(tableName, options)</h2>
+
+<pre><code>queryInterface.dropTable(&#39;nameOfTheExistingTable&#39;)
 </code></pre>
 
 
@@ -200,16 +257,16 @@ User.hasMany( Post.scope( &#39;deleted&#39; ), { as: &#39;deletedPosts&#39; } );
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872314142796.html" 
-          title="Previous Post: [译] Sequelize(5) 几对几">&laquo; [译] Sequelize(5) 几对几</a>
+          <a href="mysql.html" 
+          title="Previous Post: MySQL5.7 从相见到👋">&laquo; MySQL5.7 从相见到👋</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872314142502.html" 
-          title="Next Post: [译] Sequelize(3)  CRUD">[译] Sequelize(3)  CRUD &raquo;</a>
+          <a  href="sequelize-?-?.html" 
+          title="Next Post: [译] Sequelize(5) 几对几">[译] Sequelize(5) 几对几 &raquo;</a>
       
       </p>
         </div>
@@ -223,7 +280,7 @@ User.hasMany( Post.scope( &#39;deleted&#39; ), { as: &#39;deletedPosts&#39; } );
           
 
           
-              <div class="ds-thread" data-thread-key="14872314142644.html" data-url="http://blog.kayorl.com/14872314142644.html" data-title="[译] Sequelize(4) 范围"></div>
+              <div class="ds-thread" data-thread-key="sequelize-cli.html" data-url="http://blog.kayorl.com/sequelize-cli.html" data-title="[译] Sequelize(6) sequelize-cli，出门必备良品"></div>
           
         </div>
       </div>
@@ -276,6 +333,8 @@ User.hasMany( Post.scope( &#39;deleted&#39; ), { as: &#39;deletedPosts&#39; } );
             <a href="om.html"><strong>运维</strong></a>
         
             <a href="C-C++.html"><strong>C/C++</strong></a>
+        
+            <a href="security.html"><strong>security</strong></a>
          
         </p>
 
@@ -292,31 +351,31 @@ User.hasMany( Post.scope( &#39;deleted&#39; ), { as: &#39;deletedPosts&#39; } );
 	      
 		      
 			      <li class="post">
-			        <a href="14917448523131.html">同源政策</a>
+			        <a href="security-principle.html">安全的原则 - 读『白帽子讲 Web 安全』总结</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14905364754279.html">事件处理 之 跨浏览器</a>
+			        <a href="security-world.html">安全的世界观 - 读『白帽子讲 Web 安全』总结</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="same-origin-policy.html">同源政策</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="event.html">事件处理 之 跨浏览器</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
 			        <a href="margin-collapse.html">外边距折叠</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-centering.html">css 元素垂直、水平居中</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-style.html">css 命名约定</a>
 			      </li>
 		     
 		  

@@ -2,16 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
   <loc>http://blog.kayorl.com/</loc>
-  <lastmod>2017-04-10T22:11:50+08:00</lastmod>
+  <lastmod>2017-05-02T15:53:49+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14917448523131.html</loc>
+  <loc>http://blog.kayorl.com/security-principle.html</loc>
+  <lastmod>2017-05-02T15:12:33+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://blog.kayorl.com/security-world.html</loc>
+  <lastmod>2017-05-02T14:25:51+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://blog.kayorl.com/same-origin-policy.html</loc>
   <lastmod>2017-04-09T21:34:12+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14905364754279.html</loc>
+  <loc>http://blog.kayorl.com/event.html</loc>
   <lastmod>2017-03-26T21:54:35+08:00</lastmod>
 </url>
 
@@ -61,82 +71,82 @@
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872445826285.html</loc>
+  <loc>http://blog.kayorl.com/mysql-.html</loc>
   <lastmod>2016-12-04T19:29:42+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872339187000.html</loc>
+  <loc>http://blog.kayorl.com/mysql.html</loc>
   <lastmod>2016-12-03T13:31:58+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872470138156.html</loc>
+  <loc>http://blog.kayorl.com/sequelize-cli.html</loc>
   <lastmod>2016-11-27T16:29:13+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872314142796.html</loc>
+  <loc>http://blog.kayorl.com/sequelize-?-?.html</loc>
   <lastmod>2016-11-27T15:57:14+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872314142644.html</loc>
+  <loc>http://blog.kayorl.com/sequelize-range.html</loc>
   <lastmod>2016-11-27T10:49:14+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872314142502.html</loc>
+  <loc>http://blog.kayorl.com/sequelize-crud.html</loc>
   <lastmod>2016-11-26T23:22:14+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872476184764.html</loc>
+  <loc>http://blog.kayorl.com/supertest.html</loc>
   <lastmod>2016-11-25T14:30:18+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872295003201.html</loc>
+  <loc>http://blog.kayorl.com/pm2.html</loc>
   <lastmod>2016-11-06T09:30:25+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872295003080.html</loc>
+  <loc>http://blog.kayorl.com/nginx.html</loc>
   <lastmod>2016-10-25T17:20:00+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872477973050.html</loc>
+  <loc>http://blog.kayorl.com/chaos.html</loc>
   <lastmod>2016-10-06T17:12:17+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872314142360.html</loc>
+  <loc>http://blog.kayorl.com/sequelize-table-define.html</loc>
   <lastmod>2016-09-29T16:17:14+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872295002950.html</loc>
+  <loc>http://blog.kayorl.com/diff-c-array-const.html</loc>
   <lastmod>2016-09-23T16:10:20+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872314142143.html</loc>
+  <loc>http://blog.kayorl.com/sequelize-introduction.html</loc>
   <lastmod>2016-09-14T13:10:14+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872295002814.html</loc>
+  <loc>http://blog.kayorl.com/mysql-datatype.html</loc>
   <lastmod>2016-09-14T10:45:20+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/probile.html</loc>
+  <loc>http://blog.kayorl.com/promise.html</loc>
   <lastmod>2016-09-14T10:25:44+08:00</lastmod>
 </url>
 
 <url>
-  <loc>http://blog.kayorl.com/14872294485144.html</loc>
+  <loc>http://blog.kayorl.com/mysql-terminology.html</loc>
   <lastmod>2016-09-12T11:25:28+08:00</lastmod>
 </url>
 
@@ -164,6 +174,10 @@
 
 <url>
   <loc>http://blog.kayorl.com/web.html</loc>
+</url>
+
+<url>
+  <loc>http://blog.kayorl.com/security.html</loc>
 </url>
 
 

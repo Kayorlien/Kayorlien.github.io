@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  MySQL5.7 从相见到👋 - 几谷 博客
+  pm2 - 几谷 博客
   
   </title>
-  <meta name="keywords" content="mysql 安装 连接 导入 修改时区 备份 卸载" />
+  
   
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
@@ -85,6 +85,8 @@
             <li><a href="om.html">运维</a></li>
         
             <li><a href="C-C++.html">C/C++</a></li>
+        
+            <li><a href="security.html">security</a></li>
          
 
       </ul>
@@ -107,25 +109,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>MySQL5.7 从相见到👋</h1>
+          <h1>pm2</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/12/3 13:31 下午</span>
+          <span class="date">2016/11/6 9:30 上午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='database.html'>数据库系统</a></span>
-          
-              <span class="posted-in"><a href='om.html'>运维</a></span>
+              <span class="posted-in"><a href='nodejs.html'>nodejs</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872339187000.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/pm2.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872339187000.html" data-count-type="comments" href="14872339187000.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="pm2.html" data-count-type="comments" href="pm2.html#ds-thread"></a>
             
           </span>
 
@@ -133,101 +133,63 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>我的意中人是个盖世英雄<br/>
-有一天他会踩着七色云彩来娶我<br/>
-我猜中了前头,<br/>
-可是我猜不着这结局</p>
+      <p>nodejs 的进程管理器，自带<code>负载均衡</code>以及热重载</p>
 
 <span id="more"></span><!-- more -->
 
-<ul>
-<li>
-<a href="#toc_0">安装</a>
-</li>
-<li>
-<a href="#toc_1">建立与 MySQL 服务器的连接</a>
-</li>
-<li>
-<a href="#toc_2">导入 .sql 文件</a>
-</li>
-<li>
-<a href="#toc_3">修改时区</a>
-</li>
-<li>
-<a href="#toc_4">备份</a>
-</li>
-<li>
-<a href="#toc_5">卸载</a>
-</li>
-</ul>
+<h2 id="toc_0">全局安装</h2>
 
-
-<h2 id="toc_0">安装</h2>
-
-<p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-16-04">DO教程</a></p>
-
-<pre><code># 安装 
-$ sudo apt-get update
-$ sudo apt-get install mysql-server
-
-# 修改数据库的安全配置，如禁用远程 root 用户
-$ sudo mysql_secure_installation
-
-## 测试数据库状态
-$ systemctl status mysql.service
+<pre><code>$ npm install pm2 -g
 </code></pre>
 
-<h2 id="toc_1">建立与 MySQL 服务器的连接</h2>
+<h2 id="toc_1">开机启动</h2>
 
-<p>为连接到 MySQL 服务器,在命令行中调用 mysql 程序</p>
+<p>pm2 save 保存当前进程列表，下次启动时自动恢复列表内进程</p>
 
-<pre><code>$ mysql -h host_name -p -u user_name -D database_name
+<pre><code>$ pm2 startup &amp;&amp; pm2 save
 </code></pre>
 
-<ul>
-<li><code>mysql</code> 是必须的, 其他可选</li>
-<li>-h  host_name　　　主机地址,默认为本地</li>
-<li>-u  user_name　　　MySQL 用户名</li>
-<li>-p　　　　　　　　回显 Enter password: ，如果相应用户名有密码而没加此项，会显示<code>拒绝访问</code></li>
-<li>-D  database_name 选择操作(默认)的数据库<br/></li>
-</ul>
+<h2 id="toc_2">启动</h2>
 
-<h2 id="toc_2">导入 .sql 文件</h2>
+<blockquote>
+<p>[ app_name ] : 应用名<br/>
+[ 4 ] :进程数目,为0时进程数目与 CPU 数相等</p>
+</blockquote>
 
-<p>可以将编写好的数据库语句写入到文件名后缀为 <code>.sql</code> 的文件中,并记住其路径,最简单的方法是在命令行中进入到.sql 文件所在的目录,然后在<code>命令行</code>执行以下命令(省略了主机名,用户,密码等参数)</p>
-
-<pre><code>$ mysql sampdb &lt; create_member.sql
+<pre><code>$ pm2 start app.js --name=[app_name] -i 4
 </code></pre>
 
-<p>如果已经进入 mysql 程序界面,则执行</p>
+<h2 id="toc_3">暂停 | 删除</h2>
 
-<pre><code>mysql&gt; source create_member.sql;
+<blockquote>
+<p>[ id ] : 进程 id</p>
+</blockquote>
+
+<pre><code>$ pm2 stop [id]
+$ pm2 delete [id]
 </code></pre>
 
-<h2 id="toc_3">修改时区</h2>
+<p>进程数变为2</p>
 
-<pre><code># /etc/my.cnf
+<blockquote>
+<p>[ app_name ] : 应用名</p>
+</blockquote>
 
-[mysqld]
-...
-default-time-zone = &#39;+8:00&#39;
-
-$ systemctl restart mysql
+<pre><code>$ pm2 sacle [app_name] 2
 </code></pre>
 
-<h2 id="toc_4">备份</h2>
+<h2 id="toc_4">监控</h2>
 
-<pre><code>$ mysqldump -u -p -D exampleDB &gt;my.sql
+<pre><code>$ pm2 list
+$ pm2 monit
+$ pm2 show [app_name]
+$ pm2 logs
+$ pm2 logs [app_name]
 </code></pre>
 
-<h2 id="toc_5">卸载</h2>
+<hr/>
 
-<p>purge,翻译过来是净化的意思</p>
-
-<pre><code>sudo apt-get remove --purge mysql*
-sudo apt-get autoremove
-sudo apt-get autoclean
-</code></pre>
+<p>此外，还可以通过 <a href="https://app.keymetrics.io">keymetrics</a>  实现网页监控，不过免费版只能支持一台机器的状态监控</p>
 
 
     
@@ -238,16 +200,16 @@ sudo apt-get autoclean
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872445826285.html" 
-          title="Previous Post: MySQL 语句">&laquo; MySQL 语句</a>
+          <a href="supertest.html" 
+          title="Previous Post: supertest 模拟客户端">&laquo; supertest 模拟客户端</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872470138156.html" 
-          title="Next Post: [译] Sequelize(6) sequelize-cli，出门必备良品">[译] Sequelize(6) sequelize-cli，出门必备良品 &raquo;</a>
+          <a  href="nginx.html" 
+          title="Next Post: nginx 从安装到卸载">nginx 从安装到卸载 &raquo;</a>
       
       </p>
         </div>
@@ -261,7 +223,7 @@ sudo apt-get autoclean
           
 
           
-              <div class="ds-thread" data-thread-key="14872339187000.html" data-url="http://blog.kayorl.com/14872339187000.html" data-title="MySQL5.7 从相见到👋"></div>
+              <div class="ds-thread" data-thread-key="pm2.html" data-url="http://blog.kayorl.com/pm2.html" data-title="pm2"></div>
           
         </div>
       </div>
@@ -314,6 +276,8 @@ sudo apt-get autoclean
             <a href="om.html"><strong>运维</strong></a>
         
             <a href="C-C++.html"><strong>C/C++</strong></a>
+        
+            <a href="security.html"><strong>security</strong></a>
          
         </p>
 
@@ -330,31 +294,31 @@ sudo apt-get autoclean
 	      
 		      
 			      <li class="post">
-			        <a href="14917448523131.html">同源政策</a>
+			        <a href="security-principle.html">安全的原则 - 读『白帽子讲 Web 安全』总结</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14905364754279.html">事件处理 之 跨浏览器</a>
+			        <a href="security-world.html">安全的世界观 - 读『白帽子讲 Web 安全』总结</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="same-origin-policy.html">同源政策</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="event.html">事件处理 之 跨浏览器</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
 			        <a href="margin-collapse.html">外边距折叠</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-centering.html">css 元素垂直、水平居中</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-style.html">css 命名约定</a>
 			      </li>
 		     
 		  

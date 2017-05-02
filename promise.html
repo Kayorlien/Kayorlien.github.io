@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  pm2 - 几谷 博客
+  Promises 解决Node无限回调 - 几谷 博客
   
   </title>
   
@@ -85,6 +85,8 @@
             <li><a href="om.html">运维</a></li>
         
             <li><a href="C-C++.html">C/C++</a></li>
+        
+            <li><a href="security.html">security</a></li>
          
 
       </ul>
@@ -107,10 +109,10 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>pm2</h1>
+          <h1>Promises 解决Node无限回调</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2016/11/6 9:30 上午</span>
+          <span class="date">2016/9/14 10:25 上午</span>
 
           <span>posted in&nbsp;</span> 
           
@@ -119,11 +121,11 @@
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/14872295003201.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/promise.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="14872295003201.html" data-count-type="comments" href="14872295003201.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="promise.html" data-count-type="comments" href="promise.html#ds-thread"></a>
             
           </span>
 
@@ -131,63 +133,70 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>nodejs 的进程管理器，自带<code>负载均衡</code>以及热重载</p>
+      <p>Promises 是异步代码（如 Node.js） 实现控制流的方式， 可以让代码更干净，可读。</p>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">全局安装</h2>
+<p>利用 Promises 可以将</p>
 
-<pre><code>$ npm install pm2 -g
+<pre><code class="language-js">fs.readFile(&quot;file.json&quot;, function (err, val) {
+    if (err) {
+        console.error(&quot;unable to read file&quot;);
+    }
+    else {
+        try {
+            val = JSON.parse(val);
+            console.log(val.success);
+        }
+        catch (e) {
+            console.error(&quot;invalid json in file&quot;);
+        }
+    }
+});
 </code></pre>
 
-<h2 id="toc_1">开机启动</h2>
+<p>转化成</p>
 
-<p>pm2 save 保存当前进程列表，下次启动时自动恢复列表内进程</p>
-
-<pre><code>$ pm2 startup &amp;&amp; pm2 save
+<pre><code class="language-js">fs.readFileAsync(&quot;file.json&quot;).then(JSON.parse).then(function (val) {
+    console.log(val.success);
+})
+.catch(SyntaxError, function (e) {
+    console.error(&quot;invalid json in file&quot;);
+})
+.catch(function (e) {
+    console.error(&quot;unable to read file&quot;);
+});
 </code></pre>
 
-<h2 id="toc_2">启动</h2>
+<p></br><br/>
+然而 核心模块 <code>fs</code> 并没有 <code>readFileAsync</code> 方法, 可以使用 <a href="http://bluebirdjs.com/docs/api/promisification.html">promisfication</a> 大法.</p>
 
-<blockquote>
-<p>[ app_name ] : 应用名<br/>
-[ 4 ] :进程数目,为0时进程数目与 CPU 数相等</p>
-</blockquote>
+<h2 id="toc_0">Promisfication</h2>
 
-<pre><code>$ pm2 start app.js --name=[app_name] -i 4
+<p>Promisfication 可以转化已存在的 promise-unaware API  为 promise-returning API</p>
+
+<p>通常 Node 使用 promises 的办法是去 <code>Promise.promisifyAll</code> 一些 API</p>
+
+<pre><code class="language-js">var fs = require(&quot;fs&quot;);
+Promise.promisifyAll(fs);
+
+fs.readFileAsync(&quot;file.js&quot;, &quot;utf8&quot;).then(...)
 </code></pre>
 
-<h2 id="toc_3">暂停 | 删除</h2>
+<p>要注意到这是特殊状况, 因为 <code>fs</code> 是一个单例.  大多数库能够通过 <code>require</code> 一些库里的类(构造函数)和在 <code>.prototype</code>上调用 promisify 对该实例 promise 化.</p>
 
-<blockquote>
-<p>[ id ] : 进程 id</p>
-</blockquote>
+<p>每个实例的 promise 化在应用的生命周期内只需被调用一次,此后依据该实例原来的文档进行操作, <code>除了在方法后面增加Async 和用 promise 接口替代原来的 callback 接口</code>.</p>
 
-<pre><code>$ pm2 stop [id]
-$ pm2 delete [id]
+<pre><code class="language-js">// Mysql 模块
+var Promise = require(&quot;bluebird&quot;);
+//
+// 库里面的类并不是模块直接导出,所以需要手动的require
+//
+Promise.promisifyAll(require(&quot;mysql/lib/Connection&quot;).prototype);
+Promise.promisifyAll(require(&quot;mysql/lib/Pool&quot;).prototype);
 </code></pre>
 
-<p>进程数变为2</p>
-
-<blockquote>
-<p>[ app_name ] : 应用名</p>
-</blockquote>
-
-<pre><code>$ pm2 sacle [app_name] 2
-</code></pre>
-
-<h2 id="toc_4">监控</h2>
-
-<pre><code>$ pm2 list
-$ pm2 monit
-$ pm2 show [app_name]
-$ pm2 logs
-$ pm2 logs [app_name]
-</code></pre>
-
-<hr/>
-
-<p>此外，还可以通过 <a href="https://app.keymetrics.io">keymetrics</a>  实现网页监控，不过免费版只能支持一台机器的状态监控</p>
+<p>参考<a href="http://bluebirdjs.com/docs/why-promises.html">bluebirkjs</a></p>
 
 
     
@@ -198,16 +207,16 @@ $ pm2 logs [app_name]
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14872476184764.html" 
-          title="Previous Post: supertest 模拟客户端">&laquo; supertest 模拟客户端</a>
+          <a href="mysql-datatype.html" 
+          title="Previous Post: MySQL 数据类型">&laquo; MySQL 数据类型</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14872295003080.html" 
-          title="Next Post: nginx 从安装到卸载">nginx 从安装到卸载 &raquo;</a>
+          <a  href="mysql-terminology.html" 
+          title="Next Post: MySQL 术语">MySQL 术语 &raquo;</a>
       
       </p>
         </div>
@@ -221,7 +230,7 @@ $ pm2 logs [app_name]
           
 
           
-              <div class="ds-thread" data-thread-key="14872295003201.html" data-url="http://blog.kayorl.com/14872295003201.html" data-title="pm2"></div>
+              <div class="ds-thread" data-thread-key="promise.html" data-url="http://blog.kayorl.com/promise.html" data-title="Promises 解决Node无限回调"></div>
           
         </div>
       </div>
@@ -274,6 +283,8 @@ $ pm2 logs [app_name]
             <a href="om.html"><strong>运维</strong></a>
         
             <a href="C-C++.html"><strong>C/C++</strong></a>
+        
+            <a href="security.html"><strong>security</strong></a>
          
         </p>
 
@@ -290,31 +301,31 @@ $ pm2 logs [app_name]
 	      
 		      
 			      <li class="post">
-			        <a href="14917448523131.html">同源政策</a>
+			        <a href="security-principle.html">安全的原则 - 读『白帽子讲 Web 安全』总结</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14905364754279.html">事件处理 之 跨浏览器</a>
+			        <a href="security-world.html">安全的世界观 - 读『白帽子讲 Web 安全』总结</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="same-origin-policy.html">同源政策</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="event.html">事件处理 之 跨浏览器</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
 			        <a href="margin-collapse.html">外边距折叠</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-centering.html">css 元素垂直、水平居中</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="css-style.html">css 命名约定</a>
 			      </li>
 		     
 		  

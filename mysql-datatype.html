@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  理解 DOCTYPE 声明的意义 - 几谷 博客
+  MySQL 数据类型 - 几谷 博客
   
   </title>
-  <meta name="keywords" content="doctype DTD SGML" />
-  <meta name="description" content="理解 DOCTYPE 声明的意义" />
+  <meta name="keywords" content="mysql 数据类型" />
+  
   <link href="atom.xml" rel="alternate" title="几谷 博客" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
     <link rel="stylesheet" href="asset/css/docs.css" />
@@ -109,23 +109,23 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>理解 DOCTYPE 声明的意义</h1>
+          <h1>MySQL 数据类型</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2017/2/6 10:1 上午</span>
+          <span class="date">2016/9/14 10:45 上午</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='web.html'>web</a></span>
+              <span class="posted-in"><a href='database.html'>数据库系统</a></span>
            
          
           <span class="comments">
             
-              <a href="http://blog.kayorl.com/doctype.html#disqus_thread">comments</a>
+              <a href="http://blog.kayorl.com/mysql-datatype.html#disqus_thread">comments</a>
             
 
             
-              &nbsp;<a  class="ds-thread-count" data-thread-key="doctype.html" data-count-type="comments" href="doctype.html#ds-thread"></a>
+              &nbsp;<a  class="ds-thread-count" data-thread-key="mysql-datatype.html" data-count-type="comments" href="mysql-datatype.html#ds-thread"></a>
             
           </span>
 
@@ -133,86 +133,242 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>每次看到 html 文档时，已经习惯了头部有个 <code>&lt;!DOCTYPE html&gt;</code>，印象也有些模糊，趁着学习 css ，赶紧整理一下</p>
+      <p>blob ？显示宽度？</p>
 
 <span id="more"></span><!-- more -->
 
-<p>文档类型中会出现的元素限制。</p>
-
-<h2 id="toc_0">DOCTYPE 声明对页面进行有效性验证</h2>
-
-<blockquote>
-<p>DTD (Document Type Definition, 文档定义类型)定义 XML 或 HTML 的特定版本允许有什么，不允许有什么。</p>
-
-<p>SGML (Standard Generalized Markup language, 标准通用标记语言) 是一种定义电子文档结构和描述其内容的国际标准语言</p>
-</blockquote>
-
-<p>利用 <a href="http://validator.w3.org/">w3c 认证器</a>, 有助于找到代码中的 bug 。<br/>
-它是通过与标准HTML规则进行比较的方式，分析HTML文档、标记出错误和非标准代码的处理过程。<br/>
-Web页面使用HTML进行渲染，而HTML本身采用了HTML规范作为其规则和标准。</p>
-
-<h2 id="toc_1">DOCTYPE 声明让浏览器有不同的呈现形式</h2>
-
-<blockquote>
-<p>标准模式(standard mode)：根据规范的一种呈现形式<br/>
-混杂模式(quirk mode)：模拟老式浏览器的一种呈现形式，盒模型（border-box）</p>
-</blockquote>
+<h2 id="toc_0">属性</h2>
 
 <table>
 <thead>
 <tr>
-<th style="text-align: center"></th>
-<th style="text-align: center">DTD</th>
-<th style="text-align: center">standard</th>
-<th style="text-align: center">quirk</th>
+<th style="text-align: left">类型</th>
+<th style="text-align: center">简写</th>
+<th style="text-align: center">作用</th>
+<th style="text-align: right">适用范围</th>
 </tr>
 </thead>
 
 <tbody>
 <tr>
-<td style="text-align: center">NO</td>
-<td style="text-align: center"></td>
-<td style="text-align: center"></td>
-<td style="text-align: center">yes</td>
+<td style="text-align: left">UNSIGNED</td>
+<td style="text-align: center">UN</td>
+<td style="text-align: center">防止出现负值</td>
+<td style="text-align: right">除 BIT 以外</td>
 </tr>
 <tr>
-<td style="text-align: center"> HTML4.01</td>
-<td style="text-align: center">strict</td>
-<td style="text-align: center">yes</td>
+<td style="text-align: left">ZEROFILL</td>
+<td style="text-align: center">ZF</td>
+<td style="text-align: center">在列里的显示值前填充若干个0 (与显示宽度相关)</td>
+<td style="text-align: right">除 BIT 以外</td>
+</tr>
+<tr>
+<td style="text-align: left">AUTO_INCREMENT</td>
+<td style="text-align: center">AI</td>
+<td style="text-align: center">表示该列存放的是序号( ID ).如果没为 ID 列提供值,那 MySQL 会<code>自动生成</code>下一个编号.删除某几行后,删除的序号可能会被再使用,得看使用的引擎</td>
+<td style="text-align: right">一般用于整数 且有 <code>NOT NULL</code>(自动隐式添加) 和 <code>UNSIGNED</code> 属性</td>
+</tr>
+<tr>
+<td style="text-align: left">NULL/NOT NULL</td>
+<td style="text-align: center">NN</td>
+<td style="text-align: center">指定列能否为 NULL</td>
+<td style="text-align: right">除了 有 <code>AI</code> 的列</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_1">数字</h2>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left">类型</th>
+<th style="text-align: center">范围  ( 无符号 , 0~ )</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: left">TINYINT (M)</td>
+<td style="text-align: center">255</td>
+</tr>
+<tr>
+<td style="text-align: left">SMALLINT (M)</td>
+<td style="text-align: center">65535</td>
+</tr>
+<tr>
+<td style="text-align: left">MEDIUMINT (M)</td>
+<td style="text-align: center">16777215</td>
+</tr>
+<tr>
+<td style="text-align: left">INT (M)</td>
+<td style="text-align: center">2ˆ32-1</td>
+</tr>
+<tr>
+<td style="text-align: left">BIGINT  (M)</td>
+<td style="text-align: center">2ˆ64-1</td>
+</tr>
+<tr>
+<td style="text-align: left">DECIMAL ( [ M [ ,D ] ] )</td>
+<td style="text-align: center">由 M 和 D 的值决定</td>
+</tr>
+<tr>
+<td style="text-align: left">FLOAT  ( [ M [ ,D ] ] )</td>
+<td style="text-align: center">最大非零: ±3.402823466E+38</td>
+</tr>
+<tr>
+<td style="text-align: left">DOUBLE  ( [ M [ ,D ] ] )</td>
+<td style="text-align: center">最大非零: ± 1.7976931348623157E+308</td>
+</tr>
+<tr>
+<td style="text-align: left">BIT  ([M])</td>
+<td style="text-align: center">2ˆM-1,  1&lt;= M &lt;= 64</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>D</code> : 数学精确度,即小数点后的数字个数<br/>
+<code>M</code> : 显示宽度,为1~255 的整数.决定 MySQL 用多少个字符<code>显示</code>该列的值,与<code>存储该值所需的字节存储空间无关</code>,默认为最长值的长度 . 一般结合 <code>ZEROFILL</code> 使用</p>
+
+<p><strong>举例</strong> <br/>
+INT(2)的列,每个值仍占用<code>4个字节</code> (32bit) 的空间,假设有一个值取为2,那么将会显示 02 </p>
+
+<hr/>
+
+<h2 id="toc_2">字符串</h2>
+
+<p>MySQL字符串可以表示任何值, 它实际上是一种 &quot;泛型&quot; 类型.例如,可以用二进制串存储二进制数据,如图像,声音,压缩后的gzip 输出.</p>
+
+<ul>
+<li><code>二进制串</code>: 01010101010</li>
+<li>非二进制串: ......</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">类型</th>
+<th style="text-align: center">存储二进制串</th>
+<th style="text-align: center">最大长度 (字节)</th>
+<th style="text-align: center">存储空间要求 (字节)</th>
+<th style="text-align: center">说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center"><code>BINARY[(M)]</code></td>
+<td style="text-align: center">√</td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">M : 表示该列值的最大长度 (二进制串以字节为长度,非二进制串以字符单位)</td>
+</tr>
+<tr>
+<td style="text-align: center">CHAR[(M)]</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">M  x  w</td>
+<td style="text-align: center">w : 表示列字符集里<code>最&quot;宽&quot;</code>字符占用的字节数(定长补足用)</td>
+</tr>
+<tr>
+<td style="text-align: center"><code>VARBINARY(M)</code></td>
+<td style="text-align: center">√</td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">L+1 or L+2</td>
+<td style="text-align: center">L : 表示某个<code>给定值</code>的字节长度</td>
+</tr>
+<tr>
+<td style="text-align: center">VARCHAR(M)</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">M</td>
+<td style="text-align: center">L+1 or L+2</td>
 <td style="text-align: center"></td>
 </tr>
 <tr>
-<td style="text-align: center"></td>
-<td style="text-align: center">Transitional &amp;&amp; url</td>
-<td style="text-align: center">yes</td>
-<td style="text-align: center"></td>
+<td style="text-align: center"><code>BLOB(binary large object)</code></td>
+<td style="text-align: center">√</td>
+<td style="text-align: center">2ˆ16-1</td>
+<td style="text-align: center">L+2</td>
+<td style="text-align: center">可以存储大对象(4 GB),字节为单位</td>
 </tr>
 <tr>
+<td style="text-align: center">TEXT</td>
 <td style="text-align: center"></td>
-<td style="text-align: center">Transitional &amp;&amp; NO url</td>
-<td style="text-align: center"></td>
-<td style="text-align: center">yes</td>
+<td style="text-align: center">2ˆ16-1</td>
+<td style="text-align: center">L+2</td>
+<td style="text-align: center">字符为单位</td>
 </tr>
 <tr>
-<td style="text-align: center">HTML5</td>
-<td style="text-align: center"> 不基于 SGML，所以不需要引用 DTD</td>
-<td style="text-align: center">yes</td>
+<td style="text-align: center">ENUM(&#39;value1&#39;,&#39;value2&#39;,...)</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">65535个成员</td>
+<td style="text-align: center">1 or 2</td>
+<td style="text-align: center">定义的值顺序就是排序所用的顺序</td>
+</tr>
+<tr>
+<td style="text-align: center">SET(&#39;value1&#39;,&#39;value2&#39;,...)</td>
+<td style="text-align: center"></td>
+<td style="text-align: center">64个成员</td>
+<td style="text-align: center">1,2,3,4,8</td>
 <td style="text-align: center"></td>
 </tr>
 </tbody>
 </table>
 
-<h2 id="toc_2">混杂模式特点</h2>
+<ul>
+<li>BLOB 和 TEXT 列能否被索引取决于存储引擎,如果用 InnoDB 和 MyISAM, 必须制定一个前缀长度,方便索引.可以避免创建出可能过大的索引,那样会抵消索引带来的好处. 比较特殊的是 TEXT 列的 <code>FULLTEXT</code> 索引以索引列的完整内容为基础,自动忽略指定的前缀长度</li>
+<li>BLOB,TEXT 在多次操作之后会产生大量碎片,如果用 MyISAM 来存储 BLOB 或 TEXT, 那么定期运行 <code>OPTIMIZE TABLE</code> 可以减少碎片,改善系统性能</li>
+</ul>
 
-<ol>
-<li>盒模型的高宽包含内边距padding和边框border</li>
-<li>可以设置行内元素的高宽</li>
-<li>可设置百分比的高度</li>
-<li>用<code>margin:0 auto</code>设置水平居中在IE下会失效</li>
-<li>设置图片的padding会失效</li>
-<li>Table中的字体属性不能继承上层的设置</li>
-<li><code>white-space: pre</code>会失效</li>
-</ol>
+<hr/>
+
+<h2 id="toc_3">时态</h2>
+
+<ul>
+<li>fsp: 小数秒精度</li>
+<li>时态列的定义可以包含通用属性 NULL 或 NOT NULL. 如果都不指定, 则默认为 NULL. </li>
+<li>TIMESTAMP 和 DATETIME 有自动初始化属性和自动更新属性</li>
+<li>TIMESTAMP 的<code>默认值</code>为 NOT NULL, 如果设置为 NULL, 那么它的值会被设置为当前时间戳</li>
+<li>TIMESTAMP 不能设置为 <code>DEFAULT 0</code>,严格模式下会报错</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">类型</th>
+<th style="text-align: center">范围</th>
+<th style="text-align: center">存储要求(字节)(5.6.4以后)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">DATE</td>
+<td style="text-align: center">1000-01-01 ~ 9999-12-31</td>
+<td style="text-align: center">3</td>
+</tr>
+<tr>
+<td style="text-align: center">TIME</td>
+<td style="text-align: center">-838:59:59[.000000] ~ 838:59:59[.000000]</td>
+<td style="text-align: center">3 + fsp</td>
+</tr>
+<tr>
+<td style="text-align: center">DATETIME</td>
+<td style="text-align: center">1000-01-01 00:00:00[.000000] ~ 9999-12-31 23.59.59[.999999]</td>
+<td style="text-align: center">3 + fsp</td>
+</tr>
+<tr>
+<td style="text-align: center">TIMESTAMP</td>
+<td style="text-align: center">1970-01-01 00:00:00[.000000] ~ 2038-01-19 03:14:07[.999999]</td>
+<td style="text-align: center">4 + fsp</td>
+</tr>
+<tr>
+<td style="text-align: center">YEAR</td>
+<td style="text-align: center">1901~2155</td>
+<td style="text-align: center">1</td>
+</tr>
+</tbody>
+</table>
 
 
     
@@ -223,16 +379,16 @@ Web页面使用HTML进行渲染，而HTML本身采用了HTML规范作为其规�
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="html-decode.html" 
-          title="Previous Post: html 文档的解析，及 script 标签位置的选择">&laquo; html 文档的解析，及 script 标签位置的选择</a>
+          <a href="sequelize-introduction.html" 
+          title="Previous Post: [译] Sequelize(1)  让Node操作MySQL更方便">&laquo; [译] Sequelize(1)  让Node操作MySQL更方便</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="mysql-.html" 
-          title="Next Post: MySQL 语句">MySQL 语句 &raquo;</a>
+          <a  href="promise.html" 
+          title="Next Post: Promises 解决Node无限回调">Promises 解决Node无限回调 &raquo;</a>
       
       </p>
         </div>
@@ -246,7 +402,7 @@ Web页面使用HTML进行渲染，而HTML本身采用了HTML规范作为其规�
           
 
           
-              <div class="ds-thread" data-thread-key="doctype.html" data-url="http://blog.kayorl.com/doctype.html" data-title="理解 DOCTYPE 声明的意义"></div>
+              <div class="ds-thread" data-thread-key="mysql-datatype.html" data-url="http://blog.kayorl.com/mysql-datatype.html" data-title="MySQL 数据类型"></div>
           
         </div>
       </div>

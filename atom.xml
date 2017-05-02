@@ -4,7 +4,7 @@
   <title><![CDATA[几谷 博客]]></title>
   <link href="http://blog.kayorl.com/atom.xml" rel="self"/>
   <link href="http://blog.kayorl.com/"/>
-  <updated>2017-05-02T15:51:27+08:00</updated>
+  <updated>2017-05-02T15:54:34+08:00</updated>
   <id>http://blog.kayorl.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -13,7 +13,231 @@
   <generator uri="http://www.mweb.im/">MWeb</generator>
   
   <entry>
-    <title type="html"><![CDATA[安全的原则 - 读『白帽子讲 Web 安全』总结]]></title>
+    <title type="html"><![CDATA[正确防御XSS 的姿势 - 读『白帽子讲 Web 安全』]]></title>
+    <link href="http://blog.kayorl.com/xss-defence.html"/>
+    <updated>2017-05-02T19:47:47+08:00</updated>
+    <id>http://blog.kayorl.com/xss-defence.html</id>
+    <content type="html"><![CDATA[
+<span id="more"></span><!-- more -->
+
+<blockquote>
+<p>HttpOnly</p>
+</blockquote>
+
+<p>禁止页面访问带有 HttpOnly 属性的 Cookie</p>
+
+<blockquote>
+<p>输入检查</p>
+</blockquote>
+
+<p>使特殊字符的攻击失效</p>
+
+<blockquote>
+<p>XSS Filter， 智能的输入检查</p>
+</blockquote>
+
+<p>检查是否包含了 <code>&lt;script&gt;</code> 、 <code>javascript</code> 等敏感字符</p>
+
+<blockquote>
+<p>输出检查</p>
+</blockquote>
+
+<p>变量在输出到 HTML 页面时，可以使用编码或转义的方式来防御</p>
+
+<p>针对 HTML 代码的编码方式是 <code>HTMLEncode</code>，至少转义以下字符</p>
+
+<pre><code>&amp; --&gt; &amp;amp;
+&lt; --&gt; &amp;lt;
+&gt; --&gt; &amp;gt;
+&quot; --&gt; &amp;quot;
+&#39; --&gt; &amp;#x27;
+/ --&gt; &amp;#x2F;    //可能会闭合一些 HTML entity
+</code></pre>
+
+<p><code>JavaScriptEncode</code> 与 <code>HTMLEncode</code> 不一样，需要对 <code>\</code> 进行转义，而且，输出变量必须在引号内部，因为</p>
+
+<pre><code class="language-js">
+// 错误示范
+var x = escapeJavaScript($evil);
+
+// 正确示范
+var y = &quot;&quot;+escapeJavaScript($evil);
+</code></pre>
+
+<p></br></p>
+
+<h4 id="toc_0">防御！在 XSS 发生的地方终结它！</h4>
+
+<blockquote>
+<p>HTML 标签中输出</p>
+</blockquote>
+
+<pre><code>&lt;div&gt;&lt;sciprt&gt;alert(&quot;/xss/&quot;)&lt;/sciprt&gt;&lt;/div&gt;
+
+&lt;a&gt;&lt;img src=# onerror=alert(1)/&gt;&lt;/a&gt;
+</code></pre>
+
+<p>对策：对变量使用 HtmlEncode</p>
+
+<blockquote>
+<p>HTML 属性中输出</p>
+</blockquote>
+
+<pre><code>&lt;div name=&quot;
+    &quot;&lt;script&gt;alert(/xss/)&lt;/script&gt; &lt;&quot;
+    &quot;&gt;&lt;/div&gt;
+</code></pre>
+
+<p>对策：对变量使用 HtmlEncode</p>
+
+<blockquote>
+<p>script 标签中输出</p>
+</blockquote>
+
+<pre><code class="language-js">var x = &quot;&quot;;alert(/xss/);//&quot;;
+</code></pre>
+
+<p>对策：对变量使用 JavaScriptEncode</p>
+
+<blockquote>
+<p>事件中输出</p>
+</blockquote>
+
+<pre><code>&lt;a href=# onclick=&quot;funcA(&#39;
+    &#39;);alert(/xss);//
+&#39;)&quot;&gt;test&lt;/a&gt;
+</code></pre>
+
+<p>对策：对变量使用 JavaScriptEncode</p>
+
+<blockquote>
+<p>CSS 中输出</p>
+</blockquote>
+
+<pre><code class="language-css">background-image: url(&quot;javascript:alert(&#39;XSS&#39;)&quot;);
+</code></pre>
+
+<p>对策1：禁止用户变量在 style，html，css 文件中输出<br/>
+对策2：使用 <code>encodeForCSS()</code></p>
+
+<blockquote>
+<p>地址中输出</p>
+</blockquote>
+
+<p>待续</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[跨站脚本攻击(XSS) - 读『白帽子讲 Web 安全』]]></title>
+    <link href="http://blog.kayorl.com/xss.html"/>
+    <updated>2017-05-02T15:44:02+08:00</updated>
+    <id>http://blog.kayorl.com/xss.html</id>
+    <content type="html"><![CDATA[
+<p>本名 CSS（Cross Site Script），因与层叠样式表（CSS，Cascade Style Sheet）名重，<br/>
+无奈更名 XSS。</p>
+
+<blockquote>
+<p>定义：通过 <code>HTML 注入</code> 篡改网页，插入恶意脚本（XSS payload），控制用户浏览器</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<p></br></p>
+
+<h3 id="toc_0">XSS 类型</h3>
+
+<blockquote>
+<p>有不持久反射型 XSS</p>
+</blockquote>
+
+<p>将用户输入数据反射给浏览器，需要用户点击恶意链接</p>
+
+<blockquote>
+<p>也有持久的存储型 XSS</p>
+</blockquote>
+
+<p>恶意脚本保存到服务器端，（富文本）</p>
+
+<blockquote>
+<p>还有效果上是反射型 XSS 的DOM Based XSS</p>
+</blockquote>
+
+<p>修改页面的 DOM 节点</p>
+
+<p></br></p>
+
+<h3 id="toc_1">攻击开始 攻击1 - “Cookie” 劫持</h3>
+
+<p>XSS 定义的图示法，画的颜色好像有点多 (⊙ˍ⊙)， 看大箭头<br/>
+<img src="media/14937110420322/cookie%20%E5%8A%AB%E6%8C%81.png" alt="cookie 劫持"/></p>
+
+<p>利用上面的原理图，用户点击 <code>link</code> 后，黑客可以盗取 <code>ok.com</code> 的 Cookie，拥有 cookie 之后就可以模拟用户操作了。</p>
+
+<blockquote>
+<p>解决方法：设置 Cookie 的 <code>“HttpOnly”</code> </p>
+</blockquote>
+
+<h4 id="toc_2">攻击2 - 构造 GET 和 POST 请求</h4>
+
+<p>GET 请求的伪造：<br/>
+假设 blog.com 存在 XSS 漏洞，可以插入一张图片，发起一个 get 的删除请求，看大箭头<br/>
+<img src="media/14937110420322/get%20%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0.png" alt="get 请求伪造"/></p>
+
+<p>POST 请求的伪造类似，不过不是插入图片。</p>
+
+<ol>
+<li>插入一个 form 元素，并调用<code>form.submit();</code>方法来自动提交。</li>
+<li>还可以发送 ajax</li>
+</ol>
+
+<h4 id="toc_3">攻击3 - XSS 钓鱼</h4>
+
+<p>前面脚本的攻击过程缺少 <code>与用户交互</code> 的过程，面对验证码和<code>old password</code>情况下失效，攻击事业难道就这么停止了吗？</p>
+
+<p>不， 画出一个伪造登录框，在输入后，密码被发送到服务器上</p>
+
+<p><img src="media/14937110420322/XSS%20%E9%92%93%E9%B1%BC.png" alt="XSS 钓鱼"/></p>
+
+<h4 id="toc_4">攻击4 - 浏览器定向爆破，4，3，2，1</h4>
+
+<p>检测浏览器版本（特定版本可能存在漏洞），如果浏览器刚好存在漏洞， OOps。。</p>
+
+<h4 id="toc_5">攻击5 - 软件+浏览器，双重爆破</h4>
+
+<p>通过判断用户安装的软件，选择对应的浏览器漏洞，植入木马</p>
+
+<hr>
+
+<p></br></p>
+
+<h3 id="toc_6">XSS 构造技能入门, 字符编码</h3>
+
+<p>“百度搜藏”的一个<code>&lt;script&gt;</code>输出一个变量，且该变量转移了双引号,即把<code>&quot;</code>转义成了 <code>\&quot;</code>;<br/>
+GBK/GB2312编码下，  <code>%c1</code> 与 <code>\</code> 字符组合后会变成 Unicode 字符，<br/>
+因次，利用这种转义,构造</p>
+
+<pre><code>%c1&quot;;alert(/XSS/);//
+</code></pre>
+
+<p><img src="media/14937110420322/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E6%9E%84%E9%80%A0.png" alt="字符编码构造"/></p>
+
+<h4 id="toc_7">法2 - 绕过长度限制</h4>
+
+<ol>
+<li>利用事件来缩短所需要的字节数</li>
+<li> <code>location.hash</code> 不会随请求发送，那，把执行代码藏在这里吧。</li>
+<li>利用注释符打通两个 input</li>
+<li>利用<code>&lt;base&gt;</code>标签
+5.<code>window.name</code>不受同源策略的限制，代码放在其中，新的域里只要执行<code>eval(name);</code></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[安全的原则 - 读『白帽子讲 Web 安全』]]></title>
     <link href="http://blog.kayorl.com/security-principle.html"/>
     <updated>2017-05-02T15:12:33+08:00</updated>
     <id>http://blog.kayorl.com/security-principle.html</id>
@@ -89,7 +313,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[安全的世界观 - 读『白帽子讲 Web 安全』总结]]></title>
+    <title type="html"><![CDATA[安全的世界观 - 读『白帽子讲 Web 安全』]]></title>
     <link href="http://blog.kayorl.com/security-world.html"/>
     <updated>2017-05-02T14:25:51+08:00</updated>
     <id>http://blog.kayorl.com/security-world.html</id>
@@ -202,46 +426,18 @@ CIA: Confidentiality，Integrity，Availability</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[同源政策]]></title>
-    <link href="http://blog.kayorl.com/same-origin-policy.html"/>
+    <title type="html"><![CDATA[SOP 及其安全问题]]></title>
+    <link href="http://blog.kayorl.com/same-origin-policy-and-security.html"/>
     <updated>2017-04-09T21:34:12+08:00</updated>
-    <id>http://blog.kayorl.com/same-origin-policy.html</id>
+    <id>http://blog.kayorl.com/same-origin-policy-and-security.html</id>
     <content type="html"><![CDATA[
-<ul>
-<li>
-<a href="#toc_0">CORS , 跨源 AJAX 请求的根本解决方法, 较新</a>
-</li>
-<li>
-<a href="#toc_1">jsonp, 兼顾老式浏览器</a>
-</li>
-<li>
-<a href="#toc_2">WebSocket</a>
-</li>
-<li>
-<a href="#toc_3">window.postMessage</a>
-</li>
-<li>
-<a href="#toc_4">window.name, 窗口载入的所有页面共享</a>
-</li>
-<li>
-<a href="#toc_5">子域设置 document.domain ,通过内置 iframe 通信</a>
-</li>
-</ul>
-
+<p>浏览器的同源策略，限制了不同源的“document” 或脚本， 对当前 “document” 读取或设置某些属性</p>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">CORS , 跨源 AJAX 请求的根本解决方法, 较新</h2>
+<h3 id="toc_0">几种突破SOP 的方法</h3>
 
-<p>请移步<a href="http://blog.csdn.net/u014344668/article/details/54948546">CORS</a></p>
-
-<ul>
-<li>IE8 引入 XDR(XDomainRequest) 类型实现 CORS</li>
-<li>实现跨浏览器的CORS, 先检查 XHR 是否支持 CORS 的最简单形式, 即检查<code>withCredentials</code>,</li>
-<li>再检查 XDomainRequest 对象是否存在</li>
-</ul>
-
-<h2 id="toc_1">jsonp, 兼顾老式浏览器</h2>
+<h4 id="toc_1">jsonp, 兼顾老式浏览器</h4>
 
 <blockquote>
 <p>其他域加载代码,存在安全风险<br/>
@@ -264,12 +460,16 @@ var json = { &quot;success&quot;: true, &quot;data&quot;: &quot;secret&quot;};
 return json;
 </code></pre>
 
-<h2 id="toc_2">WebSocket</h2>
+<hr>
+
+<h4 id="toc_2">WebSocket</h4>
 
 <p>首先,同源政策对 WebSocket 不适用<br/>
 再移步 <a href="http://blog.csdn.net/frank_good/article/details/50856585">websocket 解释</a></p>
 
-<h2 id="toc_3">window.postMessage</h2>
+<hr>
+
+<h4 id="toc_3">window.postMessage</h4>
 
 <blockquote>
 <p>H5 引入,允许跨窗口通信</p>
@@ -284,7 +484,9 @@ popup.postMessage(&#39;Hello World!&#39;, &#39;http://b.com&#39;);
 window.opener.postMessage(&#39;Nice to see you&#39;, &#39;http://aaa.com&#39;);
 </code></pre>
 
-<h2 id="toc_4">window.name, 窗口载入的所有页面共享</h2>
+<hr>
+
+<h4 id="toc_4">window.name, 窗口载入的所有页面共享</h4>
 
 <blockquote>
 <p>每个页面对window.name都有读写的权限，不会因新页面的载入而进行重置。<br/>
@@ -308,7 +510,7 @@ ifr.src = &#39;about:black&#39;;
 window.name = &quot;我是 a 梦寐以求的字符串&quot;
 </code></pre>
 
-<h2 id="toc_5">子域设置 document.domain ,通过内置 iframe 通信</h2>
+<h4 id="toc_5">子域设置 document.domain ,通过内置 iframe 通信</h4>
 
 <blockquote>
 <p>只能将 domain 设置为更高一级,不能更低.</p>
@@ -2165,215 +2367,6 @@ var Post = sequelize.define( &#39;post&#39;, attributes, {
 
 <pre><code class="language-js">User.hasMany( Post ); // regular getPosts association
 User.hasMany( Post.scope( &#39;deleted&#39; ), { as: &#39;deletedPosts&#39; } );
-</code></pre>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[[译] Sequelize(3)  CRUD]]></title>
-    <link href="http://blog.kayorl.com/sequelize-crud.html"/>
-    <updated>2017-02-16T15:50:14+08:00</updated>
-    <id>http://blog.kayorl.com/sequelize-crud.html</id>
-    <content type="html"><![CDATA[
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">模型定义</h2>
-
-<pre><code class="language-js">var Task = sequelize.define( &#39;task&#39;, {
-    title: Sequelize.STRING,
-    rank: { type: Sequelize.STRING, defaultValue: 3 }
-} );
-</code></pre>
-
-<h2 id="toc_1">Create</h2>
-
-<pre><code class="language-js">// 创建数据库中对象
-Task.create( { title: &#39;foo&#39; } );
-
-// 创建临时变量
-var task = Task.build( { title: &#39;very important task&#39; } );
-
-// 将临时变量存入数据库内, 只保存 title 属性
-task.save( { fields: [ &#39;title&#39; ] } );
-</code></pre>
-
-<h2 id="toc_2">Update</h2>
-
-<pre><code class="language-js">// 在数据库中更新 task 的 title
-task.update( { title: &#39;a very different title now&#39; } );
-
-
-// 更新 排名小于1000或者无排名的 post 的 updateAt 为 null
-Post.update( {
-    updatedAt: null,
-}, {
-    where: {
-        rank: {
-            $or: {
-                $lt: 100,
-                $eq: null
-            }
-        }
-    }
-    //// rank &lt; 1000 OR rank IS NULL
-} );
-</code></pre>
-
-<h2 id="toc_3">Delete</h2>
-
-<pre><code class="language-js">// 删除 不活跃的 post
-Post.destroy( {
-    where: {
-        status: &#39;inactive&#39;
-    }
-} );
-</code></pre>
-
-<h2 id="toc_4">Retrieve</h2>
-
-<pre><code class="language-js">// 只选择相应属性
-Model.findAll( {
-    attributes: [ &#39;foo&#39;, &#39;bar&#39; ]
-} );
-// 做聚类
-Model.findAll( {
-    attributes: { include: [ [ sequelize.fn( &#39;COUNT&#39;, sequelize.col( &#39;hats&#39; ) ), &#39;no_hats&#39; ] ] }
-} );
-// 除开某些属性
-Model.findAll( {
-    attributes: { exclude: [ &#39;baz&#39; ] }
-} );
-
-// id 查找
-Project.findById( 123 ).then();
-
-// 属性查找
-Project.findOne( { where: { title: &#39;aProject&#39; } } ).then();
-// ？
-Project.findOne( { where: { title: &#39;aProject&#39; }, attributes: [ &#39;id&#39;, [ &#39;name&#39;, &#39;title&#39; ] ] } ).then();
-
-// 找，无则创建， created 为 boolean
-User.findOrCreate( { where: { username: &#39;kayor&#39; } } ).spread( function ( user, created ) {} );
-
-// 找并且计数 count 为计数， rows 为对象数组
-Project.findAndCountAll( {
-    where: { title: { $like: &#39;foo%&#39; } },
-    offset: 10,
-    limit: 2
-} ).then( function ( result ) {
-    console.log( result.count );
-    console.log( result.rows );
-} );
-
-// 找出拥有 active profile 的用户
-User.findAndCountAll( {
-    include: [
-        { model: Profile, where: { active: true } }
-  ],
-    limit: 3
-} );
-
-
-Project.findAll();
-Project.all();
-Project.findAll( { where: { name: &quot;a Project&quot; } } );
-Project.findAll( { where: [ &quot;id&gt;?&quot;, 25 ] } );
-Project.findAll( { where: { id: [ 1, 2, 3 ] } } );
-Project.findAll( {
-    where: {
-        id: {
-            $and: { a: 5 },
-            $or: [ { a: 5 }, { a: 6 } ],
-            $gt: 6,
-            $gte: 6,
-            $lt: 10,
-            $lte: 10,
-            $ne: 20,
-            $between: [ 6, 10 ],
-            $notBetween: [ 6, 10 ],
-            $in: [ 1, 2 ],
-            $notIn: [ 1, 2 ],
-            $like: &#39;%hat&#39;
-        },
-        status: { $not: false }
-    }
-} );
-
-//只找十个
-Project.findAll( { limit: 10 } );
-// 跳过前10个
-Project.findAll( { offset: 10 } );
-// 跳过前10，取两个
-Project.findAll( { offset: 10, limit: 2 } );
-
-// 递减
-Project.findAll( { order: &#39;title DESC&#39; } );
-// 分组
-Project.findAll( { group: &#39;name&#39; } );
-// 计数
-Project.count( { where: [ &quot;id&gt;?&quot;, 25 ] } );
-// 找最大
-Project.max( &#39;age&#39; );
-
-// 内连接找到拥有符合条件工具的用户
-Post.findAll( {
-    include: [ {
-        model: Comment,
-        as: &#39;comment_my&#39;,
-        where: { name: { $like: &#39;%ooth%&#39; } }
-    } ]
-} );
-
-// 获得原数据
-Post.findOne( { where: { title: &#39;scut&#39; } } ).then( function ( post ) {
-    post.title = &#39;south china university of tecknology&#39;;
-    console.log( post.title ); // &#39;south china university of tecknology&#39;
-
-    post.reload().then( function () {
-        console.log( post.title ); // &#39;scut&#39;
-    } );
-} );
-
-</code></pre>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[supertest 模拟客户端]]></title>
-    <link href="http://blog.kayorl.com/supertest.html"/>
-    <updated>2017-02-16T20:20:18+08:00</updated>
-    <id>http://blog.kayorl.com/supertest.html</id>
-    <content type="html"><![CDATA[
-<p>模拟一个客户端，可用于爬虫、API 测试等</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">安装</h2>
-
-<pre><code>$ npm install supertest --save-dev
-</code></pre>
-
-<h2 id="toc_1">例子</h2>
-
-<pre><code class="language-js">var request = require(&#39;supertest&#39;);
-var express = require(&#39;express&#39;);
-
-var app = express();
-
-app.get(&#39;/user&#39;, function(req, res) {
-  res.status(200).json({ name: &#39;tobi&#39; });
-});
-
-request(app)
-  .get(&#39;/user&#39;)
-  .expect(&#39;Content-Type&#39;, /json/)
-  .expect(&#39;Content-Length&#39;, &#39;15&#39;)
-  .expect(200)
-  .end(function(err, res) {
-    if (err) throw err;
-  });
 </code></pre>
 
 ]]></content>
